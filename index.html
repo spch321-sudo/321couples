@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#B0345A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="321夫妻成長營">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<title>321 夫妻成長營</title>
+<style>
+  :root{
+    --rose:#B0345A;      /* 主玫瑰 */
+    --rose-soft:#C0506E;
+    --rose-tint:#F6E4E9;
+    --gold:#BF8F00;
+    --navy:#1F3864;
+    --green:#4A7C59;
+    --blue:#5B7BA8;
+    --purple:#7E5A98;
+    --ink:#2B2730;
+    --ink-soft:#5A535F;
+    --cream:#FBF6F1;
+    --card:#FFFFFF;
+    --line:#EDE3DC;
+    --shadow:0 6px 22px rgba(140,60,80,.10);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    font-size:19px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:84px;
+    overflow-x:hidden;
+  }
+  /* ===== 品牌列 ===== */
+  .brandbar{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(135deg,var(--rose) 0%,#92274A 100%);
+    color:#fff;
+    padding:calc(env(safe-area-inset-top) + 12px) 18px 12px;
+    box-shadow:0 2px 12px rgba(146,39,74,.28);
+  }
+  .brandbar .dove{font-size:15px;opacity:.92;letter-spacing:.5px;}
+  .brandbar .apptitle{font-size:25px;font-weight:800;letter-spacing:1px;margin-top:2px;display:flex;align-items:baseline;gap:8px;}
+  .brandbar .apptitle small{font-size:14px;font-weight:500;opacity:.85;letter-spacing:2px;}
+
+  /* ===== 頁面容器 ===== */
+  .page{display:none;padding:18px 16px 8px;max-width:680px;margin:0 auto;animation:fade .35s ease;}
+  .page.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  /* ===== 複習：專題清單 ===== */
+  .lead{margin:4px 2px 18px;}
+  .lead h2{font-size:23px;font-weight:800;margin:0 0 4px;color:var(--navy);}
+  .lead p{margin:0;color:var(--ink-soft);font-size:17px;line-height:1.7;}
+
+  .topiclist{display:flex;flex-direction:column;gap:14px;}
+  .tcard{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:16px 16px 16px 18px;display:flex;align-items:center;gap:14px;
+    box-shadow:var(--shadow);cursor:pointer;position:relative;overflow:hidden;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .tcard:active{transform:scale(.985);}
+  .tcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--ac,var(--rose));}
+  .tcard .num{
+    flex:0 0 auto;width:50px;height:50px;border-radius:14px;
+    background:var(--ac,var(--rose));color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;line-height:1;box-shadow:0 4px 10px rgba(0,0,0,.12);
+  }
+  .tcard .meta{flex:1;min-width:0;}
+  .tcard .meta .label{font-size:13px;color:var(--ac,var(--rose));font-weight:700;letter-spacing:1px;}
+  .tcard .meta .ttl{font-size:20px;font-weight:800;color:var(--ink);line-height:1.35;margin:1px 0 2px;}
+  .tcard .meta .sub{font-size:15px;color:var(--ink-soft);line-height:1.55;
+    overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .tcard .arrow{flex:0 0 auto;color:#C9BBB2;font-size:24px;font-weight:700;}
+  .tcard.capstone{background:linear-gradient(135deg,#23406F,#16294B);border-color:#16294B;}
+  .tcard.capstone .meta .ttl,.tcard.capstone .meta .sub{color:#fff;}
+  .tcard.capstone .meta .label{color:#E7C66B;}
+  .tcard.capstone .arrow{color:rgba(255,255,255,.55);}
+  .tcard.capstone::before{background:var(--gold);}
+  .capseal{font-size:12px;color:#16294B;background:#E7C66B;border-radius:999px;
+    padding:2px 9px;font-weight:800;display:inline-block;margin-top:5px;letter-spacing:1px;}
+
+  /* ===== 專題內頁 ===== */
+  .detail{display:none;animation:fade .3s ease;}
+  .detail.active{display:block;}
+  .dhead{padding:20px 18px 22px;color:#fff;position:relative;}
+  .dhead .back{position:absolute;top:calc(env(safe-area-inset-top) + 10px);left:14px;
+    background:rgba(255,255,255,.18);border:none;color:#fff;font-size:16px;font-weight:700;
+    padding:8px 14px 8px 10px;border-radius:999px;cursor:pointer;backdrop-filter:blur(4px);}
+  .dhead .dicon{font-size:46px;line-height:1;margin-top:38px;}
+  .dhead .dlabel{font-size:14px;font-weight:700;letter-spacing:2px;opacity:.9;margin-top:10px;}
+  .dhead .dttl{font-size:27px;font-weight:800;line-height:1.3;margin:2px 0 6px;}
+  .dhead .dsub{font-size:16px;opacity:.92;line-height:1.6;}
+  .dbody{padding:18px 16px 20px;max-width:680px;margin:0 auto;}
+
+  .kcard{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 17px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .kcard h3{margin:0 0 8px;font-size:20px;font-weight:800;color:var(--navy);
+    display:flex;align-items:center;gap:8px;line-height:1.4;}
+  .kcard h3 .dot{width:11px;height:11px;border-radius:50%;background:var(--ac,var(--rose));flex:0 0 auto;}
+  .kcard p{margin:0 0 8px;}
+  .kcard p:last-child{margin-bottom:0;}
+  .kcard ul{margin:6px 0 0;padding-left:4px;list-style:none;}
+  .kcard li{position:relative;padding:4px 0 4px 26px;line-height:1.65;}
+  .kcard li::before{content:"";position:absolute;left:6px;top:14px;width:8px;height:8px;
+    border-radius:50%;background:var(--ac,var(--rose));opacity:.55;}
+  .kcard .arrowmap{color:var(--ac,var(--rose));font-weight:800;margin:0 4px;}
+  .kcard b,.kcard strong{color:var(--ink);}
+
+  /* 經文卡 */
+  .scripture{background:var(--rose-tint);border-radius:16px;padding:16px 18px;margin-bottom:14px;
+    border-left:5px solid var(--ac,var(--rose));}
+  .scripture .ref{font-size:14px;font-weight:800;color:var(--ac,var(--rose));
+    letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .scripture .verse{font-size:18.5px;line-height:1.85;color:#4A3942;}
+
+  /* 321 卡 */
+  .pcard{background:linear-gradient(135deg,#FBF3DC,#F6E9C4);border:1px solid #E9D79A;
+    border-radius:16px;padding:16px 18px;margin-bottom:14px;}
+  .pcard .ptag{font-size:13px;font-weight:800;color:#8A6800;letter-spacing:1.5px;
+    display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+  .pcard p{margin:0;color:#5B4A1F;line-height:1.75;}
+
+  /* 對照表 */
+  .compare{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+  .crow{display:flex;align-items:center;background:#F8F1EC;border-radius:11px;overflow:hidden;}
+  .crow .bad{flex:1;padding:9px 12px;color:#A98A7C;text-align:right;font-size:16px;}
+  .crow .vs{flex:0 0 auto;padding:0 10px;color:#C9BBB2;font-size:13px;}
+  .crow .good{flex:1;padding:9px 12px;color:var(--ac,var(--rose));font-weight:800;font-size:17px;}
+
+  /* 溝通之手 */
+  .handlist{counter-reset:hand;}
+  .handlist li{padding-left:42px;}
+  .handlist li::before{content:counter(hand);counter-increment:hand;
+    background:var(--ac,var(--rose));color:#fff;width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;
+    left:4px;top:7px;opacity:1;}
+  .handlist li b{color:var(--ac,var(--rose));}
+
+  .note{font-size:14.5px;color:var(--ink-soft);background:#F2EBE5;border-radius:12px;
+    padding:11px 14px;margin-bottom:14px;line-height:1.65;}
+
+  /* ===== 佔位頁 ===== */
+  .soon{text-align:center;padding:40px 18px;}
+  .soon .ic{font-size:54px;}
+  .soon h2{font-size:23px;color:var(--navy);margin:14px 0 6px;font-weight:800;}
+  .soon p{color:var(--ink-soft);font-size:16px;margin:0 0 20px;}
+  .roadmap{text-align:left;max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:11px;}
+  .ritem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;
+    box-shadow:var(--shadow);display:flex;gap:11px;align-items:flex-start;}
+  .ritem .ri{font-size:24px;flex:0 0 auto;}
+  .ritem .rt{font-weight:800;color:var(--ink);font-size:17px;}
+  .ritem .rd{color:var(--ink-soft);font-size:14.5px;line-height:1.6;}
+  .stage{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;
+    background:var(--rose-tint);color:var(--rose);border-radius:999px;padding:3px 11px;margin-bottom:14px;}
+
+  /* ===== 今天儀表板 ===== */
+  .greet{margin:6px 2px 16px;}
+  .greet h2{font-size:23px;font-weight:800;color:var(--navy);margin:0 0 3px;}
+  .greet p{margin:0;color:var(--ink-soft);font-size:16px;}
+  .dashcard{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:16px 17px;margin-bottom:14px;box-shadow:var(--shadow);}
+  .balcard{background:linear-gradient(135deg,#FBF3DC,#F4E2BE);border:1px solid #E9D79A;}
+  .balcard .blabel{font-size:15px;color:#8A6800;font-weight:700;}
+  .balrow{display:flex;align-items:flex-end;gap:18px;margin:8px 0 4px;}
+  .balrow .big{font-size:46px;font-weight:800;color:#7A5A00;line-height:1;}
+  .balrow .bunit{font-size:16px;color:#8A6800;margin-bottom:6px;}
+  .balrow .bweek{margin-left:auto;text-align:right;color:#8A6800;font-size:15px;line-height:1.4;}
+  .balrow .bweek b{font-size:24px;color:#7A5A00;}
+  .balmsg{font-size:15px;color:#6B5418;line-height:1.6;margin-top:6px;}
+  .bigbtn{display:block;width:100%;border:none;border-radius:14px;cursor:pointer;
+    background:var(--rose);color:#fff;font-size:19px;font-weight:800;padding:15px;
+    box-shadow:0 5px 14px rgba(176,52,90,.28);font-family:inherit;}
+  .bigbtn:active{transform:scale(.99);}
+  .minicard{display:flex;align-items:center;gap:13px;}
+  .minicard .mi{font-size:26px;}
+  .minicard .mt{font-weight:800;color:var(--ink);font-size:17px;}
+  .minicard .md{color:var(--ink-soft);font-size:14.5px;}
+  .softtag{font-size:12px;font-weight:800;color:#A89AA0;background:#F2EBE5;
+    border-radius:999px;padding:3px 10px;margin-left:auto;flex:0 0 auto;}
+
+  /* ===== 愛的存款 ===== */
+  .bankview{display:none;animation:fade .3s ease;}
+  .bankview.active{display:block;}
+  .form-lbl{font-size:15px;font-weight:800;color:var(--navy);margin:2px 0 8px;}
+  .seg{display:flex;gap:8px;margin-bottom:14px;}
+  .seg button{flex:1;border:2px solid var(--line);background:#fff;border-radius:12px;
+    padding:11px 6px;font-size:17px;font-weight:700;color:var(--ink-soft);cursor:pointer;
+    font-family:inherit;transition:.12s;}
+  .seg button.on{border-color:var(--rose);background:var(--rose-tint);color:var(--rose);}
+  .seg.types button.on{border-color:var(--gold);background:#FBF3DC;color:#8A6800;}
+  textarea.depo{width:100%;border:2px solid var(--line);border-radius:12px;padding:12px 13px;
+    font-size:18px;font-family:inherit;line-height:1.6;resize:vertical;min-height:84px;color:var(--ink);}
+  textarea.depo:focus{outline:none;border-color:var(--rose);}
+  .hint{font-size:14px;color:var(--ink-soft);margin:-6px 0 12px;line-height:1.55;}
+  .deposit{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);position:relative;}
+  .deposit .dtop{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap;}
+  .chip{font-size:13px;font-weight:800;border-radius:999px;padding:2px 10px;}
+  .chip.to{background:var(--rose-tint);color:var(--rose);}
+  .chip.gan{background:#E5F0E8;color:var(--green);}
+  .chip.zan{background:#FBF3DC;color:#8A6800;}
+  .chip.zhu{background:#E7EEF7;color:var(--blue);}
+  .deposit .dtime{font-size:13px;color:#B6A9AF;margin-left:auto;}
+  .deposit .dtext{font-size:17px;color:var(--ink);line-height:1.65;}
+  .deposit .del{position:absolute;top:8px;right:10px;border:none;background:none;
+    color:#D6C6CC;font-size:18px;cursor:pointer;padding:4px;line-height:1;}
+  .empty{text-align:center;color:var(--ink-soft);padding:26px 16px;font-size:16px;line-height:1.7;}
+  .empty .eic{font-size:40px;display:block;margin-bottom:8px;}
+
+  /* ===== 夫妻檔案 ===== */
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+  .field input,.field select{width:100%;border:2px solid var(--line);border-radius:12px;
+    padding:12px 13px;font-size:18px;font-family:inherit;color:var(--ink);background:#fff;}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--rose);}
+  .saved{font-size:15px;color:var(--green);font-weight:700;text-align:center;
+    min-height:22px;margin-top:6px;}
+
+  /* ===== 親密關係評估 ===== */
+  .a-intro p{font-size:16.5px;line-height:1.75;color:var(--ink-soft);margin:0 0 12px;}
+  .sat-wrap{text-align:center;padding:6px 0 2px;}
+  .sat-num{font-size:54px;font-weight:800;color:var(--green);line-height:1;}
+  .sat-unit{font-size:18px;color:var(--ink-soft);}
+  input[type=range].sat{width:100%;margin:16px 0 2px;accent-color:var(--green);height:30px;}
+  .rate-row{padding:12px 0;border-bottom:1px solid var(--line);}
+  .rate-row:last-child{border-bottom:none;}
+  .rate-q{font-size:16.5px;color:var(--ink);line-height:1.6;margin-bottom:9px;}
+  .rate-q .qn{color:var(--green);font-weight:800;margin-right:5px;}
+  .rate-btns{display:flex;gap:7px;}
+  .rate-btns button{flex:1;border:2px solid var(--line);background:#fff;border-radius:10px;
+    padding:11px 0;font-size:18px;font-weight:800;color:var(--ink-soft);cursor:pointer;font-family:inherit;transition:.1s;}
+  .rate-btns button.on{border-color:var(--green);background:#E5F0E8;color:var(--green);}
+  .rate-ends{display:flex;justify-content:space-between;font-size:13px;color:#B6A9AF;margin-top:5px;}
+  .rate-row.warn .rate-btns button.on{border-color:var(--rose);background:var(--rose-tint);color:var(--rose);}
+  .seg.who button.on{border-color:var(--green);background:#E5F0E8;color:var(--green);}
+
+  .light-badge{display:flex;align-items:center;gap:14px;border-radius:16px;padding:16px 18px;margin-bottom:14px;color:#fff;}
+  .light-badge .lemoji{font-size:40px;}
+  .light-badge .ltxt .ll{font-size:24px;font-weight:800;}
+  .light-badge .ltxt .ls{font-size:15px;opacity:.95;}
+  .result-grid{display:flex;gap:12px;margin-bottom:14px;}
+  .result-box{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px;text-align:center;box-shadow:var(--shadow);}
+  .result-box .rbnum{font-size:30px;font-weight:800;color:var(--navy);line-height:1.1;}
+  .result-box .rblbl{font-size:14px;color:var(--ink-soft);margin-top:3px;}
+  .interp{background:#FBF3DC;border:1px solid #E9D79A;border-radius:14px;padding:14px 16px;margin-bottom:16px;
+    font-size:16px;line-height:1.7;color:#5B4A1F;}
+
+  .chart-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px 8px;
+    margin-bottom:14px;box-shadow:var(--shadow);}
+  .chart-card .ct{font-size:15px;font-weight:800;color:var(--navy);margin:0 4px 4px;}
+  .legend{display:flex;gap:16px;justify-content:center;font-size:14px;color:var(--ink-soft);margin-top:4px;}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block;}
+  .hist-item{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:11px 13px;margin-bottom:9px;box-shadow:var(--shadow);}
+  .hist-item .hl{width:14px;height:14px;border-radius:50%;flex:0 0 auto;}
+  .hist-item .hwho{font-weight:800;color:var(--ink);}
+  .hist-item .hsat{margin-left:auto;font-weight:800;color:var(--green);font-size:18px;}
+  .hist-item .hdate{font-size:13px;color:#B6A9AF;}
+
+  /* ===== 幸福習慣 ===== */
+  .hpills{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .hpill{display:flex;align-items:center;gap:7px;border:2px solid var(--line);background:#fff;
+    border-radius:12px;padding:12px 10px;font-size:16px;font-weight:700;color:var(--ink-soft);
+    cursor:pointer;font-family:inherit;transition:.12s;}
+  .hpill .he{font-size:20px;}
+  .hpill.on{border-color:var(--green);background:#E5F0E8;color:var(--green);}
+  .hgrid .grow{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+  .hgrid .glabel{width:26px;font-size:18px;text-align:center;flex:0 0 auto;}
+  .hgrid .gcells{display:flex;gap:3px;flex:1;}
+  .gcell{flex:1;height:20px;border-radius:4px;background:#EFE7E1;min-width:0;}
+  .gcell.ghd{background:none;font-size:11px;color:#B6A9AF;display:flex;align-items:flex-end;
+    justify-content:center;aspect-ratio:auto;height:16px;}
+  .gcell.today{outline:2px solid var(--ink-soft);outline-offset:-1px;}
+
+  /* ===== 和好工具・溝通之手 ===== */
+  .gm-row{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff;}
+  .gm-del{background:none;border:none;color:var(--rose);font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;padding:2px 0;}
+  .gm-add{background:#fff;color:var(--rose);border:2px dashed var(--rose);border-radius:12px;padding:12px;width:100%;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;}
+  .gm-add:active{transform:scale(.99);}
+  .role-item{font-size:15.5px;line-height:1.75;color:var(--ink);margin-bottom:10px;}
+  .role-item b{display:block;color:var(--rose);font-size:15px;margin-bottom:1px;}
+  .role-ul{margin:2px 0 0;padding-left:20px;}
+  .role-ul li{font-size:15px;line-height:1.9;color:var(--ink);}
+  .role-ul li b{color:var(--navy);}
+  .role-sub{font-size:14px;font-weight:800;color:var(--rose);margin:12px 0 2px;letter-spacing:.5px;}
+  .hand-reminder{background:linear-gradient(135deg,#FBF3DC,#F6E9C4);border:1px solid #E9D79A;
+    border-radius:16px;padding:16px 18px;margin-bottom:16px;font-size:16px;line-height:1.78;color:#5B4A1F;}
+  .hand-parts{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 2px;}
+  .hand-parts span{font-size:14px;background:var(--rose-tint);color:var(--rose);
+    border-radius:999px;padding:4px 11px;font-weight:700;}
+  .handstep .hs-head{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap;}
+  .hs-num{width:28px;height:28px;border-radius:50%;background:var(--rose);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:0 0 auto;}
+  .hs-part{font-size:14px;color:var(--rose);font-weight:800;background:var(--rose-tint);border-radius:999px;padding:2px 10px;}
+  .hs-title{font-size:19px;font-weight:800;color:var(--navy);}
+  .hs-prompt{font-size:15.5px;color:var(--ink-soft);line-height:1.65;margin-bottom:10px;}
+  .feel-bar{display:flex;gap:8px;margin-bottom:10px;}
+  .feel-bar button{flex:1;border:2px solid var(--line);background:#fff;border-radius:10px;padding:8px;
+    font-weight:700;font-family:inherit;font-size:15px;color:var(--ink-soft);cursor:pointer;}
+  .feel-bar button.on{border-color:var(--rose);background:var(--rose-tint);color:var(--rose);}
+  .feel-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .fchip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;
+    font-size:15.5px;color:var(--ink);cursor:pointer;font-family:inherit;transition:.1s;}
+  .fchip:active{background:var(--rose-tint);border-color:var(--rose);}
+  .hand-summary{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 19px;
+    box-shadow:var(--shadow);font-size:18.5px;line-height:1.95;color:var(--ink);white-space:pre-wrap;margin-bottom:14px;}
+
+  .covtext{min-height:150px;}
+  .anniv-line{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:17px;color:var(--ink);}
+  .anniv-line .ae{font-size:22px;}
+  .anniv-line .ad{margin-left:auto;font-weight:800;color:var(--navy);}
+  .anniv-line .ad.today{color:var(--rose);}
+  .anniv-empty{font-size:16px;color:var(--ink-soft);line-height:1.6;}
+
+  /* ===== 引導分享 ===== */
+  .gprog{text-align:center;font-size:15px;color:var(--ink-soft);font-weight:700;margin:2px 0 8px;}
+  .gdots{display:flex;justify-content:center;gap:7px;margin-bottom:16px;}
+  .gdot{width:9px;height:9px;border-radius:50%;background:#E3D8CF;transition:.15s;}
+  .gdot.on{background:var(--gold);transform:scale(1.3);}
+  .gdot.done{background:#D9C58A;}
+  .gstep{border-left:5px solid var(--gold);}
+  .gs-label{display:inline-block;font-size:14.5px;font-weight:800;color:#8A6800;
+    background:#FBF3DC;border-radius:999px;padding:3px 13px;margin-bottom:11px;}
+  .gs-body{font-size:18.5px;line-height:1.95;color:var(--ink);}
+  .gs-hint{font-size:15.5px;color:var(--ink-soft);background:#F5F0EA;border-radius:12px;
+    padding:11px 14px;margin-top:12px;line-height:1.7;}
+  .gs-eg{background:#FBF6F1;border:1px dashed #DAC9BB;border-radius:12px;padding:11px 14px;
+    margin-top:12px;font-size:16.5px;line-height:1.78;color:#5A4A39;}
+  .gs-eg .gl{font-size:13px;font-weight:800;color:#A6794A;letter-spacing:1px;margin-bottom:5px;}
+  .gs-pray{background:#ECF2F7;border-radius:12px;padding:11px 14px;margin-top:12px;
+    font-size:16.5px;line-height:1.85;color:#33506E;}
+  .gs-pray .gl{font-size:13px;font-weight:800;color:#5B7BA8;letter-spacing:1px;margin-bottom:5px;}
+  .gchips-title{font-size:13.5px;font-weight:800;color:#A6794A;letter-spacing:.5px;margin:16px 2px 8px;}
+  .gchips{display:flex;flex-wrap:wrap;gap:8px;}
+  .gchip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;
+    font-size:16px;color:var(--ink);cursor:pointer;font-family:inherit;transition:.1s;}
+  .gchip.on{border-color:var(--gold);background:#FBF3DC;color:#8A6800;font-weight:700;}
+  .gs-echo{background:#E7F1ED;border-radius:12px;padding:11px 14px;margin-top:12px;
+    font-size:16.5px;line-height:1.8;color:#2F5D52;}
+  .gs-echo .gl{font-size:13px;font-weight:800;color:#3C8C76;letter-spacing:1px;margin-bottom:5px;}
+  .gs-resp{background:#FBEEF1;border-radius:12px;padding:11px 14px;margin-top:12px;
+    font-size:16.5px;line-height:1.8;color:#7A3B4E;}
+  .gs-resp .gl{font-size:13px;font-weight:800;color:#B0345A;letter-spacing:1px;margin-bottom:5px;}
+  .gnav{display:flex;gap:12px;margin-top:6px;}
+  .gbtn{flex:1;border:none;border-radius:14px;padding:15px 8px;font-size:18px;font-weight:800;
+    font-family:inherit;cursor:pointer;}
+  .gbtn.gprev{background:#fff;color:#8A6800;border:2px solid var(--gold);}
+  .gbtn.gnext{background:var(--gold);color:#fff;box-shadow:0 5px 14px rgba(191,143,0,.28);}
+
+  /* ===== 底部分頁 ===== */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    display:flex;padding:6px 4px calc(env(safe-area-inset-bottom) + 4px);
+    box-shadow:0 -4px 18px rgba(140,60,80,.07);}
+  .tab{flex:1;background:none;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;
+    color:#A89AA0;font-size:12px;font-weight:700;transition:color .15s;}
+  .tab .ti{font-size:24px;line-height:1;filter:grayscale(.4) opacity(.7);transition:.15s;}
+  .tab.active{color:var(--rose);}
+  .tab.active .ti{filter:none;transform:translateY(-1px);}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="brandbar">
+  <div class="dove">🕊️ 國度321空中團契</div>
+  <div class="apptitle">321 夫妻成長營 <small id="brand-sub">愛的小家</small></div>
+</header>
+
+<!-- 今天 -->
+<section class="page" id="page-home">
+  <div class="greet">
+    <h2 id="greet-title">今天</h2>
+    <p>每天打開，看見你們愈來愈好。</p>
+  </div>
+
+  <div class="dashcard balcard">
+    <div class="blabel">💛 情感帳戶</div>
+    <div class="balrow">
+      <div class="big" id="bal-total">0</div>
+      <div class="bunit">筆累計存款</div>
+      <div class="bweek">本週<br><b id="bal-week">0</b> 筆</div>
+    </div>
+    <div class="balmsg" id="bal-msg">還沒有存款。今天就為對方存一筆愛吧！</div>
+  </div>
+
+  <button class="bigbtn" id="home-deposit" style="margin-bottom:16px;">💝 記一筆愛的存款</button>
+
+  <div class="dashcard">
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+      <div class="form-lbl" style="font-size:18px;margin:0;">✅ 今日幸福習慣</div>
+      <span style="margin-left:auto;color:var(--green);font-weight:800;font-size:18px;"><span id="hb-count">0</span>/6</span>
+    </div>
+    <div class="hpills" id="hb-pills"></div>
+    <button class="bigbtn" id="open-habits" style="background:#fff;color:var(--green);border:2px solid var(--green);box-shadow:none;margin-top:12px;">📅 查看習慣紀錄</button>
+  </div>
+  <div class="dashcard" id="anniv-card" style="cursor:pointer;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div class="form-lbl" style="font-size:18px;margin:0;">📅 週年與立約</div>
+      <span class="arrow" style="margin-left:auto;">›</span>
+    </div>
+    <div id="anniv-body"></div>
+  </div>
+</section>
+
+<!-- 複習 -->
+<section class="page active" id="page-learn">
+  <div class="lead">
+    <h2>七個專題　重點複習</h2>
+    <p>營會的領受帶回家。前六個專題是建造婚姻的材料與工法，專題七是整棟房子的房角石。</p>
+  </div>
+  <div class="topiclist" id="topiclist"></div>
+</section>
+
+<!-- 專題內頁 -->
+<section class="detail" id="detail">
+  <div class="dhead" id="dhead">
+    <button class="back" id="backbtn">‹ 返回</button>
+    <div class="dicon" id="d-icon"></div>
+    <div class="dlabel" id="d-label"></div>
+    <div class="dttl" id="d-ttl"></div>
+    <div class="dsub" id="d-sub"></div>
+  </div>
+  <div class="dbody" id="d-body"></div>
+</section>
+
+<!-- 操練 -->
+<section class="page" id="page-practice">
+  <div class="greet">
+    <h2>操練</h2>
+    <p>把領受化為今天就能做的一個動作。</p>
+  </div>
+
+  <div class="tcard" id="open-bank" style="--ac:var(--rose)">
+    <div class="num">💝</div>
+    <div class="meta">
+      <div class="label">每日操練</div>
+      <div class="ttl">愛的存款</div>
+      <div class="sub">感謝一件事、讚美一個優點、祝福一個盼望——天天為情感帳戶存款。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="tcard" id="open-hand" style="margin-top:14px;--ac:var(--rose-soft)">
+    <div class="num" style="background:var(--rose-soft)">🖐️</div>
+    <div class="meta">
+      <div class="label">衝突當下</div>
+      <div class="ttl">和好工具・溝通之手</div>
+      <div class="sub">吵架了怎麼辦？七步引導＋情緒辭彙庫，幫助你穿上新人，好好說。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="tcard" id="open-actions" style="margin-top:14px;--ac:var(--gold)">
+    <div class="num" style="background:var(--gold)">🤲</div>
+    <div class="meta">
+      <div class="label">愛的行動</div>
+      <div class="ttl">六個愛的行動</div>
+      <div class="sub">洗腳、浴水重生、按手、抹油、領餅杯、立約——營會的六個聖禮，帶回家繼續操練。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+</section>
+
+<!-- 愛的存款 子頁 -->
+<section class="bankview" id="bankview">
+  <div class="dhead" id="bankhead" style="background:linear-gradient(135deg,var(--rose),#92274A);">
+    <button class="back" id="bank-back">‹ 返回</button>
+    <div class="dicon">💝</div>
+    <div class="dlabel">每日操練</div>
+    <div class="dttl">愛的存款</div>
+    <div class="dsub">每個人心裡都有一個情感帳戶——讓對方開心，就是存款。</div>
+  </div>
+  <div class="dbody">
+    <div class="dashcard balcard">
+      <div class="blabel">💛 情感帳戶</div>
+      <div class="balrow">
+        <div class="big" id="bv-total">0</div>
+        <div class="bunit">筆累計存款</div>
+        <div class="bweek">本週<br><b id="bv-week">0</b> 筆</div>
+      </div>
+    </div>
+
+    <div class="dashcard">
+      <div class="form-lbl">存給誰？</div>
+      <div class="seg" id="seg-to"></div>
+
+      <div class="form-lbl">哪一種好話？</div>
+      <div class="seg types" id="seg-type">
+        <button data-type="感謝" class="on">感謝</button>
+        <button data-type="讚美">讚美</button>
+        <button data-type="祝福">祝福</button>
+      </div>
+      <div class="hint" id="type-hint">感謝一件事——謝謝他為這個家所做的。</div>
+
+      <div class="form-lbl">想說的話</div>
+      <textarea class="depo" id="depo-text" placeholder="例：謝謝你今天接送孩子，讓我可以安心工作。"></textarea>
+      <button class="bigbtn" id="save-depo" style="margin-top:12px;">存入這筆愛 💛</button>
+    </div>
+
+    <div class="form-lbl" style="margin:4px 2px 10px;">存款紀錄</div>
+    <div id="depo-list"></div>
+  </div>
+</section>
+
+<!-- 成長 -->
+<section class="page" id="page-grow">
+  <div class="greet">
+    <h2>成長</h2>
+    <p>看見軌跡，珍藏回憶。</p>
+  </div>
+
+  <div class="tcard" id="open-assess" style="--ac:var(--green)">
+    <div class="num" style="background:var(--green)">📊</div>
+    <div class="meta">
+      <div class="label">定期操練</div>
+      <div class="ttl">親密關係評估</div>
+      <div class="sub">三段評估＋綠黃紅燈號，定期重測，用折線圖看見關係愈來愈好。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="tcard" id="open-pearls" style="margin-top:14px;--ac:var(--purple)">
+    <div class="num" style="background:var(--purple)">🦪</div>
+    <div class="meta">
+      <div class="label">珍藏回憶</div>
+      <div class="ttl">珍珠時刻</div>
+      <div class="sub">把美好的時光、事情、物品與回憶，一顆顆串成珍珠項鍊。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+  <div class="tcard" id="open-covenant" style="--ac:var(--navy)">
+    <div class="num" style="background:var(--navy)">📜</div>
+    <div class="meta">
+      <div class="label">委身立約</div>
+      <div class="ttl">立約書</div>
+      <div class="sub">保存你們的盟約與紀念日，每年週年一起重宣、更新婚約。</div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+</section>
+
+<!-- 親密關係評估 子頁 -->
+<section class="bankview" id="assessview">
+  <div class="dhead" style="background:linear-gradient(135deg,var(--green),#2E5B3A);">
+    <button class="back" id="assess-back">‹ 返回</button>
+    <div class="dicon">📊</div>
+    <div class="dlabel">成長</div>
+    <div class="dttl">親密關係評估</div>
+    <div class="dsub">定期重測，看見關係愈來愈好。</div>
+  </div>
+  <div class="dbody" id="assess-body"></div>
+</section>
+
+<!-- 幸福習慣紀錄 子頁 -->
+<section class="bankview" id="habitview">
+  <div class="dhead" style="background:linear-gradient(135deg,var(--green),#2E5B3A);">
+    <button class="back" id="habit-back">‹ 返回</button>
+    <div class="dicon">📅</div>
+    <div class="dlabel">今天</div>
+    <div class="dttl">幸福習慣紀錄</div>
+    <div class="dsub">出門祝福、走路牽手、回家擁抱、睡前禱告、每天談心、每週約會。</div>
+  </div>
+  <div class="dbody" id="habit-body"></div>
+</section>
+
+<!-- 和好工具・溝通之手 子頁 -->
+<section class="bankview" id="handview">
+  <div class="dhead" style="background:linear-gradient(135deg,var(--rose-soft),#8E2F4C);">
+    <button class="back" id="hand-back">‹ 返回</button>
+    <div class="dicon">🖐️</div>
+    <div class="dlabel">和好工具</div>
+    <div class="dttl">溝通之手</div>
+    <div class="dsub">先穿上新人，再用這隻手好好說。</div>
+  </div>
+  <div class="dbody" id="hand-body"></div>
+</section>
+
+<!-- 六個愛的行動 子頁 -->
+<section class="bankview" id="actionsview">
+  <div class="dhead" id="actionshead" style="background:linear-gradient(135deg,var(--gold),#8A6800);">
+    <button class="back" id="actions-back">‹ 返回</button>
+    <div class="dicon" id="ac-icon">🤲</div>
+    <div class="dlabel" id="ac-label">操練</div>
+    <div class="dttl" id="ac-ttl">六個愛的行動</div>
+    <div class="dsub" id="ac-sub">營會的六個活動，帶回家繼續操練。</div>
+  </div>
+  <div class="dbody" id="actions-body"></div>
+</section>
+
+<!-- 立約書 子頁 -->
+<section class="bankview" id="covenantview">
+  <div class="dhead" style="background:linear-gradient(135deg,#23406F,#16294B);">
+    <button class="back" id="covenant-back">‹ 返回</button>
+    <div class="dicon">📜</div>
+    <div class="dlabel">委身立約</div>
+    <div class="dttl">立約書</div>
+    <div class="dsub">人要離開父母，與妻子連合，二人成為一體。</div>
+  </div>
+  <div class="dbody" id="covenant-body"></div>
+</section>
+
+<!-- 珍珠時刻 子頁 -->
+<section class="bankview" id="pearlsview">
+  <div class="dhead" style="background:linear-gradient(135deg,#7E5A98,#54396B);">
+    <button class="back" id="pearls-back">‹ 返回</button>
+    <div class="dicon">🦪</div>
+    <div class="dlabel">成長</div>
+    <div class="dttl">珍珠時刻</div>
+    <div class="dsub">把美好的時光，串成一串珍珠項鍊。</div>
+  </div>
+  <div class="dbody" id="pearls-body"></div>
+</section>
+
+<!-- 愛的小家 子頁 -->
+<section class="bankview" id="groupview">
+  <div class="dhead" style="background:linear-gradient(135deg,#B0345A,#7A2540);">
+    <button class="back" id="group-back">‹ 返回</button>
+    <div class="dicon">🤝</div>
+    <div class="dlabel">愛的小家</div>
+    <div class="dttl">小家通訊與跟進</div>
+    <div class="dsub">有兩三個人奉我的名聚會，那裡就有我在他們中間。</div>
+  </div>
+  <div class="dbody" id="group-body"></div>
+</section>
+
+<!-- 我們 -->
+<section class="page" id="page-us">
+  <div class="greet">
+    <h2>我們</h2>
+    <p>夫妻的檔案與設定。</p>
+  </div>
+
+  <div class="dashcard">
+    <div class="form-lbl" style="font-size:18px;margin-bottom:14px;">👫 夫妻檔案</div>
+    <div class="field">
+      <label>丈夫的稱呼</label>
+      <input type="text" id="pf-husband" placeholder="例：志明" maxlength="12">
+    </div>
+    <div class="field">
+      <label>丈夫的愛的語言</label>
+      <select id="pf-hlove"></select>
+    </div>
+    <div class="field">
+      <label>妻子的稱呼</label>
+      <input type="text" id="pf-wife" placeholder="例：春嬌" maxlength="12">
+    </div>
+    <div class="field">
+      <label>妻子的愛的語言</label>
+      <select id="pf-wlove"></select>
+    </div>
+    <button class="bigbtn" id="save-profile">儲存檔案</button>
+    <div class="saved" id="pf-saved"></div>
+  </div>
+
+  <div class="dashcard" id="open-group" style="cursor:pointer;">
+    <div class="minicard"><div class="mi">🤝</div><div style="flex:1;"><div class="mt">愛的小家</div><div class="md">陪伴員・小家長・成員・跟進</div></div><span style="color:var(--rose);font-size:24px;font-weight:700;line-height:1;">›</span></div>
+  </div>
+  <div class="dashcard">
+    <div class="form-lbl" style="font-size:18px;margin-bottom:6px;">🔤 字級大小</div>
+    <p class="a-intro" style="margin:0 0 12px;font-size:15px;">調整全 app 的文字大小，看得更清楚。</p>
+    <div class="seg" id="font-seg">
+      <button data-s="1">標準</button>
+      <button data-s="1.15">大</button>
+      <button data-s="1.3">特大</button>
+    </div>
+  </div>
+</section>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab" data-target="page-home"><span class="ti">🏠</span>今天</button>
+  <button class="tab active" data-target="page-learn"><span class="ti">📖</span>複習</button>
+  <button class="tab" data-target="page-practice"><span class="ti">❤️</span>操練</button>
+  <button class="tab" data-target="page-grow"><span class="ti">🌱</span>成長</button>
+  <button class="tab" data-target="page-us"><span class="ti">⚙️</span>我們</button>
+</nav>
+
+<script>
+/* ============ 七個專題內容資料 ============ */
+const TOPICS = [
+  {
+    n:"一", icon:"🌳", accent:"var(--rose)",
+    title:"建立幸福婚姻的理念（上）",
+    sub:"三一原型理論．馬車理論",
+    summary:"從創造、墮落到救贖更新——婚姻是兩個「新人」的連合。",
+    cards:[
+      {t:"scripture",ref:"創世記 1：26-27",v:"神說：我們要照著我們的形像、按著我們的樣式造人，使他們管理海裡的魚、空中的鳥、地上的牲畜，和全地，並地上所爬的一切昆蟲。神就照著自己的形像造人，乃是照著他的形像造男造女。"},
+      {t:"point",h:"原型・創造",b:"上帝照他的形像樣式造人，人受造奇妙可畏。<br><b>六字真言</b>：<ul><li><b>為寶為尊</b>——靈魂寶貴，形像尊貴</li><li><b>又美又善</b>——外貌美麗，內心善良</li><li><b>為樂為榮</b>——喜樂泉源，榮耀冠冕</li></ul>"},
+      {t:"scripture",ref:"創世記 2：24",v:"因此，人要離開父母，與妻子連合，二人成為一體。"},
+      {t:"point",h:"伊甸原型・共同點",b:"<ul><li>人要離開父母 <span class='arrowmap'>→</span> 成熟獨立</li><li>與妻子連合 <span class='arrowmap'>→</span> 親密聯結</li><li>二人成為一體 <span class='arrowmap'>→</span> 合而為一</li></ul>"},
+      {t:"point",h:"種子原型・獨特性",b:"<ul><li>個人要離開個人的父母</li><li>個人與個人的妻子連合</li><li>兩個個人成為一體</li></ul>"},
+      {t:"point",h:"後原型・墮落（弗 4：22）",b:"舊人因私慾的迷惑，漸漸變壞。<ul><li>離開上帝，卻離不開父母</li><li>與妻子隔閡</li><li>二人仍為二體</li></ul>"},
+      {t:"point",h:"恢復原型・救贖（弗 5：31-32）",b:"基督離開上帝來到地上，擔當我們的罪，完成救贖。<ul><li>基督與教會連合，我們成為新人</li><li>二靈成為一靈</li><li>基督是新郎，教會是新婦，二人成為一體</li></ul>"},
+      {t:"point",h:"成長原型・更新（弗 4：24）",b:"穿上新人，這新人是照著神的形像造的，有真理的仁義和聖潔。<ul><li>脫去舊人，穿上新人</li><li>與妻子的新人連合</li><li>兩個新人成為一體</li></ul>"},
+      {t:"point",h:"馬車理論",b:"<ul><li>身體是馬</li><li>心是韁繩</li><li>魂是車夫</li><li>靈是管家</li><li><b>耶穌是王</b></li></ul>"},
+      {t:"prin",b:"婚姻的更新，是兩個「新人」的連合。唯有<b>無己</b>，才能讓耶穌坐上馬車作王，駕馭身體、心、魂，走在合神心意的道路上。"}
+    ]
+  },
+  {
+    n:"二", icon:"🧭", accent:"var(--gold)",
+    title:"建立幸福婚姻的理念（下）",
+    sub:"321 理念．建立健康安全的生態環境",
+    summary:"三個基礎、兩個核心、一個目的——把 321 落實在每一次的選擇。",
+    cards:[
+      {t:"point",h:"三個基礎",b:"<ul><li><b>耶穌是我的榜樣</b>——謙卑容易驕傲難</li><li><b>聖經是我的準則</b>——神說的算，不是人說的算</li><li><b>聖靈是我的引導</b>——用心靠聖靈，不是用腦靠自己</li></ul>"},
+      {t:"point",h:"兩個核心",b:"<ul><li><b>讓耶穌作王</b>——無己容易有己難</li><li><b>讓耶穌得到一切的榮耀</b>——一切都是恩典</li></ul>"},
+      {t:"point",h:"一個目的",b:"<b>建立屬神的體系</b>——在乎每一次的選擇。<br>人會犯錯是正常的，不會馬上變好也是正常的；選擇帶來改變，變得愈來愈好。要給彼此<b>犯錯的空間</b>和<b>成長的時間</b>。"},
+      {t:"compare",h:"落實理念・選對的那一邊",rows:[
+        ["契約","盟約"],["好才結婚","不好才結婚"],["互扯","互補"],
+        ["有己","無己"],["焦點在人","焦點在耶穌"],["組織導向","關係導向"],
+        ["重事","重人"],["用腦","用心"],["談事","談心"],["驕傲","謙卑"]
+      ]},
+      {t:"point",h:"謙卑三招",b:"<ul><li>都是我的錯</li><li>你是我老師</li><li>我要服事你</li></ul>"},
+      {t:"point",h:"溝通三招",b:"<ul><li>感覺沒有對錯</li><li>建議不是決定</li><li>檢討不是批評</li></ul>"},
+      {t:"point",h:"除掉兩種邪「較」與兩種害蟲",b:"<ul><li><b>不比較</b>——誰大誰小</li><li><b>不計較</b>——誰多誰少</li><li><b>不嫉妒</b>——別人比我好</li><li><b>不猜疑</b>——別人對我不好</li></ul>"},
+      {t:"prin",b:"困難的耶穌做，簡單的我們做。不是馬上變好，肯定愈來愈好。改變，從我開始。"}
+    ]
+  },
+  {
+    n:"三", icon:"☀️", accent:"var(--green)",
+    title:"經營正向的婚姻",
+    sub:"看聽想講行．播放唱片理論",
+    summary:"正面的解讀才能正確解毒——把壞唱片換成好唱片。",
+    cards:[
+      {t:"point",h:"人生的正事",b:"<b>身體</b>五件正事：吃、喝、拉、撒、睡——正確地做，身體必健康。<br><b>心靈</b>五件正事：看、聽、想、講、行——做得好，人生必美好。"},
+      {t:"point",h:"正確的看",b:"<ul><li>看別人：為寶為尊、又美又善、為樂為榮、比自己強</li><li>看自己：合乎中道</li><li>看事情：都是美好的——上帝有本事把壞事變好事</li></ul>"},
+      {t:"point",h:"正確的聽",b:"用心聽、專心聽、同理心聽。<br><b>傾聽就是愛，瞭解中有醫治。</b>"},
+      {t:"point",h:"正確的想",b:"<ul><li>凡事必有上帝的美意</li><li>凡事必有我的功課</li><li>苦難之後必有更大的祝福</li></ul>"},
+      {t:"point",h:"正確的講與行",b:"講感謝、讚美、祝福的好話。<br>你願意人怎樣待你，就怎樣待人；施比受更為有福。"},
+      {t:"point",h:"從壞事操練",b:"正面解讀才能正確解毒；負面解讀會產生心靈的毒素。<ul><li>危機就是轉機</li><li>正向回應產生良性循環，最後反敗為勝</li><li>不要以惡報惡，倒要以善勝惡</li></ul>"},
+      {t:"point",h:"播放唱片理論",b:"<b>壞唱片</b>：看不好→聽不好→想不好→講不好→行不好，封閉沒有出路。<br><b>好唱片</b>：看與聽常常無法改變，但<b>想、講、行</b>可以改變——產生新的良性循環的軌道。"},
+      {t:"prin",b:"用心靠聖靈，不要用腦靠自己；用心就開心，用腦就煩惱。一生的果效從心發出。"}
+    ]
+  },
+  {
+    n:"四", icon:"💞", accent:"var(--rose-soft)",
+    title:"性福！幸福！",
+    sub:"聖經中對性的看見",
+    summary:"性是神賜給已婚夫妻純潔、聖潔又美好的恩典。",
+    cards:[
+      {t:"note",b:"本專題為<b>已婚夫妻</b>內容。聖經以尊貴、聖潔的眼光看待夫妻的親密，這裡整理屬靈與關係的原則；更詳細的實用內容請參閱學員手冊，與配偶一同閱讀分享。"},
+      {t:"point",h:"聖經對性的看見",b:"<ul><li>性是神對已婚夫妻的心意，在墮落之前就是神的心意</li><li>性幫助夫妻進入聯合，沒有什麼好羞恥</li><li>性是用來向伴侶傳達愛——完全敞開自己被愛</li><li>婚姻中的性是純潔和神聖的</li><li>性是為要享受，也為要生育下一代</li><li>夫妻一生都要享受性</li></ul>"},
+      {t:"point",h:"在性上彼此滿足的心",b:"<ul><li>人最重要的性器官是腦——心思與態度先預備好</li><li>充滿愛和溫柔地滿足配偶的需要</li><li>為性製造正確的氣氛</li><li>好的性是有效的屬靈爭戰</li><li>坦誠溝通彼此的需要，不做冒犯配偶的事</li></ul>"},
+      {t:"point",h:"持續堅固三樣",b:"<ul><li>熱情</li><li>愛慕</li><li>享樂</li></ul>"},
+      {t:"point",h:"夫妻分享題",b:"<ul><li>這個專題，你有什麼領受和學習？</li><li>你對彼此性生活的感恩</li><li>分享你在這方面的需要</li><li>你們可以如何增進和諧與樂趣？</li></ul>"},
+      {t:"prin",b:"在神的計畫裡，夫妻的親密是讓人完全敞開、被愛、合一的方式——以愛、以尊重、以感恩，把這份恩典經營得又純潔又甜美。"}
+    ]
+  },
+  {
+    n:"五", icon:"💬", accent:"var(--blue)",
+    title:"經營美滿婚姻的方法（上）",
+    sub:"屬神的價值觀．五種愛的語言．愛的存款",
+    summary:"改變別人最快的路，是改變自己；天天為情感帳戶存款。",
+    cards:[
+      {t:"point",h:"正確的先後次序",b:"不要本末倒置。<ul><li>頭 <span class='arrowmap'>→</span> 身體 <span class='arrowmap'>→</span> 雙腳</li><li>生命 <span class='arrowmap'>→</span> 關係 <span class='arrowmap'>→</span> 事工</li><li>夫妻 <span class='arrowmap'>→</span> 兒女 <span class='arrowmap'>→</span> 父母</li><li>婚姻 <span class='arrowmap'>→</span> 家庭 <span class='arrowmap'>→</span> 工作</li></ul>"},
+      {t:"point",h:"經營的方法",b:"做沒做過的事是成長，做不敢做的事是勇敢，做不想做的事是突破。<br><b>改變別人最快的路，是改變自己。</b><br>右手握拳宣告：我要改變、我必須改變、我能改變、我正在改變、我已經改變。"},
+      {t:"point",h:"五種愛的語言",b:"<ul><li>身體接觸——牽手、擁抱</li><li>肯定話語——五種好話</li><li>精心時刻——約會、散步、按摩</li><li>接受禮物——鮮花、卡片、短信</li><li>服務行動——家事、服務</li></ul>"},
+      {t:"point",h:"肯定話語：五種好話",b:"讚美、感謝、鼓勵、引導、祝福。<br><b>讚美的好話</b>：右眼看優點、左眼看缺點；憑事實、憑愛心、憑信心讚美。配偶是<b>施工中的傑作</b>，上帝是作者——讚美作品，榮耀歸給作者。"},
+      {t:"point",h:"感謝的好話",b:"<ul><li>不要覺得自然而然</li><li>不要當作理所當然</li><li>不要以為偶然突然</li><li>都是上帝恩典使然</li></ul>所以——<b>凡事要感謝</b>。"},
+      {t:"point",h:"愛的存款",b:"每個人心裡都有一個<b>情感帳戶</b>。<ul><li><b>存款</b>：讓對方開心、感到被愛</li><li><b>提款</b>：讓對方傷心、感到不被愛</li></ul>智慧存款——投其所好，滿足所需。"},
+      {t:"prin",b:"改變別人是上帝的工作，改變自己要與上帝合作。先生命、再關係、後事工。"}
+    ]
+  },
+  {
+    n:"六", icon:"🦪", accent:"var(--purple)",
+    title:"經營美滿婚姻的方法（下）",
+    sub:"珍珠時刻．處理衝突三階段．溝通之手",
+    summary:"把一粒沙包容成一顆珍珠；衝突時，先選擇穿上新人。",
+    cards:[
+      {t:"point",h:"珍珠時刻",b:"你要做吐沙的蛤蜊，還是包容沙的珍珠貝？<br>配偶的缺點和過錯像一粒沙，你可以選擇吐出去，或用愛包容——<b>從一粒沙變成一顆珍珠，從一堆沙變成一串珍珠項鍊。</b>"},
+      {t:"point",h:"上帝給我們的兩大能力",b:"記憶力與想像力——能重溫舊夢，能轉移注意力，從看到的缺點轉到想到的美好。<br><b>轉化思緒，就能轉化情緒。</b>"},
+      {t:"point",h:"衝突的產生",b:"男女大不同，個性、原生家庭、成長背景不同，差異產生衝突。<br>身體正面是<b>新人（謙卑）</b>，背面是<b>舊人（驕傲）</b>。<b>驕傲是造成衝突最大的原因。</b>"},
+      {t:"point",h:"處理衝突・第一階段",b:"<b>解決我的問題</b>——看見自己的問題。衝突引起我的生氣傷心，是因為我選擇了背面的舊人、選擇了驕傲。耶穌是醫生，藉著配偶觸診我的痛點。看見自己的問題，接納別人就很自然。"},
+      {t:"point",h:"處理衝突・第二階段",b:"<b>接納別人的問題</b>——接納差異、補足差異、成全他，讓他感到被接納被愛才願意改變。<br>用肯定句表達否定事：<ul><li>是是　是是是　但是　你說是不是</li><li>好好　好好好　好像　你說好不好</li><li>對對　對對對　對不起　你說對不對</li></ul>"},
+      {t:"point",h:"處理衝突・第三階段",b:"<b>調整彼此的問題</b>——能夠心平氣和，用新人對新人溝通，用溝通之手彼此了解差異、解決衝突。"},
+      {t:"point",h:"衝突的五種模式",b:"<ul><li>熱戰型</li><li>冷戰型</li><li>逃避型</li><li>屈就型</li><li>對談型 ✦（最好的）</li></ul>"},
+      {t:"hand",h:"溝通之手・七步",rows:[
+        ["手腕","感謝付出"],["姆指","描述情境"],["食指","述說感受"],
+        ["中指","表達需求"],["無名指","表示歉意"],["小指","提出建議"],["手掌","感謝傾聽"]
+      ]},
+      {t:"prin",b:"衝突時是誰的錯？是「我做錯選擇」——選擇穿上舊人、選擇驕傲。選擇謙卑、選擇新人，就能化干戈為珍珠。"}
+    ]
+  },
+  {
+    n:"七", icon:"👑", accent:"var(--navy)", capstone:true,
+    title:"美滿婚姻的秘訣",
+    sub:"更新婚約盟約禮證道．以弗所書 5：21-33",
+    summary:"房角石——讓基督作頭、作王，是美滿婚姻最深的秘訣。",
+    cards:[
+      {t:"scripture",ref:"以弗所書 5：21、22、25、31-33",v:"又當存敬畏基督的心，彼此順服。你們作妻子的，當順服自己的丈夫，如同順服主。你們作丈夫的，要愛你們的妻子，正如基督愛教會，為教會捨己。⋯⋯為這個緣故，人要離開父母，與妻子連合，二人成為一體。這是極大的奧祕，但我是指著基督和教會說的。然而，你們各人都當愛妻子，如同愛自己一樣。妻子也當敬重她的丈夫。"},
+      {t:"point",h:"一、夫妻的角色",b:"<ul><li><b>離開</b>——夫妻要成熟獨立</li><li><b>連合</b>——夫妻要親密相連</li><li><b>合一</b>——夫妻要成為一體</li></ul>丈夫是頭：要<b>帶頭，不要出頭</b>。<br>妻子是身體：要<b>體貼體諒，不要替代</b>。<br>丈夫像老闆，妻子像秘書——秘書可以比老闆聰明能幹，但秘書的意見是<b>建議，不是決定</b>。"},
+      {t:"point",h:"頭與兩個腦",b:"<ul><li><b>個人</b>：左腦右腦提供意見，頭作決定——一頭二臂</li><li><b>夫妻</b>：男腦女腦提供意見，丈夫是頭——二頭四臂</li><li><b>靠主</b>：神腦人腦提供意見，<b>基督是頭</b>作決定——三頭六臂</li></ul>"},
+      {t:"point",h:"二、夫妻的職責",b:"<b>丈夫</b>愛妻子，正如基督愛教會——疼愛呵護，給她安全感（對妻子說：我愛你）。<br><b>妻子</b>順服丈夫，正如教會順服基督——尊重順服，給他自信心（對丈夫說：你好棒）。<br>彼此選擇謙卑、捨己、無己，就能彼此相愛、彼此順服、彼此敬重。"},
+      {t:"point",h:"三、夫妻的使命",b:"<ul><li><b>彰顯奧祕</b>——如同基督與教會連合，二人成為一體</li><li><b>彰顯榮耀</b>——成就上帝的旨意，教會成為聖潔，與基督在天上作王</li></ul>"},
+      {t:"prin",b:"美滿婚姻最深的秘訣，就是<b>讓基督作頭、讓耶穌作王</b>。無己，讓基督在我們的婚姻裡居首位——這是整棟房子的房角石。"}
+    ]
+  }
+];
+
+/* ============ 渲染專題清單 ============ */
+function renderList(){
+  const wrap=document.getElementById('topiclist');
+  wrap.innerHTML=TOPICS.map((tp,i)=>`
+    <div class="tcard${tp.capstone?' capstone':''}" style="--ac:${tp.accent}" data-idx="${i}">
+      <div class="num">${tp.icon}</div>
+      <div class="meta">
+        <div class="label">專題${tp.n}</div>
+        <div class="ttl">${tp.title}</div>
+        <div class="sub">${tp.summary}</div>
+        ${tp.capstone?'<span class="capseal">房角石</span>':''}
+      </div>
+      <div class="arrow">›</div>
+    </div>`).join('');
+}
+
+/* ============ 渲染專題內頁 ============ */
+function cardHTML(c,accent){
+  if(c.t==='scripture')
+    return `<div class="scripture" style="--ac:${accent}"><div class="ref">📖 ${c.ref}</div><div class="verse">${c.v}</div></div>`;
+  if(c.t==='prin')
+    return `<div class="pcard"><div class="ptag">✦ 落實 321 理念</div><p>${c.b}</p></div>`;
+  if(c.t==='note')
+    return `<div class="note">${c.b}</div>`;
+  if(c.t==='compare'){
+    const rows=c.rows.map(r=>`<div class="crow"><div class="bad">${r[0]}</div><div class="vs">vs</div><div class="good">${r[1]}</div></div>`).join('');
+    return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>${c.h}</h3><div class="compare">${rows}</div></div>`;
+  }
+  if(c.t==='hand'){
+    const items=c.rows.map(r=>`<li><b>${r[0]}</b>　${r[1]}</li>`).join('');
+    return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>🖐️ ${c.h}</h3><ul class="handlist">${items}</ul></div>`;
+  }
+  return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>${c.h}</h3><p>${c.b}</p></div>`;
+}
+
+function openTopic(i){
+  const tp=TOPICS[i];
+  const head=document.getElementById('dhead');
+  head.style.background = tp.capstone
+    ? 'linear-gradient(135deg,#23406F,#16294B)'
+    : `linear-gradient(135deg,${tp.accent},rgba(0,0,0,.28))`;
+  document.getElementById('d-icon').textContent=tp.icon;
+  document.getElementById('d-label').textContent='專題'+tp.n+(tp.capstone?'　·　房角石':'');
+  document.getElementById('d-ttl').textContent=tp.title;
+  document.getElementById('d-sub').textContent=tp.sub;
+  document.getElementById('d-body').innerHTML=tp.cards.map(c=>cardHTML(c,tp.accent)).join('');
+  document.getElementById('page-learn').classList.remove('active');
+  document.getElementById('detail').classList.add('active');
+  window.scrollTo(0,0);
+}
+function closeTopic(){
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('page-learn').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ============ 底部分頁切換 ============ */
+document.getElementById('tabbar').addEventListener('click',e=>{
+  const btn=e.target.closest('.tab'); if(!btn) return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('bankview').classList.remove('active');
+  document.getElementById('assessview').classList.remove('active');
+  document.getElementById('habitview').classList.remove('active');
+  document.getElementById('handview').classList.remove('active');
+  document.getElementById('actionsview').classList.remove('active');
+  document.getElementById('covenantview').classList.remove('active');
+  document.getElementById('pearlsview').classList.remove('active');
+  document.getElementById('groupview').classList.remove('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(btn.dataset.target).classList.add('active');
+  if(typeof renderBalance==='function'){ renderBalance(); updateGreeting(); renderHabitToday(); renderAnniv(); }
+  window.scrollTo(0,0);
+});
+
+renderList();
+
+/* ============ 事件委派（取代行內 onclick，相容 LINE 等內建瀏覽器） ============ */
+document.getElementById('topiclist').addEventListener('click',e=>{
+  const card=e.target.closest('.tcard'); if(!card) return;
+  openTopic(Number(card.dataset.idx));
+});
+document.getElementById('backbtn').addEventListener('click',closeTopic);
+
+/* ============ 儲存（localStorage，附記憶體備援，相容預覽沙箱） ============ */
+const store = (function(){
+  let mem={}, ok=false;
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); ok=true; }catch(e){}
+  return {
+    get(k){ try{ return ok? localStorage.getItem(k) : (k in mem? mem[k]:null); }catch(e){ return (k in mem? mem[k]:null); } },
+    set(k,v){ try{ ok? localStorage.setItem(k,v) : (mem[k]=v); }catch(e){ mem[k]=v; } }
+  };
+})();
+function jget(k,d){ try{ const v=store.get(k); return v? JSON.parse(v):d; }catch(e){ return d; } }
+function jset(k,v){ store.set(k, JSON.stringify(v)); }
+
+/* ============ 夫妻檔案 ============ */
+const LOVE_LANGS=['身體接觸','肯定話語','精心時刻','接受禮物','服務行動'];
+function getProfile(){ return jget('couple_profile',{husband:'',wife:'',hLove:'',wLove:''}); }
+function fillSelect(sel){ sel.innerHTML='<option value="">（未選）</option>'+LOVE_LANGS.map(l=>`<option>${l}</option>`).join(''); }
+function initProfileUI(){
+  const p=getProfile();
+  fillSelect(document.getElementById('pf-hlove'));
+  fillSelect(document.getElementById('pf-wlove'));
+  document.getElementById('pf-husband').value=p.husband||'';
+  document.getElementById('pf-wife').value=p.wife||'';
+  document.getElementById('pf-hlove').value=p.hLove||'';
+  document.getElementById('pf-wlove').value=p.wLove||'';
+}
+document.getElementById('save-profile').addEventListener('click',()=>{
+  jset('couple_profile',{
+    husband:document.getElementById('pf-husband').value.trim(),
+    wife:document.getElementById('pf-wife').value.trim(),
+    hLove:document.getElementById('pf-hlove').value,
+    wLove:document.getElementById('pf-wlove').value
+  });
+  const s=document.getElementById('pf-saved');
+  s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
+  refreshNames(); updateGreeting();
+});
+
+let NAMES={h:'丈夫',w:'妻子'};
+function refreshNames(){
+  const p=getProfile();
+  NAMES.h=p.husband||'丈夫'; NAMES.w=p.wife||'妻子';
+  renderToSeg();
+}
+function updateGreeting(){
+  const p=getProfile(), t=document.getElementById('greet-title');
+  t.textContent=(p.husband&&p.wife)? `${p.husband} ❤ ${p.wife}` : '今天';
+}
+
+/* ============ 愛的存款 ============ */
+const TYPE_HINTS={
+  '感謝':'感謝一件事——謝謝他為這個家所做的。',
+  '讚美':'讚美一個優點——他是上帝施工中的傑作。',
+  '祝福':'祝福一個盼望——為他說一句帶著信心的好話。'
+};
+const TYPE_CLASS={'感謝':'gan','讚美':'zan','祝福':'zhu'};
+let bankState={to:'h',type:'感謝'};
+let bankReturn='page-home';
+
+function getDeposits(){ return jget('love_deposits',[]); }
+function isThisWeek(ts){
+  const now=new Date(), d=new Date(ts);
+  const day=(now.getDay()+6)%7;
+  const monday=new Date(now); monday.setHours(0,0,0,0); monday.setDate(now.getDate()-day);
+  return d>=monday;
+}
+function renderBalance(){
+  const list=getDeposits(), total=list.length, week=list.filter(x=>isThisWeek(x.ts)).length;
+  ['bal-total','bv-total'].forEach(id=>{const el=document.getElementById(id); if(el)el.textContent=total;});
+  ['bal-week','bv-week'].forEach(id=>{const el=document.getElementById(id); if(el)el.textContent=week;});
+  const msg=document.getElementById('bal-msg');
+  if(msg){
+    if(total===0) msg.textContent='還沒有存款。今天就為對方存一筆愛吧！';
+    else if(week===0) msg.textContent='本週還沒存款。一句好話，就是一筆愛的存款。';
+    else msg.textContent=`本週已存 ${week} 筆——凡事謝恩，把榮耀歸給主。`;
+  }
+}
+function renderToSeg(){
+  const seg=document.getElementById('seg-to');
+  seg.innerHTML=
+    `<button data-to="h"${bankState.to==='h'?' class="on"':''}>給 ${NAMES.h}</button>`+
+    `<button data-to="w"${bankState.to==='w'?' class="on"':''}>給 ${NAMES.w}</button>`;
+}
+function renderDepoList(){
+  const list=getDeposits().slice().sort((a,b)=>b.ts-a.ts);
+  const wrap=document.getElementById('depo-list');
+  if(!list.length){
+    wrap.innerHTML='<div class="empty"><span class="eic">💛</span>還沒有存款紀錄。<br>每一句感謝、讚美與祝福，都會存在這裡。</div>';
+    return;
+  }
+  wrap.innerHTML=list.map(d=>{
+    const name=d.to==='h'?NAMES.h:NAMES.w, dt=new Date(d.ts);
+    return `<div class="deposit">
+      <button class="del" data-id="${d.id}">✕</button>
+      <div class="dtop">
+        <span class="chip to">給 ${name}</span>
+        <span class="chip ${TYPE_CLASS[d.type]||'gan'}">${d.type}</span>
+        <span class="dtime">${dt.getMonth()+1}/${dt.getDate()}</span>
+      </div>
+      <div class="dtext"></div>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('.deposit').forEach((node,i)=>{ node.querySelector('.dtext').textContent=list[i].text; });
+}
+function openBank(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-home'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('assessview').classList.remove('active');
+  document.getElementById('habitview').classList.remove('active');
+  document.getElementById('handview').classList.remove('active');
+  document.getElementById('bankview').classList.add('active');
+  renderBalance(); renderToSeg(); renderDepoList();
+  window.scrollTo(0,0);
+}
+function closeBank(){
+  document.getElementById('bankview').classList.remove('active');
+  document.getElementById(bankReturn).classList.add('active');
+  renderBalance(); updateGreeting();
+  window.scrollTo(0,0);
+}
+document.getElementById('open-bank').addEventListener('click',openBank);
+document.getElementById('home-deposit').addEventListener('click',openBank);
+document.getElementById('bank-back').addEventListener('click',closeBank);
+document.getElementById('seg-to').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  bankState.to=b.dataset.to; renderToSeg();
+});
+document.getElementById('seg-type').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  bankState.type=b.dataset.type;
+  document.querySelectorAll('#seg-type button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.getElementById('type-hint').textContent=TYPE_HINTS[bankState.type];
+});
+document.getElementById('save-depo').addEventListener('click',()=>{
+  const ta=document.getElementById('depo-text'), text=ta.value.trim();
+  if(!text){ ta.focus(); return; }
+  const list=getDeposits();
+  list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:Date.now(),to:bankState.to,type:bankState.type,text});
+  jset('love_deposits',list);
+  ta.value=''; renderBalance(); renderDepoList();
+});
+document.getElementById('depo-list').addEventListener('click',e=>{
+  const del=e.target.closest('.del'); if(!del) return;
+  jset('love_deposits', getDeposits().filter(x=>x.id!==del.dataset.id));
+  renderBalance(); renderDepoList();
+});
+
+/* ============ 初始化 ============ */
+initProfileUI();
+refreshNames();
+updateGreeting();
+renderBalance();
+
+/* ============ 親密關係評估 ============ */
+const ASSESS2=['金錢管理','感受關愛','衝突管理','性關係','家務分配','子女教養','姻親關係','朋友交往','休閒娛樂','宗教信仰'];
+const ASSESS3=[
+ '我的伴侶經常批評我的個性，對我作人身攻擊。',
+ '我的話語或行為經常被伴侶誤認為帶有惡意。',
+ '我們無法談論問題，小小的爭執常一下子失控，造成兇狠對罵，帶來更深的傷害。',
+ '我們經常冷戰，關係緊繃。',
+ '我的伴侶經常對我冷嘲熱諷，表露輕蔑、厭惡。',
+ '我們有爭執時，總有一方不願再談，退避三舍，離開現場。',
+ '在這親密關係中，我覺得沒有安全感，無法吐露心事與真正的感受。',
+ '在親密關係中，覺得很寂寞。'
+];
+function lightOf(total){
+  if(total<=18) return {key:'green',label:'綠燈區',color:'#3FA45B',emoji:'🟢',
+    msg:'你們的關係穩健、安全。繼續用感謝、讚美、祝福為情感帳戶存款，讓珍珠愈串愈長。'};
+  if(total<=36) return {key:'yellow',label:'黃燈區',color:'#D9A300',emoji:'🟡',
+    msg:'關係出現一些警訊，是邀請你們更靠近的提醒。先看見自己的問題（都是我的錯），用謙卑的看聽想講行來回應。'};
+  return {key:'red',label:'紅燈區',color:'#C0392B',emoji:'🔴',
+    msg:'關係亮起紅燈，別灰心——危機就是轉機。記得用「溝通之手」好好對談，也可以邀請陪伴員一起同行。不是馬上變好，肯定愈來愈好。'};
+}
+function getAssessments(){ return jget('assessments',[]); }
+function who(k){ return k==='h'? NAMES.h : NAMES.w; }
+function shade(hex){
+  const n=parseInt(hex.replace('#',''),16);
+  let r=Math.round(((n>>16)&255)*.68), g=Math.round(((n>>8)&255)*.68), b=Math.round((n&255)*.68);
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+let assessState=null, assessScreen='intro';
+
+function openAssess(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-grow'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('bankview').classList.remove('active');
+  document.getElementById('habitview').classList.remove('active');
+  document.getElementById('handview').classList.remove('active');
+  document.getElementById('assessview').classList.add('active');
+  showAssessIntro();
+  window.scrollTo(0,0);
+}
+function closeAssess(){
+  document.getElementById('assessview').classList.remove('active');
+  document.getElementById(bankReturn||'page-grow').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-assess').addEventListener('click',openAssess);
+document.getElementById('assess-back').addEventListener('click',()=>{
+  if(assessScreen==='intro') closeAssess(); else showAssessIntro();
+});
+
+function showAssessIntro(){
+  assessScreen='intro';
+  const hist=getAssessments(), body=document.getElementById('assess-body');
+  let histBlock='';
+  if(hist.length){
+    const last=hist[hist.length-1], lt=lightOf(last.p3total);
+    histBlock=`<div class="dashcard">
+      <div class="minicard"><div class="mi">${lt.emoji}</div>
+        <div><div class="mt">最近一次：${who(last.who)}　${last.sat} 分</div>
+        <div class="md">${lt.label}　·　已完成 ${hist.length} 次評估</div></div></div>
+      <button class="bigbtn" id="a-history" style="background:var(--green);margin-top:12px;">📈 查看紀錄與趨勢</button>
+    </div>`;
+  }
+  body.innerHTML=`
+    <div class="dashcard a-intro">
+      <p>這份評估幫助你們<b>定期檢視</b>親密關係的狀態。請憑最近的真實感受作答，沒有標準答案——重點在探索與了解，先不急著解決問題。</p>
+      <div class="form-lbl">這次由誰來填？</div>
+      <div class="seg who" id="a-who">
+        <button data-who="h" class="on">${NAMES.h}</button>
+        <button data-who="w">${NAMES.w}</button>
+      </div>
+      <button class="bigbtn" id="a-start" style="background:var(--green);">開始評估</button>
+    </div>${histBlock}`;
+  assessState={who:'h'};
+  body.querySelector('#a-who').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    assessState.who=b.dataset.who;
+    body.querySelectorAll('#a-who button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+  body.querySelector('#a-start').addEventListener('click',showAssessForm);
+  const h=body.querySelector('#a-history'); if(h) h.addEventListener('click',showAssessHistory);
+}
+function rateRow(q,i,arr,warn,lo,hi){
+  const cur=assessState[arr][i]||0;
+  const btns=[1,2,3,4,5,6].map(v=>`<button data-v="${v}"${cur===v?' class="on"':''}>${v}</button>`).join('');
+  return `<div class="rate-row${warn?' warn':''}">
+    <div class="rate-q"><span class="qn">${i+1}.</span>${q}</div>
+    <div class="rate-btns" data-arr="${arr}" data-idx="${i}">${btns}</div>
+    <div class="rate-ends"><span>${lo}</span><span>${hi}</span></div>
+  </div>`;
+}
+function showAssessForm(){
+  assessScreen='form';
+  if(assessState.sat==null) assessState.sat=70;
+  assessState.p2=assessState.p2||Array(10).fill(0);
+  assessState.p3=assessState.p3||Array(8).fill(0);
+  const body=document.getElementById('assess-body');
+  const p2rows=ASSESS2.map((q,i)=>rateRow(q,i,'p2',false,'極不滿意','極滿意')).join('');
+  const p3rows=ASSESS3.map((q,i)=>rateRow(q,i,'p3',true,'極不同意','極同意')).join('');
+  body.innerHTML=`
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;">評估一　整體滿意度</div>
+      <p class="a-intro" style="margin:0 0 2px;font-size:15px;">整體來說，你對與伴侶的親密關係有多滿意？</p>
+      <div class="sat-wrap"><span class="sat-num" id="sat-num">${assessState.sat}</span><span class="sat-unit"> / 100 分</span></div>
+      <input type="range" class="sat" id="sat-range" min="0" max="100" step="5" value="${assessState.sat}">
+      <div class="rate-ends"><span>極不滿意</span><span>極滿意</span></div>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;">評估二　十個面向的滿意度</div>
+      <div>${p2rows}</div>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;">評估三　關係的警訊</div>
+      <p class="a-intro" style="margin:0 0 4px;font-size:15px;">越同意，分數越高。請誠實作答。</p>
+      <div>${p3rows}</div>
+    </div>
+    <div class="saved" id="a-msg" style="color:var(--rose);min-height:0;margin:0 0 8px;"></div>
+    <button class="bigbtn" id="a-finish" style="background:var(--green);">看結果</button>`;
+  const r=body.querySelector('#sat-range'), n=body.querySelector('#sat-num');
+  r.addEventListener('input',()=>{ assessState.sat=Number(r.value); n.textContent=r.value; });
+  body.querySelectorAll('.rate-btns').forEach(grp=>{
+    grp.addEventListener('click',e=>{
+      const b=e.target.closest('button'); if(!b) return;
+      assessState[grp.dataset.arr][Number(grp.dataset.idx)]=Number(b.dataset.v);
+      grp.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  body.querySelector('#a-finish').addEventListener('click',()=>{
+    if(assessState.p2.some(v=>!v)||assessState.p3.some(v=>!v)){
+      body.querySelector('#a-msg').textContent='還有題目沒作答，請完成所有項目再看結果。';
+      return;
+    }
+    showAssessResult();
+  });
+  window.scrollTo(0,0);
+}
+function showAssessResult(){
+  assessScreen='result';
+  const p2sum=assessState.p2.reduce((a,b)=>a+b,0);
+  const p3sum=assessState.p3.reduce((a,b)=>a+b,0);
+  const lt=lightOf(p3sum), body=document.getElementById('assess-body');
+  body.innerHTML=`
+    <div class="light-badge" style="background:linear-gradient(135deg,${lt.color},${shade(lt.color)});">
+      <div class="lemoji">${lt.emoji}</div>
+      <div class="ltxt"><div class="ll">${lt.label}</div><div class="ls">關係警訊分數　${p3sum} / 48</div></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-box"><div class="rbnum">${assessState.sat}</div><div class="rblbl">整體滿意度 /100</div></div>
+      <div class="result-box"><div class="rbnum">${p2sum}</div><div class="rblbl">十面向滿意 /60</div></div>
+    </div>
+    <div class="interp">${lt.msg}</div>
+    <button class="bigbtn" id="a-save" style="background:var(--green);">儲存這次評估</button>
+    <div class="saved" id="a-saved2"></div>
+    <button class="bigbtn" id="a-redo" style="background:#fff;color:var(--green);border:2px solid var(--green);box-shadow:none;margin-top:6px;">重新作答</button>`;
+  body.querySelector('#a-save').addEventListener('click',()=>{
+    const list=getAssessments();
+    list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:Date.now(),
+      who:assessState.who,sat:assessState.sat,p2:assessState.p2.slice(),p3:assessState.p3.slice(),
+      p2sum,p3total:p3sum,light:lt.key});
+    jset('assessments',list);
+    body.querySelector('#a-saved2').textContent='已儲存 ✓';
+    assessState=null;
+    setTimeout(showAssessHistory,800);
+  });
+  body.querySelector('#a-redo').addEventListener('click',()=>{ assessState={who:assessState.who}; showAssessForm(); });
+  window.scrollTo(0,0);
+}
+function buildChart(hist){
+  const W=320,H=170,padL=30,padR=12,padT=14,padB=22;
+  const x0=padL,x1=W-padR,y0=H-padB,y1=padT;
+  const xFor=i=> hist.length<=1?(x0+x1)/2 : x0+(x1-x0)*i/(hist.length-1);
+  const yFor=v=> y0+(y1-y0)*(v/100);
+  let grid='';
+  [0,50,100].forEach(v=>{const y=yFor(v);
+    grid+=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="#EDE3DC" stroke-width="1"/>`;
+    grid+=`<text x="${x0-5}" y="${y+4}" text-anchor="end" font-size="11" fill="#B6A9AF">${v}</text>`;
+  });
+  function series(w,color){
+    const pts=hist.map((e,i)=>({i,e})).filter(o=>o.e.who===w);
+    if(!pts.length) return '';
+    const poly=pts.map(o=>`${xFor(o.i)},${yFor(o.e.sat)}`).join(' ');
+    const line=pts.length>1?`<polyline points="${poly}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>`:'';
+    const dots=pts.map(o=>`<circle cx="${xFor(o.i)}" cy="${yFor(o.e.sat)}" r="4.5" fill="${color}"/>`).join('');
+    return line+dots;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">${grid}${series('h','#5B7BA8')}${series('w','#B0345A')}</svg>`;
+}
+function showAssessHistory(){
+  assessScreen='history';
+  const hist=getAssessments().slice().sort((a,b)=>a.ts-b.ts), body=document.getElementById('assess-body');
+  if(!hist.length){
+    body.innerHTML='<div class="empty"><span class="eic">📊</span>還沒有評估紀錄。<br>完成第一次評估後，這裡會出現趨勢圖。</div>'+
+      '<button class="bigbtn" id="a-new" style="background:var(--green);">開始評估</button>';
+    body.querySelector('#a-new').addEventListener('click',showAssessIntro); return;
+  }
+  const items=hist.slice().reverse().map(e=>{
+    const lt=lightOf(e.p3total),dt=new Date(e.ts);
+    return `<div class="hist-item">
+      <span class="hl" style="background:${lt.color}"></span>
+      <div><div class="hwho">${who(e.who)}</div><div class="hdate">${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()}　${lt.label}</div></div>
+      <span class="hsat">${e.sat}<span style="font-size:13px;color:#B6A9AF;font-weight:500;"> 分</span></span>
+    </div>`;
+  }).join('');
+  body.innerHTML=`
+    <div class="chart-card">
+      <div class="ct">整體滿意度趨勢（0–100）</div>
+      ${buildChart(hist)}
+      <div class="legend"><span><i style="background:var(--blue)"></i>${NAMES.h}</span><span><i style="background:var(--rose)"></i>${NAMES.w}</span></div>
+    </div>
+    <div class="form-lbl" style="margin:4px 2px 10px;">歷次紀錄</div>
+    ${items}
+    <button class="bigbtn" id="a-new" style="background:var(--green);margin-top:6px;">再做一次評估</button>`;
+  body.querySelector('#a-new').addEventListener('click',showAssessIntro);
+  window.scrollTo(0,0);
+}
+
+/* ============ 幸福習慣 ============ */
+const HABITS=[
+ {e:'🌅',t:'出門祝福'},{e:'🤝',t:'走路牽手'},{e:'🤗',t:'回家擁抱'},
+ {e:'🙏',t:'睡前禱告'},{e:'💬',t:'每天談心'},{e:'💕',t:'每週約會'}
+];
+const HABIT_COLORS=['#BF8F00','#C0506E','#B0345A','#5B7BA8','#4A7C59','#7E5A98'];
+function dateKey(d){ d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function getHabits(){ return jget('habits',{}); }
+function getHabitDay(key){ const a=getHabits()[key]; return Array.isArray(a)? a.slice() : [false,false,false,false,false,false]; }
+function toggleHabitToday(i){
+  const data=getHabits(), key=dateKey();
+  const day=Array.isArray(data[key])? data[key].slice() : [false,false,false,false,false,false];
+  day[i]=!day[i]; data[key]=day; jset('habits',data);
+  renderHabitToday();
+}
+function renderHabitToday(){
+  const pills=document.getElementById('hb-pills'); if(!pills) return;
+  const day=getHabitDay(dateKey());
+  document.getElementById('hb-count').textContent=day.filter(Boolean).length;
+  pills.innerHTML=HABITS.map((h,i)=>`<button class="hpill${day[i]?' on':''}" data-i="${i}"><span class="he">${h.e}</span>${h.t}</button>`).join('');
+}
+document.getElementById('hb-pills').addEventListener('click',e=>{
+  const b=e.target.closest('.hpill'); if(!b) return;
+  toggleHabitToday(Number(b.dataset.i));
+});
+function openHabits(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-home'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','handview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('habitview').classList.add('active');
+  renderHabitGrid();
+  window.scrollTo(0,0);
+}
+function closeHabits(){
+  document.getElementById('habitview').classList.remove('active');
+  document.getElementById(bankReturn||'page-home').classList.add('active');
+  renderHabitToday();
+  window.scrollTo(0,0);
+}
+document.getElementById('open-habits').addEventListener('click',openHabits);
+document.getElementById('habit-back').addEventListener('click',closeHabits);
+function renderHabitGrid(){
+  const body=document.getElementById('habit-body');
+  const today=new Date(), days=[];
+  for(let k=13;k>=0;k--){ const d=new Date(today); d.setDate(today.getDate()-k); days.push(d); }
+  const data=getHabits(), todayK=dateKey();
+  let totalDone=0;
+  const rows=HABITS.map((h,i)=>{
+    const cells=days.map(d=>{
+      const key=dateKey(d), arr=data[key]||[], on=!!arr[i]; if(on)totalDone++;
+      return `<span class="gcell${key===todayK?' today':''}" style="${on?`background:${HABIT_COLORS[i]}`:''}"></span>`;
+    }).join('');
+    return `<div class="grow"><span class="glabel">${h.e}</span><span class="gcells">${cells}</span></div>`;
+  }).join('');
+  const header=days.map((d,idx)=>`<span class="gcell ghd">${idx%2===0?d.getDate():''}</span>`).join('');
+  body.innerHTML=`
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;">近 14 天</div>
+      <div class="hgrid">
+        <div class="grow"><span class="glabel"></span><span class="gcells">${header}</span></div>
+        ${rows}
+      </div>
+      <div class="legend" style="margin-top:12px;justify-content:flex-start;gap:10px 14px;flex-wrap:wrap;">
+        ${HABITS.map((h,i)=>`<span><i style="background:${HABIT_COLORS[i]}"></i>${h.t}</span>`).join('')}
+      </div>
+    </div>
+    <div class="dashcard"><div class="minicard"><div class="mi">🌱</div><div><div class="mt">近 14 天共完成 ${totalDone} 次</div><div class="md">習慣是愛的存款的延伸——困難的耶穌做，簡單的我們做，肯定愈來愈好。</div></div></div></div>`;
+}
+renderHabitToday();
+
+/* ============ 和好工具・溝通之手 ============ */
+const HAND_STEPS=[
+ {part:'手腕',title:'感謝付出',prompt:'先謝謝對方的付出，讓對話從感恩開始。',ph:'例：謝謝你一直為這個家這麼辛苦。'},
+ {part:'姆指',title:'描述情境',prompt:'就事論事，描述發生了什麼，不加評斷。',ph:'例：剛剛我們在談錢的時候……'},
+ {part:'食指',title:'述說感受',prompt:'說出自己的感受，用「我覺得……」，而不是指責對方。',ph:'例：我覺得有點委屈，也有些難過。',vocab:true},
+ {part:'中指',title:'表達需求',prompt:'說出你真正需要的是什麼。',ph:'例：我需要被理解，需要你聽我把話說完。'},
+ {part:'無名指',title:'表示歉意',prompt:'先看見自己的問題——都是我的錯。為自己選擇的舊人道歉。',ph:'例：對不起，我剛剛口氣不好。'},
+ {part:'小指',title:'提出建議',prompt:'提出建議，不是要求。建議不是決定。',ph:'例：下次我們可以先深呼吸，再好好說。'},
+ {part:'手掌',title:'感謝傾聽',prompt:'謝謝對方願意聽你說完。',ph:'例：謝謝你願意聽我說這些。'}
+];
+const FEEL_NEG=['難過','委屈','失望','灰心','傷心','想哭','孤單','寂寞','無助','受傷','生氣','憤怒','不滿','煩躁','被誤會','被忽略','被拒絕','被責備','不被尊重','不被重視','焦慮','緊張','害怕','擔心','不安','壓力大','疲累','無力'];
+const FEEL_POS=['開心','喜樂','感恩','感動','滿足','平安','放心','輕鬆','被愛','被尊重','被肯定','被接納','被了解','被在乎','被需要','安慰','溫暖','親密','有盼望','有安全感','欣慰','幸福'];
+let handFeelMode='neg', handScreen='intro', handVals=['','','','','','',''];
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function openHand(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-practice'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('handview').classList.add('active');
+  showHandIntro();
+  window.scrollTo(0,0);
+}
+function closeHand(){
+  document.getElementById('handview').classList.remove('active');
+  document.getElementById(bankReturn||'page-practice').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-hand').addEventListener('click',openHand);
+document.getElementById('hand-back').addEventListener('click',()=>{
+  if(handScreen==='form') showHandIntro();
+  else if(handScreen==='summary') showHandForm();
+  else closeHand();
+});
+function showHandIntro(){
+  handScreen='intro';
+  const body=document.getElementById('hand-body');
+  body.innerHTML=`
+    <div class="hand-reminder">
+      <b>衝突時是誰的錯？</b><br>是「我做錯選擇」——選擇了驕傲、選擇了舊人。<br><br>
+      現在，先深呼吸，<b>選擇穿上新人、選擇謙卑</b>。先看見自己的問題，再用這隻「溝通之手」，好好把話說出來。
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;">🖐️ 溝通之手的七個部位</div>
+      <div class="hand-parts">${HAND_STEPS.map((s,i)=>`<span>${i+1}.${s.part}・${s.title}</span>`).join('')}</div>
+    </div>
+    <button class="bigbtn" id="hand-start">我準備好了，開始</button>`;
+  body.querySelector('#hand-start').addEventListener('click',showHandForm);
+  window.scrollTo(0,0);
+}
+function showHandForm(){
+  handScreen='form';
+  const body=document.getElementById('hand-body');
+  const steps=HAND_STEPS.map((s,i)=>{
+    const vocab=s.vocab?`
+      <div class="feel-bar" id="feel-bar">
+        <button data-m="neg" class="${handFeelMode==='neg'?'on':''}">負面感受</button>
+        <button data-m="pos" class="${handFeelMode==='pos'?'on':''}">正面感受</button>
+      </div>
+      <div class="feel-chips" id="feel-chips"></div>`:'';
+    return `<div class="dashcard handstep">
+      <div class="hs-head"><span class="hs-num">${i+1}</span><span class="hs-part">${s.part}</span><span class="hs-title">${s.title}</span></div>
+      <div class="hs-prompt">${s.prompt}</div>
+      ${vocab}
+      <textarea class="depo hs-text" data-i="${i}" placeholder="${s.ph}">${esc(handVals[i])}</textarea>
+    </div>`;
+  }).join('');
+  body.innerHTML=steps+`<button class="bigbtn" id="hand-done" style="margin-top:4px;">完成，看我要說的話 💬</button>`;
+  body.querySelectorAll('.hs-text').forEach(ta=>{
+    ta.addEventListener('input',()=>{ handVals[Number(ta.dataset.i)]=ta.value; });
+  });
+  renderFeelChips();
+  const fb=body.querySelector('#feel-bar');
+  if(fb) fb.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    handFeelMode=b.dataset.m;
+    fb.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    renderFeelChips();
+  });
+  body.querySelector('#hand-done').addEventListener('click',showHandSummary);
+  window.scrollTo(0,0);
+}
+function renderFeelChips(){
+  const wrap=document.getElementById('feel-chips'); if(!wrap) return;
+  const list=handFeelMode==='neg'?FEEL_NEG:FEEL_POS;
+  wrap.innerHTML=list.map(w=>`<button class="fchip" data-w="${w}">${w}</button>`).join('');
+  wrap.querySelectorAll('.fchip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      const ta=document.querySelector('.hs-text[data-i="2"]'); if(!ta) return;
+      const w=c.dataset.w;
+      ta.value=ta.value.trim()? (ta.value.replace(/\s+$/,'')+'、'+w) : ('我覺得'+w);
+      handVals[2]=ta.value; ta.focus();
+    });
+  });
+}
+function compileHand(){
+  const parts=[];
+  document.querySelectorAll('.hs-text').forEach(ta=>{ const v=ta.value.trim(); if(v) parts.push(v); });
+  return parts.join('\n');
+}
+function showHandSummary(){
+  handScreen='summary';
+  const text=compileHand(), body=document.getElementById('hand-body');
+  body.innerHTML=`
+    <div class="hand-reminder" style="background:linear-gradient(135deg,#F6E4E9,#EFD3DB);border-color:#E2B8C4;color:#6E2440;">
+      用<b>新人對新人</b>溝通。心平氣和，照著下面的話，好好對你的配偶說。
+    </div>
+    <div class="hand-summary">${text? esc(text) : '（你還沒有寫下任何內容，回去填寫溝通之手的七個部位吧。）'}</div>
+    <button class="bigbtn" id="hand-copy">複製這段話</button>
+    <div class="saved" id="hand-copied"></div>
+    <button class="bigbtn" id="hand-edit" style="background:#fff;color:var(--rose);border:2px solid var(--rose);box-shadow:none;margin-top:6px;">回去修改</button>
+    <button class="bigbtn" id="hand-finish" style="background:#fff;color:var(--ink-soft);border:2px solid var(--line);box-shadow:none;margin-top:6px;">完成，清空重來</button>`;
+  body.querySelector('#hand-copy').addEventListener('click',()=>{
+    const ok=copyText(text);
+    document.getElementById('hand-copied').textContent=ok?'已複製 ✓':'長按上面文字也可複製';
+  });
+  body.querySelector('#hand-edit').addEventListener('click',showHandForm);
+  body.querySelector('#hand-finish').addEventListener('click',()=>{ handVals=['','','','','','','']; closeHand(); });
+  window.scrollTo(0,0);
+}
+function copyText(t){
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t); return true; } }catch(e){}
+  try{
+    const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta); return ok;
+  }catch(e){ return false; }
+}
+
+/* ============ 六個愛的行動 ============ */
+const ACTIONS=[
+ {n:'一',icon:'🦶',title:'我要服事你',sub:'彼此洗腳',ref:'約翰福音 13：14-17',
+  verse:'我是你們的主，你們的夫子，尚且洗你們的腳，你們也當彼此洗腳。我給你們作了榜樣，叫你們照著我向你們所做的去做。⋯⋯你們既知道這事，若是去行就有福了。',
+  prep:'臉盆、毛巾、溫水（臉盆裝一半溫水）。',
+  meaning:'我願意作配偶的僕人，把他當作主耶穌，從心裡服事他。',
+  share:['你希望被配偶服事的地方和需要','你想要服事配偶的事情'],
+  steps:['被洗腳者坐在椅子上，洗腳者跪在腳前','先洗右腳再洗左腳，洗腳時不說話','雙腳洗完後站起來擁抱，並為對方祝福','然後互換']},
+ {n:'二',icon:'💧',title:'都是我的錯',sub:'浴水重生',ref:'羅馬書 6：4',
+  verse:'所以，我們藉著洗禮歸入死，和他一同埋葬，原是叫我們一舉一動有新生的樣式，像基督藉著父的榮耀從死裡復活一樣。',
+  prep:'在家可用淋浴或一盆清水象徵（營會中穿著泳裝、泳帽）。',
+  meaning:'結束舊生命，埋葬舊生活，開始新人生。',
+  share:['一方承認以前所犯的過錯、得罪配偶的事','另一方承擔責任、負起責任，表明都是我的錯','然後互換'],
+  steps:['手牽手浸入水中（或一同淋水），憋氣','站起來彼此擁抱','高舉雙手，高喊哈利路亞，榮耀歸給神']},
+ {n:'三',icon:'🙌',title:'我要陪伴你',sub:'按手祝福',ref:'使徒行傳 8：17；提摩太後書 1：6',
+  verse:'於是使徒按手在他們頭上，他們就受了聖靈。／為此我提醒你，使你將神藉我按手所給你的恩賜再如火挑旺起來。',
+  prep:'安靜的空間。',
+  meaning:'按手表示連結、認同、支持，願意用行動陪伴他一起去尋求耶穌的幫助。',
+  share:['一方向配偶表明你的軟弱、缺點，和需要對方陪伴扶持的事','另一方表達願意無條件地愛他、接納他、陪伴他、祝福他','然後互換'],
+  steps:['為對方按手','祝福禱告，求聖靈充滿他']},
+ {n:'四',icon:'🫒',title:'我以你為榮',sub:'抹油禱告',ref:'詩篇 104：15；雅各書 5：14',
+  verse:'又得酒能悅人心，得油能潤人面，得糧能養人心。／你們中間有病了的呢，他就該請教會的長老來；他們可以奉主的名用油抹他，為他禱告。',
+  prep:'一小瓶油（如橄欖油）。',
+  meaning:'油能潤人面，使臉有榮光。抹油表示尊榮對方，以對方為榮。',
+  share:['向配偶稱讚他的優點、你以他為榮的地方','表達他是上帝給你最大的恩典，能與他結為夫妻是你最大的榮幸','然後互換'],
+  steps:['在對方的額頭用油抹圓，表示在基督裡，配偶是圓滿完全的','為他宣告禱告']},
+ {n:'五',icon:'🍞',title:'我為你捨命',sub:'同領餅跟杯',ref:'哥林多前書 11：23-25',
+  verse:'主耶穌……拿起餅來，祝謝了，就擘開，說：「這是我的身體，為你們捨的，你們應當如此行，為的是紀念我。」……「這杯是用我的血所立的新約，你們每逢喝的時候，要如此行，為的是紀念我。」',
+  prep:'每人一片蘇打餅乾、一杯葡萄汁。',
+  meaning:'餅代表肉，杯代表血，代表我的生命願意為對方犧牲捨命，就像主耶穌愛我為我捨命。',
+  share:['向配偶表達他的重要及你對他的愛，願意為了愛他捨己守約','另一方感謝他的誓約，並表達願意一起堅守婚約'],
+  steps:['丈夫拿起餅說：「這是我的身體，我要為你而捨」，擘開一人一半，同時吃餅','拿起杯說：「這是我與你立約的血，我要為你而流」，同時喝完','然後互換']},
+ {n:'六',icon:'📜',title:'我對你委身',sub:'委身立約',ref:'羅馬書 12：1；申命記 7：9',
+  verse:'所以，弟兄們，我以神的慈悲勸你們，將身體獻上，當作活祭，是聖潔的，是神所喜悅的。／所以，你要知道耶和華你的神，他是神，是信實的神；向愛他、守他誡命的人守約，施慈愛，直到千代。',
+  prep:'立約書。',
+  meaning:'透過立約，彼此委身於對方和上帝所立的婚約，立志靠主建立榮神益人的婚姻。',
+  share:['宣告我要一心一意、一生一世愛配偶','委身經營上帝所設立的婚姻，成為美好的見證'],
+  steps:['宣讀立約書並簽名','牽手禱告']}
+];
+const HUSBAND_WEAKNESS=['害怕失敗','不擅表達情感','遇到衝突想逃避','壓力大時容易煩躁','不夠有耐心','常常沉默不說','很需要被肯定','不太會傾聽','有時太固執','容易被手機分心','不夠體貼細心','害怕示弱','為經濟焦慮','不太會道歉','偶爾亂發脾氣'];
+const WIFE_WEAKNESS=['容易胡思亂想','比較沒有安全感','常常想太多','容易擔心焦慮','情緒起伏比較大','有時會碎念','太在意別人看法','不太會表達需要','容易翻舊帳','付出後容易委屈','需要常被關心','容易和別人比較','不容易放下','有點完美主義','累的時候容易抱怨'];
+const HUSBAND_STRENGTH=['工作很負責任','有責任感','孝順父母','遇困難不放棄','保護家人','幽默風趣','踏實穩重','願意為家付出','其實很體貼','有擔當','信仰堅定','樂於助人','很會修東西','冷靜理性','很顧家'];
+const WIFE_STRENGTH=['對孩子很有耐心','做事很細心','把家打理得溫暖','善解人意','溫柔體貼','堅強勇敢','很會持家','待人熱情','很有愛心','常常鼓勵人','賢慧','信心堅定','很有智慧','勤勞','笑容溫暖'];
+const COMMIT_ITEMS=['每天為你禱告','多花時間陪伴你','主動分擔家事','學習控制脾氣','戒掉讓你困擾的習慣','多聽你說話','放下手機專心陪你','常常表達愛與肯定','固定安排兩人約會','你生病時細心照顧','不再翻舊帳','把你的需要放在前面','一起讀經禱告','在金錢上節制','願意為你先低頭'];
+const SERVE_ITEMS=['每天倒一杯溫水','為你準備早餐','主動洗碗收拾','幫你按摩肩頸','接送你上下班','每天為你禱告','專心聽你說話','分擔家務','記得你的喜好','生病時細心照顧','為你留一盞燈','主動倒垃圾','陪你散步運動','睡前幫你蓋被','把最好的留給你'];
+const SACRIFICE_ITEMS=['為你先放下面子道歉','為你改掉我的壞習慣','犧牲我的休息照顧你','把我的時間優先給你','忍耐不對你發脾氣','為你放下我的堅持','在你軟弱時扛起這個家','寧願自己吃虧也護著你','為你犧牲我的興趣愛好','把功勞與好處讓給你','為這個家節制我的慾望','在你犯錯時選擇饒恕','為你放下我的驕傲','為你一生守約不變心','一生為你禱告守望'];
+const FAULT_ITEMS=['滑手機沒好好聽你說話','講話口氣不好','常常嫌棄批評你','喜歡翻舊帳','忽略你的感受','對你發脾氣、遷怒','沒有信守承諾','把家事都推給你','在別人面前讓你難堪','冷戰、不理你','沒花時間陪你','不夠體貼你的需要','嘮叨、碎念','心思都在工作或孩子，忽略你','說話太重、傷了你'];
+const ACTION_GUIDES=[
+ [
+  {label:'預備心',body:'先安靜下來，彼此握著手，閉上眼睛，一起做個簡短的禱告，求聖靈幫助你們真誠地分享、用心地聆聽。<div class="gs-hint">記得：用心聽、不用腦想。傾聽就是愛，瞭解中有醫治。</div>',pray:'主耶穌，謝謝你為我們立下服事的榜樣。求你軟化我們的心，幫助我們真誠地分享、用心地聆聽，讓我們在彼此服事中經歷你的愛。奉主名禱告，阿們。'},
+  {label:'丈夫先分享',body:'丈夫，慢慢說出一件你心裡渴望被服事、被照顧的地方或需要，說出真實的感受。<div class="gs-hint">妻子：專心聆聽，不打斷、不辯解，用心感受他的需要。</div>',eg:'「其實我最近工作壓力很大，回到家很希望你能抱抱我、聽我說說話。不用幫我解決，只要陪著我就好。」',echo:'「你的意思是，你壓力大的時候，希望我多抱抱你、聽你說話，是嗎？」'},
+  {label:'妻子分享',body:'換妻子，說出一件你渴望被服事、被照顧的需要。<div class="gs-hint">丈夫：用心聆聽，溫柔回應。</div>',eg:'「我很需要你偶爾主動分擔家事，像是飯後一起收拾。那會讓我覺得被疼惜、不孤單。」',echo:'「你是說，你希望我偶爾主動分擔家事，這樣你會覺得被疼惜，對嗎？」'},
+  {label:'立志服事',body:'彼此說出一件你願意主動去服事對方的事——把對方當作主耶穌，從心裡服事他。',eg:'丈夫：「我願意每天早上先幫你倒一杯溫水。」<br>妻子：「我願意以後多陪你散步、聽你說話。」',chips:{title:'參考這些服事，點選你願意為對方做的',items:SERVE_ITEMS}},
+  {label:'收尾',body:'彼此擁抱，為對方禱告，謝謝對方願意向你敞開心。',pray:'主啊，謝謝你讓我們彼此敞開。求你幫助我們真的去服事對方，像你服事我們一樣。求你祝福我的另一半，賜他平安喜樂。阿們。'}
+ ],
+ [
+  {label:'預備心',body:'一起求聖靈光照，幫助你謙卑地看見自己的問題。<div class="gs-hint">提醒自己：衝突時，是我先選擇了舊人、選擇了驕傲。謙卑是復興的鑰匙。</div>',pray:'主啊，求你的聖靈光照我，讓我看見自己的問題，而不是只看見對方的錯。給我謙卑的心，能誠實地認錯。奉主名求，阿們。'},
+  {label:'丈夫先認錯',body:'丈夫，誠實承認以前得罪妻子、虧待她的地方，真心地說「對不起」。<div class="gs-hint">妻子：用愛心聆聽，不翻舊帳、不趁機指責。</div>',eg:'「對不起，上次你跟我說心事的時候，我只顧著滑手機，沒有好好聽你說，讓你覺得不被重視，是我不對。」',echo:'「我聽到你說，那天你只顧著看手機、沒有好好聽我說，讓我覺得不被重視，是這個意思嗎？」',chips:{title:'常見的過錯，點選你要向對方認的',items:FAULT_ITEMS}},
+  {label:'妻子回應接納',body:'妻子，承擔自己的那一份，對丈夫說「都是我的錯」，並表達你的饒恕與接納。',eg:'「謝謝你願意說對不起。其實我也有不對，那天我口氣很衝、把話講得很難聽，都是我的錯。我願意饒恕你，也求你饒恕我。」'},
+  {label:'妻子認錯',body:'換妻子，誠實承認以前得罪丈夫、虧待他的地方，真心地說「對不起」。<div class="gs-hint">丈夫：用愛心聆聽，不翻舊帳、不趁機指責。</div>',eg:'「對不起，我常常嫌你做得不夠好，卻很少看見你的努力，也常用言語刺傷你，是我不對。」',echo:'「我聽到你說，你常常嫌我做得不夠好、忽略了我的努力，也對我說了一些重話，是這個意思嗎？」',chips:{title:'常見的過錯，點選你要向對方認的',items:FAULT_ITEMS}},
+  {label:'丈夫回應接納',body:'丈夫，承擔自己的那一份，對妻子說「都是我的錯」，並表達你的饒恕與接納。',eg:'「都是我的錯，我也沒有把你的辛苦放在心上。我願意饒恕你，我們重新開始。」'},
+  {label:'收尾',body:'一同把舊人埋葬，彼此擁抱，高舉雙手，感謝主賜下全新的生命與全新的開始。',pray:'主啊，謝謝你的寶血洗淨我們，把舊人埋葬。求你賜給我們全新的生命、全新的開始。哈利路亞，榮耀歸給你。阿們。'}
+ ],
+ [
+  {label:'預備心',body:'營造一個安全、被接納的氛圍。<div class="gs-hint">提醒自己：我是來陪伴的，不是來論斷的。無條件的愛，才能讓人安心敞開。</div>',pray:'主啊，求你幫助我，不是來論斷，而是來陪伴。讓我成為對方安全的避風港，能無條件地接納他。奉主名禱告，阿們。'},
+  {label:'丈夫敞開軟弱',body:'丈夫，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方。<div class="gs-hint">妻子：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我心裡其實很害怕失敗，常常擔心自己不夠好、養不起這個家。這些我很少跟人說，但我需要你的支持。」',echo:'「你是說，你心裡其實很害怕失敗、擔心自己不夠好，需要我的支持，是嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:HUSBAND_WEAKNESS}},
+  {label:'妻子回應陪伴',body:'妻子，緊握他的手，對他說：「無論如何，我都愛你、接納你，願意陪你一起面對。」並為他祝福。',eg:'「謝謝你願意告訴我這些。不管你成功還是失敗，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
+  {label:'妻子敞開軟弱',body:'換妻子，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方。<div class="gs-hint">丈夫：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我有時候很沒有安全感，會胡思亂想，需要你常常給我肯定。」',echo:'丈夫先覆述：「你的意思是，你比較沒有安全感、容易胡思亂想，需要我常常給你肯定，是這個意思嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:WIFE_WEAKNESS}},
+  {label:'丈夫回應陪伴',body:'丈夫，緊握她的手，對她說：「無論如何，我都愛你、接納你，願意陪你一起面對。」並為她祝福。',eg:'「謝謝你願意告訴我這些。不管發生什麼，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
+  {label:'收尾',body:'為對方按手禱告，求聖靈充滿、扶持，使你們在軟弱中彼此成為依靠。',pray:'主啊，求你的聖靈充滿我所愛的人，扶持他的軟弱，挑旺他裡面的恩賜。讓我們在軟弱中彼此成為依靠。奉主名禱告，阿們。'}
+ ],
+ [
+  {label:'預備心',body:'調整眼光——用右眼看優點，憑愛心、憑信心讚美。<div class="gs-hint">記得：配偶是上帝施工中的傑作。讚美作品，把榮耀歸給作者。</div>',pray:'主啊，幫助我用你的眼光看我的配偶，看見他是你手中的傑作。讓我的口充滿讚美，把榮耀歸給你。阿們。'},
+  {label:'丈夫稱讚妻子',body:'丈夫，具體說出三個你欣賞她、以她為榮的優點，愈具體愈好。<div class="gs-hint">妻子：安靜領受，不要推辭，真心向他道謝。</div>',eg:'「我很欣賞你對孩子的耐心、你做事的細心，還有你總是把家裡打理得很溫暖。能娶到你，是我的福氣。」',echo:'',resp:'妻子：安靜領受，把他欣賞你的覆述一次並道謝，例如：「你欣賞我對孩子的耐心、做事的細心，還有把家打理得溫暖，謝謝你這樣看我，我很感動。」',chips:{title:'參考這些優點，點選你想稱讚妻子的',items:WIFE_STRENGTH}},
+  {label:'妻子稱讚丈夫',body:'換妻子，具體說出三個你欣賞他、以他為榮的優點。<div class="gs-hint">丈夫：安靜領受，真心道謝。</div>',eg:'「我以你為榮——你工作很負責任，對長輩很孝順，遇到困難總是不放棄。謝謝你一直撐著這個家。」',resp:'丈夫：安靜領受，把她欣賞你的覆述一次並道謝，例如：「你以我工作負責任、孝順長輩、遇難不放棄為榮，謝謝你的肯定，這對我很重要。」',chips:{title:'參考這些優點，點選你想稱讚丈夫的',items:HUSBAND_STRENGTH}},
+  {label:'以對方為榮',body:'彼此對望，對對方說出你以他為榮、視他為恩典的話。',eg:'「能與你結為夫妻，是我這一生最大的榮幸；你是上帝給我最好的禮物。」'},
+  {label:'收尾',body:'在對方額頭用油抹一個圓，宣告「在基督裡，你是圓滿完全的」，並為他祝福禱告。',pray:'主啊，奉你的名為他抹油。我宣告在基督裡，他是圓滿完全、滿有榮光的。求你使用他、祝福他，使他一生榮耀你的名。阿們。'}
+ ],
+ [
+  {label:'預備心',body:'一起默想主耶穌如何愛你、為你捨命。求主把這樣捨己的愛，澆灌在你心中。',pray:'主耶穌，謝謝你為我們捨命，用你的身體和寶血為我們立約。求你把這樣捨己的愛，澆灌在我們心中，使我們能彼此相愛。阿們。'},
+  {label:'丈夫表達捨命的愛',body:'丈夫，告訴妻子她對你何等重要，你願意為了愛她而捨己，一生守約。<div class="gs-hint">妻子：用心領受他的愛與承諾。</div>',eg:'「你對我太重要了，沒有你我的生命不完整。我願意像主愛我一樣，為了愛你而捨己，一生守住我們的約。」',echo:'「我聽見你說，我對你很重要，你願意為了愛我而捨己、一生守約，是這個意思嗎？」',chips:{title:'參考這些捨己的愛，點選你願意為對方做的',items:SACRIFICE_ITEMS}},
+  {label:'妻子回應',body:'妻子，感謝丈夫的愛與誓約，表達你願意與他一起堅守這婚姻的盟約。',eg:'「謝謝你的愛和承諾，我很感動。我也願意和你一起，無論順境逆境，都守住我們在神面前所立的婚約。」'},
+  {label:'妻子表達捨命的愛',body:'換妻子，向丈夫表達你為他捨己守約的心，願意為了愛他而放下自己。<div class="gs-hint">丈夫：用心領受她的愛與承諾。</div>',eg:'「我願意為了這個家、為了愛你，放下自己的驕傲與堅持，一生與你同行。」',echo:'丈夫先覆述：「你是說，你願意為了這個家、為了愛我，放下自己的堅持，一生與我同行，是這個意思嗎？」',chips:{title:'參考這些捨己的愛，點選你願意為對方做的',items:SACRIFICE_ITEMS}},
+  {label:'丈夫回應',body:'丈夫，感謝妻子的愛與擺上，表達你願意與她一起堅守這婚姻的盟約。',eg:'「謝謝你的愛和擺上，我很感動。我也願意和你一起，無論順境逆境，都守住我們在神面前所立的婚約。」'},
+  {label:'同領餅與杯',body:'照著「進行步驟」，一同領餅、領杯，紀念主為你們捨命的愛，也立定心志為彼此捨己。',pray:'主啊，我們同領這餅和杯，紀念你為我們捨命的愛。求你幫助我們，也這樣彼此相愛、彼此捨己。阿們。'},
+  {label:'收尾',body:'彼此擁抱，謝謝對方願意一生為這份愛擺上。',pray:'主啊，謝謝你賜給我這位伴侶。求你保守我們的婚約，使我們的愛在你裡面長久堅固，直到永遠。阿們。'}
+ ],
+ [
+  {label:'預備心',body:'一起默想：上帝是信實守約的神，向愛他、守他誡命的人守約、施慈愛，直到千代。',pray:'主啊，你是信實守約的神，向愛你的人守約施慈愛直到千代。求你幫助我們，也這樣信實地委身於彼此。阿們。'},
+  {label:'丈夫宣告委身',body:'丈夫，看著妻子的眼睛，宣告：「我要一心一意、一生一世愛你，委身經營我們的婚姻。」',eg:'「在神面前我向你宣告：無論貧窮富足、健康疾病，我都要一心一意、一生一世愛你，永不離開你，委身經營我們的婚姻。」'},
+  {label:'妻子宣告委身',body:'妻子，看著丈夫的眼睛，同樣宣告你一生一世的委身與相愛。',eg:'「我也向你宣告：我願意一生一世愛你、尊重你、扶持你，與你一同牽手走過這一生。」'},
+  {label:'立志具體委身',body:'現在，各自向對方立志——說出一件你願意為他犧牲捨己、具體去做的委身事項。<div class="gs-hint">不只是口頭的愛，更要用行動委身。困難的耶穌做，簡單的我們做。</div>',eg:'丈夫：「我立志每天為你和這個家禱告，也減少滑手機，把時間留給你。」<br>妻子：「我立志學習控制脾氣，常常用鼓勵的話對你說。」',chips:{title:'參考這些委身事項，點選你願意立志去做的',items:COMMIT_ITEMS}},
+  {label:'一同立約',body:'一起宣讀你們的立約書（可到「成長 → 立約書」一起讀），並簽名，立志靠主建立榮神益人的婚姻。',eg:'「我願意在上帝面前立約，與你連合、二人成為一體，一起建立一個榮耀神、祝福人的家。」'},
+  {label:'收尾',body:'牽手禱告，把你們的婚姻完全交託給主，求主保守你們所立的盟約。',pray:'主啊，我們把這個婚姻完全交託給你。求你坐在我們婚姻的寶座上作王，保守我們所立的盟約，使我們的家成為你榮耀的見證。奉主名禱告，阿們。'}
+ ]
+];
+let actionScreen='list', curAction=0, guideStep=0;
+function openActions(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-practice'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('actionsview').classList.add('active');
+  showActionsList();
+  window.scrollTo(0,0);
+}
+function closeActions(){
+  document.getElementById('actionsview').classList.remove('active');
+  document.getElementById(bankReturn||'page-practice').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-actions').addEventListener('click',openActions);
+document.getElementById('actions-back').addEventListener('click',()=>{
+  if(actionScreen==='guide') showAction(curAction);
+  else if(actionScreen==='detail') showActionsList();
+  else closeActions();
+});
+function setActionsHead(icon,label,ttl,sub){
+  document.getElementById('ac-icon').textContent=icon;
+  document.getElementById('ac-label').textContent=label;
+  document.getElementById('ac-ttl').textContent=ttl;
+  document.getElementById('ac-sub').textContent=sub;
+}
+function showActionsList(){
+  actionScreen='list';
+  setActionsHead('🤲','操練','六個愛的行動','營會的六個活動，帶回家繼續操練。');
+  const body=document.getElementById('actions-body');
+  body.innerHTML=ACTIONS.map((a,i)=>`
+    <div class="tcard" style="--ac:var(--gold)" data-ai="${i}">
+      <div class="num" style="background:var(--gold)">${a.icon}</div>
+      <div class="meta"><div class="label">活動${a.n}</div><div class="ttl">${a.title}</div><div class="sub">${a.sub}</div></div>
+      <div class="arrow">›</div>
+    </div>`).join('');
+  body.querySelectorAll('.tcard').forEach(c=>c.addEventListener('click',()=>showAction(Number(c.dataset.ai))));
+  window.scrollTo(0,0);
+}
+function showAction(i){
+  actionScreen='detail';
+  curAction=i;
+  const a=ACTIONS[i];
+  setActionsHead(a.icon,'活動'+a.n,a.title,a.sub);
+  const body=document.getElementById('actions-body');
+  body.innerHTML=`
+    <div class="scripture" style="--ac:var(--gold)"><div class="ref">📖 ${a.ref}</div><div class="verse">${a.verse}</div></div>
+    <div class="kcard" style="--ac:var(--gold)"><h3><span class="dot"></span>意義</h3><p>${a.meaning}</p></div>
+    <div class="kcard" style="--ac:var(--gold)"><h3><span class="dot"></span>預備</h3><p>${a.prep}</p></div>
+    <div class="kcard" style="--ac:var(--gold)"><h3><span class="dot"></span>彼此分享</h3><ul>${a.share.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <button class="bigbtn" id="start-guide" style="background:var(--gold);margin-top:12px;">🤝 開始一步一步引導分享</button></div>
+    <div class="kcard" style="--ac:var(--gold)"><h3><span class="dot"></span>進行步驟</h3><ul class="handlist">${a.steps.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  body.querySelector('#start-guide').addEventListener('click',()=>{ guideStep=0; showGuide(i); });
+  window.scrollTo(0,0);
+}
+function showGuide(i){
+  actionScreen='guide';
+  curAction=i;
+  const a=ACTIONS[i], g=ACTION_GUIDES[i], total=g.length;
+  if(guideStep<0) guideStep=0; if(guideStep>=total) guideStep=total-1;
+  const s=g[guideStep];
+  setActionsHead(a.icon,'活動'+a.n+'・引導分享',a.title,a.sub);
+  const dots=g.map((x,k)=>`<span class="gdot${k===guideStep?' on':k<guideStep?' done':''}"></span>`).join('');
+  const body=document.getElementById('actions-body');
+  body.innerHTML=`
+    <div class="gprog">第 ${guideStep+1} 步 ／ 共 ${total} 步</div>
+    <div class="gdots">${dots}</div>
+    <div class="dashcard gstep">
+      <div class="gs-label">${s.label}</div>
+      <div class="gs-body">${s.body}</div>
+      ${s.eg?`<div class="gs-eg"><div class="gl">💬 可以這樣說</div><div>${s.eg}</div></div>`:''}
+      ${s.echo?`<div class="gs-echo"><div class="gl">🔁 先覆述，確認你聽懂了</div><div>聆聽的一方，用自己的話把對方說的覆述一次，最後確認「是這個意思嗎？」，再回應。例如：<br>${s.echo}</div></div>`:''}
+      ${s.resp?`<div class="gs-resp"><div class="gl">💛 領受並回應</div><div>${s.resp}</div></div>`:''}
+      ${s.pray?`<div class="gs-pray"><div class="gl">🙏 可以這樣禱告</div><div>${s.pray}</div></div>`:''}
+      ${s.chips?`<div class="gchips-title">🔖 ${s.chips.title}</div><div class="gchips">${s.chips.items.map(w=>`<button class="gchip" data-w="${w}">${w}</button>`).join('')}</div>`:''}
+    </div>
+    <div class="gnav">
+      <button class="gbtn gprev" id="g-prev">${guideStep===0?'‹ 回說明':'‹ 上一步'}</button>
+      <button class="gbtn gnext" id="g-next">${guideStep===total-1?'完成 ✓':'下一步 ›'}</button>
+    </div>`;
+  document.getElementById('g-prev').addEventListener('click',()=>{
+    if(guideStep===0){ showAction(i); } else { guideStep--; showGuide(i); }
+  });
+  document.getElementById('g-next').addEventListener('click',()=>{
+    if(guideStep===total-1){ guideStep=0; showAction(i); } else { guideStep++; showGuide(i); }
+  });
+  const cw=body.querySelector('.gchips');
+  if(cw) cw.addEventListener('click',e=>{ const b=e.target.closest('.gchip'); if(b) b.classList.toggle('on'); });
+  window.scrollTo(0,0);
+}
+
+/* ============ 立約書 & 週年 ============ */
+const COVENANT_TEMPLATE=`我願意在上帝面前立約。
+我要離開父母，與我的配偶連合，二人成為一體，建立成長原型的婚姻來榮耀上帝。
+
+我要落實 321 的理念：以耶穌為榜樣，以聖經為準則，以聖靈為引導；我要讓耶穌作王，讓耶穌得到一切的榮耀。
+
+我要與配偶建立一個屬神體系的婚姻，成為合神心意、討神喜悅、合乎主用的婚姻。
+
+我要以對方愛的語言向他表達愛，為他存愛的存款；一起經營珍珠的時刻，用有效的溝通化解衝突。
+
+我們要彼此祝福、彼此牽手、彼此擁抱、一起禱告，建立美好的幸福習慣。
+
+我要向我的配偶守約施慈愛，堅定我們在上帝面前所立的婚姻盟約。`;
+function getCovenant(){ return jget('covenant',{marriageDate:'',covenantDate:'',vow:'',hVow:'',wVow:''}); }
+function nextAnniv(dateStr){
+  if(!dateStr) return null;
+  const d=new Date(dateStr+'T00:00:00'); if(isNaN(d.getTime())) return null;
+  const today=new Date(); today.setHours(0,0,0,0);
+  let next=new Date(d); next.setFullYear(today.getFullYear());
+  if(next<today) next.setFullYear(today.getFullYear()+1);
+  return {years:next.getFullYear()-d.getFullYear(), days:Math.round((next-today)/86400000)};
+}
+function annivLine(emoji,label,dateStr){
+  const a=nextAnniv(dateStr); if(!a) return '';
+  const txt=a.days===0? '就是今天 🎉' : `還有 ${a.days} 天`;
+  return `<div class="anniv-line"><span class="ae">${emoji}</span><span>${label} ${a.years} 週年</span><span class="ad${a.days===0?' today':''}">${txt}</span></div>`;
+}
+function renderAnniv(){
+  const wrap=document.getElementById('anniv-body'); if(!wrap) return;
+  const c=getCovenant();
+  const lines=annivLine('💍','結婚',c.marriageDate)+annivLine('📜','立約',c.covenantDate);
+  wrap.innerHTML=lines||'<div class="anniv-empty">還沒有設定紀念日。到「成長 → 立約書」填上結婚與立約的日子，這裡就會為你們倒數。</div>';
+}
+function openCovenant(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-grow'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('covenantview').classList.add('active');
+  renderCovenant();
+  window.scrollTo(0,0);
+}
+function closeCovenant(){
+  document.getElementById('covenantview').classList.remove('active');
+  document.getElementById(bankReturn||'page-grow').classList.add('active');
+  renderAnniv();
+  window.scrollTo(0,0);
+}
+document.getElementById('anniv-card').addEventListener('click',openCovenant);
+document.getElementById('open-covenant').addEventListener('click',openCovenant);
+document.getElementById('covenant-back').addEventListener('click',closeCovenant);
+function renderCovenant(){
+  const c=getCovenant(), body=document.getElementById('covenant-body');
+  body.innerHTML=`
+    <div class="hand-reminder">
+      這是你們在上帝面前所立的盟約。每年的結婚或立約週年，可以一起重讀、重新宣告，<b>更新婚約</b>——讓基督一直在你們的婚姻裡作王。
+    </div>
+    <div class="dashcard">
+      <div class="field"><label>💍 結婚紀念日</label><input type="date" id="cov-marriage" value="${c.marriageDate||''}"></div>
+      <div class="field" style="margin-bottom:0;"><label>📜 立約日</label><input type="date" id="cov-covenant" value="${c.covenantDate||''}"></div>
+    </div>
+    <div class="dashcard">
+      <div class="field" style="margin-bottom:10px;"><label>我們的立約書</label>
+        <textarea class="depo covtext" id="cov-vow" placeholder="寫下你們的盟約……">${esc(c.vow||'')}</textarea>
+      </div>
+      <button class="bigbtn" id="cov-template" style="background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:none;">套用 321 立約書範本</button>
+    </div>
+    <div class="dashcard">
+      <div class="field"><label>丈夫的誓約（可不填）</label><textarea class="depo" id="cov-hvow" placeholder="例：我要一生一世愛護、保守、看顧妳……">${esc(c.hVow||'')}</textarea></div>
+      <div class="field" style="margin-bottom:0;"><label>妻子的誓約（可不填）</label><textarea class="depo" id="cov-wvow" placeholder="例：我願順服、扶持、幫助你，一同牽手走過一生……">${esc(c.wVow||'')}</textarea></div>
+    </div>
+    <button class="bigbtn" id="cov-save" style="background:var(--navy);">儲存立約書</button>
+    <div class="saved" id="cov-saved"></div>`;
+  body.querySelector('#cov-template').addEventListener('click',()=>{
+    const ta=body.querySelector('#cov-vow');
+    if(ta.value.trim()){ try{ if(!confirm('要用範本覆蓋目前的立約書內容嗎？')) return; }catch(e){ return; } }
+    ta.value=COVENANT_TEMPLATE;
+  });
+  body.querySelector('#cov-save').addEventListener('click',()=>{
+    jset('covenant',{
+      marriageDate:body.querySelector('#cov-marriage').value,
+      covenantDate:body.querySelector('#cov-covenant').value,
+      vow:body.querySelector('#cov-vow').value,
+      hVow:body.querySelector('#cov-hvow').value,
+      wVow:body.querySelector('#cov-wvow').value
+    });
+    const s=body.querySelector('#cov-saved'); s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
+    renderAnniv();
+  });
+  window.scrollTo(0,0);
+}
+renderAnniv();
+
+/* ============ 愛的小家：通訊與跟進 ============ */
+let groupDraft=null;
+const MEET_FREQ=['每週一次','每兩週一次','每月一次','每季一次','不定期'];
+const MEET_WAY=['實體聚會','線上視訊','電話關懷','通訊軟體（LINE 等）','其他'];
+const ROLES_DAILY=['💗 關懷牧養','🙏 禱告守望','📋 行政聯絡','🌱 邀請陪伴'];
+const ROLES_MEET=['🎵 敬拜帶領','📖 分享帶領','🍵 飲食招待','🤲 結束差遣'];
+function getGroup(){ return jget('group_info',{gname:'',companion:{name:'',contact:''},leader:{name:'',contact:''},members:[],meet:{freq:'',time:'',way:''}}); }
+function updateBrand(){ const el=document.getElementById('brand-sub'); if(el){ const g=getGroup(); el.textContent=(g.gname&&g.gname.trim())?g.gname.trim():'愛的小家'; } }
+function openGroup(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-us'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview','pearlsview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('groupview').classList.add('active');
+  groupDraft=getGroup();
+  if(!groupDraft.companion) groupDraft.companion={name:'',contact:''};
+  if(!groupDraft.leader) groupDraft.leader={name:'',contact:''};
+  if(!Array.isArray(groupDraft.members)) groupDraft.members=[];
+  if(!groupDraft.meet) groupDraft.meet={freq:'',time:'',way:''};
+  renderGroup();
+  window.scrollTo(0,0);
+}
+function closeGroup(){
+  document.getElementById('groupview').classList.remove('active');
+  document.getElementById(bankReturn||'page-us').classList.add('active');
+  window.scrollTo(0,0);
+}
+function readGroupInputs(){
+  const body=document.getElementById('group-body'); if(!body||!groupDraft) return;
+  const g=groupDraft, val=id=>{const el=body.querySelector(id); return el?el.value:'';};
+  g.gname=val('#g-name');
+  g.companion.name=val('#g-comp-name'); g.companion.contact=val('#g-comp-contact');
+  g.leader.name=val('#g-lead-name'); g.leader.contact=val('#g-lead-contact');
+  g.meet.freq=val('#g-freq'); g.meet.time=val('#g-time'); g.meet.way=val('#g-way');
+  body.querySelectorAll('.gm-row').forEach((row,i)=>{
+    if(g.members[i]){ g.members[i].name=row.querySelector('.gm-name').value||''; g.members[i].contact=row.querySelector('.gm-contact').value||''; g.members[i].roleDaily=row.querySelector('.gm-rd').value||''; g.members[i].roleMeet=row.querySelector('.gm-rm').value||''; }
+  });
+}
+function renderGroup(){
+  const g=groupDraft, body=document.getElementById('group-body');
+  const opt=(arr,v)=>'<option value="">（未選）</option>'+arr.map(x=>`<option${x===v?' selected':''}>${x}</option>`).join('');
+  const members=g.members.map((m,i)=>`
+    <div class="gm-row" data-i="${i}">
+      <div class="field"><label>夫妻／家人姓名</label><input type="text" class="gm-name" value="${esc(m.name||'')}" placeholder="例：志明 ❤ 春嬌"></div>
+      <div class="field"><label>聯絡方式</label><input type="text" class="gm-contact" value="${esc(m.contact||'')}" placeholder="電話／LINE"></div>
+      <div class="field"><label>平時崗位（維繫運作）</label><select class="gm-rd">${opt(ROLES_DAILY,m.roleDaily||'')}</select></div>
+      <div class="field" style="margin-bottom:8px;"><label>聚集崗位（跟進聚會）</label><select class="gm-rm">${opt(ROLES_MEET,m.roleMeet||'')}</select></div>
+      <button class="gm-del" data-i="${i}">－ 刪除這一戶</button>
+    </div>`).join('');
+  body.innerHTML=`
+    <div class="hand-reminder">把你們的<b>愛的小家</b>連結起來——陪伴員、小家長與小家裡的每對夫妻，彼此以「2」的關係同行，操練 235，成為屬靈同伴、屬靈父母兒女、屬靈戰友。<br>「無論在哪裡，有兩三個人奉我的名聚會，那裡就有我在他們中間。」（太十八20）</div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:6px;">🏡 我們小家的名稱</div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 12px;">一起為小家取一個名字，成為彼此的歸屬與記號（會顯示在最上面）。</p>
+      <div class="field" style="margin-bottom:0;"><input type="text" id="g-name" value="${esc(g.gname||'')}" placeholder="例：恩典之家、活水小家" maxlength="14"></div>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:4px;">📜 小家的職責與分工</div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 13px;">人人有分、彼此服事——先生命、再關係、後事工，一起委身經營這個家。一個小家三到四對夫妻，加上一對陪伴員夫妻。</p>
+      <div class="role-item"><b>🤝 陪伴員（屬靈遮蓋）</b>為小家禱告守望，傳遞 321 理念與教材，做小家長的屬靈父母，遇難處時扶持。</div>
+      <div class="role-item"><b>👑 小家長夫妻（帶領牧養）</b>帶領聚會、平日關懷代禱，活出 321 無己的榜樣，與陪伴員連結、回報小家光景。</div>
+      <div class="role-item"><b>👨‍👩‍👧 每對夫妻：各認領「平時」+「聚集」一個崗位</b></div>
+      <div class="role-sub">🌿 平時崗位（維繫關係、運作小家）</div>
+      <ul class="role-ul">
+        <li>💗 <b>關懷牧養</b>──平日問安、生日節慶關心、缺席探訪</li>
+        <li>🙏 <b>禱告守望</b>──收集代禱事項、建立禱告鏈、為小家守望</li>
+        <li>📋 <b>行政聯絡</b>──群組通知、時間協調、出席與資料維護</li>
+        <li>🌱 <b>邀請陪伴</b>──關心新朋友、邀約並陪伴跟進</li>
+      </ul>
+      <div class="role-sub">🤝 聚集崗位（跟進聚會時）</div>
+      <ul class="role-ul">
+        <li>🎵 <b>敬拜帶領</b>──詩歌敬拜、開場</li>
+        <li>📖 <b>分享帶領</b>──帶讀經、321 理念分享與討論</li>
+        <li>🍵 <b>飲食招待</b>──茶點、場地布置、迎新招待</li>
+        <li>🤲 <b>結束差遣</b>──結束代禱、彼此祝福、差遣</li>
+      </ul>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:12px;">🤝 陪伴員</div>
+      <div class="field"><label>姓名</label><input type="text" id="g-comp-name" value="${esc(g.companion.name||'')}" placeholder="陪伴你們的同工"></div>
+      <div class="field" style="margin-bottom:0;"><label>聯絡方式</label><input type="text" id="g-comp-contact" value="${esc(g.companion.contact||'')}" placeholder="電話／LINE"></div>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:12px;">👑 小家長夫妻</div>
+      <div class="field"><label>姓名</label><input type="text" id="g-lead-name" value="${esc(g.leader.name||'')}" placeholder="例：建國 ❤ 美惠"></div>
+      <div class="field" style="margin-bottom:0;"><label>聯絡方式</label><input type="text" id="g-lead-contact" value="${esc(g.leader.contact||'')}" placeholder="電話／LINE"></div>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:6px;">👨‍👩‍👧 小家成員（夫妻／家人）</div>
+      <p class="a-intro" style="margin:0 0 12px;font-size:14.5px;color:var(--ink-soft);">小家裡一起同行的夫妻與家人，各自認領平時與聚集的服事崗位。</p>
+      <div id="gm-list">${members||'<p class="a-intro" style="font-size:14.5px;margin:0 0 12px;color:var(--ink-soft);">還沒有成員，點下面新增。</p>'}</div>
+      <button class="gm-add" id="gm-add">＋ 新增一戶夫妻／家人</button>
+    </div>
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:17px;margin-bottom:12px;">📅 跟進聚會</div>
+      <div class="field"><label>多久聚一次</label><select id="g-freq">${opt(MEET_FREQ,g.meet.freq)}</select></div>
+      <div class="field"><label>什麼時間</label><input type="text" id="g-time" value="${esc(g.meet.time||'')}" placeholder="例：每週五晚上 8:00"></div>
+      <div class="field" style="margin-bottom:0;"><label>用什麼方式</label><select id="g-way">${opt(MEET_WAY,g.meet.way)}</select></div>
+    </div>
+    <button class="bigbtn" id="g-save">儲存小家資料</button>
+    <div class="saved" id="g-saved"></div>`;
+  body.querySelector('#gm-add').addEventListener('click',()=>{ readGroupInputs(); groupDraft.members.push({name:'',contact:'',roleDaily:'',roleMeet:''}); renderGroup(); });
+  body.querySelectorAll('.gm-del').forEach(b=>b.addEventListener('click',()=>{ readGroupInputs(); groupDraft.members.splice(Number(b.dataset.i),1); renderGroup(); }));
+  body.querySelector('#g-save').addEventListener('click',()=>{
+    readGroupInputs(); jset('group_info',groupDraft); updateBrand();
+    const s=body.querySelector('#g-saved'); s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
+  });
+  window.scrollTo(0,0);
+}
+document.getElementById('open-group').addEventListener('click',openGroup);
+document.getElementById('group-back').addEventListener('click',closeGroup);
+updateBrand();
+
+/* ============ 字級調整 ============ */
+function getFontScale(){ return store.get('fontScale')||'1'; }
+function applyFontScale(s){ document.body.style.zoom = (s && s!=='1') ? s : ''; }
+function renderFontSeg(){
+  const seg=document.getElementById('font-seg'); if(!seg) return;
+  const cur=getFontScale();
+  seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.s===cur));
+}
+document.getElementById('font-seg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  store.set('fontScale', b.dataset.s);
+  applyFontScale(b.dataset.s);
+  renderFontSeg();
+});
+applyFontScale(getFontScale());
+renderFontSeg();
+
+/* ============ 珍珠時刻 ============ */
+const PEARL_CATS=[{k:'時光',e:'🎉'},{k:'事情',e:'🍽️'},{k:'物品',e:'🎁'},{k:'回憶',e:'💭'}];
+let pearlCat='時光';
+function getPearls(){ return jget('pearls',[]); }
+function pearlEmoji(k){ const c=PEARL_CATS.find(x=>x.k===k); return c?c.e:'🦪'; }
+function fmtDate(s){ if(!s) return ''; const p=s.split('-'); return p.length===3?`${p[0]}/${Number(p[1])}/${Number(p[2])}`:s; }
+function openPearls(){
+  bankReturn=(document.querySelector('.page.active')||{id:'page-grow'}).id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('pearlsview').classList.add('active');
+  renderPearlsBody();
+  window.scrollTo(0,0);
+}
+function closePearls(){
+  document.getElementById('pearlsview').classList.remove('active');
+  document.getElementById(bankReturn||'page-grow').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-pearls').addEventListener('click',openPearls);
+document.getElementById('pearls-back').addEventListener('click',closePearls);
+function renderPearlsBody(){
+  pearlCat=PEARL_CATS[0].k;
+  const body=document.getElementById('pearls-body');
+  body.innerHTML=`
+    <div class="dashcard balcard" style="background:linear-gradient(135deg,#EFE7F3,#E1D1EB);border-color:#D2BEE0;">
+      <div class="blabel" style="color:#54396B;">🦪 珍珠項鍊</div>
+      <div class="balrow"><div class="big" id="pearl-count" style="color:#54396B;">0</div><div class="bunit" style="color:#54396B;">顆珍珠</div></div>
+      <div class="balmsg" style="color:#54396B;">配偶的缺點像一粒沙，選擇用愛包容，就從一粒沙變成一顆珍珠。</div>
+    </div>
+    <div class="dashcard">
+      <div class="field"><label>日期</label><input type="date" id="pearl-date"></div>
+      <div class="form-lbl">這是哪一種美好？</div>
+      <div class="seg" id="pearl-cat">${PEARL_CATS.map((c,i)=>`<button data-k="${c.k}"${i===0?' class="on"':''}>${c.e} ${c.k}</button>`).join('')}</div>
+      <div class="field"><label>標題</label><input type="text" id="pearl-title" placeholder="例：結婚 20 週年的旅行"></div>
+      <div class="field" style="margin-bottom:10px;"><label>美好的回憶</label><textarea class="depo" id="pearl-text" placeholder="寫下這段珍貴的回憶……"></textarea></div>
+      <button class="bigbtn" id="pearl-save" style="background:var(--purple);">串上這顆珍珠 🦪</button>
+    </div>
+    <div class="form-lbl" style="margin:4px 2px 10px;">珍珠串</div>
+    <div id="pearl-list"></div>`;
+  document.getElementById('pearl-date').value=dateKey();
+  document.getElementById('pearl-cat').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    pearlCat=b.dataset.k;
+    document.querySelectorAll('#pearl-cat button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+  document.getElementById('pearl-save').addEventListener('click',savePearl);
+  document.getElementById('pearl-list').addEventListener('click',e=>{
+    const del=e.target.closest('.del'); if(!del) return;
+    jset('pearls', getPearls().filter(x=>x.id!==del.dataset.id));
+    renderPearlList();
+  });
+  renderPearlList();
+}
+function savePearl(){
+  const title=document.getElementById('pearl-title').value.trim();
+  const text=document.getElementById('pearl-text').value.trim();
+  const date=document.getElementById('pearl-date').value||dateKey();
+  if(!title && !text){ document.getElementById('pearl-title').focus(); return; }
+  const list=getPearls();
+  list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date,cat:pearlCat,title,text});
+  jset('pearls',list);
+  document.getElementById('pearl-title').value='';
+  document.getElementById('pearl-text').value='';
+  renderPearlList();
+}
+function renderPearlList(){
+  const list=getPearls().slice().sort((a,b)=> a.date<b.date?1 : a.date>b.date?-1 : b.id.localeCompare(a.id));
+  document.getElementById('pearl-count').textContent=list.length;
+  const wrap=document.getElementById('pearl-list');
+  if(!list.length){ wrap.innerHTML='<div class="empty"><span class="eic">🦪</span>還沒有珍珠。<br>把美好的時光、事情、物品與回憶，一顆顆串起來吧。</div>'; return; }
+  wrap.innerHTML=list.map(p=>`<div class="deposit">
+    <button class="del" data-id="${p.id}">✕</button>
+    <div class="dtop"><span class="chip" style="background:#EFE7F3;color:#54396B;">${pearlEmoji(p.cat)} ${p.cat}</span><span class="dtime">${fmtDate(p.date)}</span></div>
+    <div class="ptitle" style="font-weight:800;color:var(--ink);font-size:17.5px;margin:2px 0 3px;"></div>
+    <div class="dtext"></div>
+  </div>`).join('');
+  wrap.querySelectorAll('.deposit').forEach((node,i)=>{
+    node.querySelector('.ptitle').textContent=list[i].title||'（無標題）';
+    node.querySelector('.dtext').textContent=list[i].text||'';
+  });
+}
+
+/* ============ PWA 離線註冊 ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+
+</script>
+</body>
+</html>
