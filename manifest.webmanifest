@@ -1,15 +1,19 @@
 {
-  "name": "321 夫妻成長營",
+  "name": "321夫妻成長營",
   "short_name": "321夫妻成長營",
-  "description": "321 夫妻成長營 — 營會後的複習與跟進・愛的小家",
-  "start_url": "./",
+  "description": "國度321空中團契・夫妻成長營：會前預備、會時領受、會後跟進，落實321理念，讓耶穌在婚姻裡作王。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "/321-marriage-camp/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#FBF6F1",
   "theme_color": "#B0345A",
-  "lang": "zh-Hant",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

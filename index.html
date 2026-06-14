@@ -104,6 +104,47 @@
   .dhead .dsub{font-size:16px;opacity:.92;line-height:1.6;}
   .dbody{padding:18px 16px 20px;max-width:680px;margin:0 auto;}
 
+  /* 專題筆記本 */
+  .note-fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom) + 78px);z-index:70;
+    display:none;align-items:center;gap:6px;padding:11px 16px;border:none;border-radius:999px;
+    cursor:pointer;font-family:inherit;font-size:15px;font-weight:800;color:#fff;
+    background:linear-gradient(135deg,#C24E72,#9C2F52);box-shadow:0 6px 18px rgba(150,40,80,.38);}
+  .note-fab.show{display:flex;}
+  .note-fab .nfi{font-size:18px;}
+  .note-sheet{position:fixed;inset:0;z-index:80;display:none;}
+  .note-sheet.open{display:block;}
+  .nmask{position:absolute;inset:0;background:rgba(40,20,30,.45);}
+  .note-panel{position:absolute;left:0;right:0;bottom:0;max-height:88vh;
+    background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);
+    display:flex;flex-direction:column;animation:slideup .28s ease;}
+  @keyframes slideup{from{transform:translateY(100%);}to{transform:translateY(0);}}
+  .note-phead{display:flex;align-items:center;gap:10px;padding:16px 18px 12px;border-bottom:1px solid var(--line);}
+  .note-phead .npt{flex:1;min-width:0;}
+  .note-phead .nl{font-size:12px;font-weight:800;color:var(--rose);letter-spacing:1px;}
+  .note-phead .nt{font-size:18px;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .note-close{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;
+    background:#F3E9EC;color:#9C2F52;font-size:22px;font-weight:800;line-height:1;}
+  .note-cbody{padding:14px 18px calc(env(safe-area-inset-bottom) + 18px);overflow-y:auto;}
+  .note-tip{font-size:13px;color:#9A8175;margin:0 0 10px;line-height:1.6;}
+  .note-area{width:100%;box-sizing:border-box;min-height:44vh;border:1.5px solid #E6D8DD;border-radius:14px;
+    padding:14px;font-family:inherit;font-size:16px;line-height:1.85;color:#3A2A30;resize:vertical;background:#FFFDFE;}
+  .note-area:focus{outline:none;border-color:var(--rose);}
+  .note-saved{font-size:13px;color:#3C8C76;font-weight:700;margin-top:8px;height:18px;}
+
+  /* 落實應用 */
+  .apx{background:#FBF6F2;border-radius:12px;padding:10px 12px;margin:8px 0;border-left:3px solid var(--ac,var(--rose));}
+  .apx-s{font-weight:800;color:#7A5A48;font-size:14.5px;margin-bottom:3px;}
+  .apx-a{color:#4D4036;font-size:15px;line-height:1.72;}
+  .apdiv{margin:16px 0 9px;font-weight:800;color:var(--navy);font-size:15px;}
+  .aprow{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .apply-inp{flex:1;min-width:0;border:1.5px solid #E6D8DD;border-radius:10px;padding:10px 12px;
+    font-family:inherit;font-size:15px;color:#3A2A30;background:#fff;}
+  .apply-inp:focus{outline:none;border-color:var(--rose);}
+  .apply-del{flex:0 0 auto;width:38px;height:38px;border-radius:10px;border:1.5px solid #E2C9D1;
+    background:#FBEEF2;color:#9C2F52;font-size:20px;font-weight:800;cursor:pointer;line-height:1;}
+  .apply-add{margin-top:2px;width:100%;border:1.5px dashed #D8A9BC;background:#FFF6F9;color:#9C2F52;
+    border-radius:12px;padding:11px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;}
+
   .kcard{background:var(--card);border:1px solid var(--line);border-radius:16px;
     padding:16px 17px;margin-bottom:14px;box-shadow:var(--shadow);}
   .kcard h3{margin:0 0 8px;font-size:20px;font-weight:800;color:var(--navy);
@@ -134,10 +175,17 @@
 
   /* 對照表 */
   .compare{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-  .crow{display:flex;align-items:center;background:#F8F1EC;border-radius:11px;overflow:hidden;}
-  .crow .bad{flex:1;padding:9px 12px;color:#A98A7C;text-align:right;font-size:16px;}
-  .crow .vs{flex:0 0 auto;padding:0 10px;color:#C9BBB2;font-size:13px;}
-  .crow .good{flex:1;padding:9px 12px;color:var(--ac,var(--rose));font-weight:800;font-size:17px;}
+  .cmp-legend{font-size:13px;color:#9A8175;margin:8px 2px 0;line-height:1.6;}
+  .crow{display:flex;align-items:center;gap:6px;background:#F8F1EC;border-radius:11px;padding:6px 7px;}
+  .cmid{flex:1;display:flex;align-items:center;min-width:0;}
+  .cmid .bad{flex:1;padding:3px 6px;color:#A98A7C;text-align:right;font-size:15px;}
+  .cmid .vs{flex:0 0 auto;padding:0 6px;color:#C9BBB2;font-size:12px;}
+  .cmid .good{flex:1;padding:3px 6px;color:var(--ac,var(--rose));font-weight:800;font-size:16px;}
+  .cmp-tog{flex:0 0 auto;border:1.5px solid #D8C6BB;background:#fff;border-radius:999px;
+    font-size:12px;font-weight:700;padding:6px 8px;cursor:pointer;font-family:inherit;
+    color:#A98A7C;line-height:1.1;white-space:nowrap;}
+  .cmp-tog.grow.on{background:#FBF0D8;border-color:#E0A93C;color:#9A6B00;}
+  .cmp-tog.done.on{background:#E7F1ED;border-color:#3C8C76;color:#2F6B58;}
 
   /* 溝通之手 */
   .handlist{counter-reset:hand;}
@@ -361,6 +409,63 @@
   .gbtn.gprev{background:#fff;color:#8A6800;border:2px solid var(--gold);}
   .gbtn.gnext{background:var(--gold);color:#fff;box-shadow:0 5px 14px rgba(191,143,0,.28);}
 
+  /* ===== 營會三階段導覽 ===== */
+  .phasenav{display:flex;flex-direction:column;gap:12px;margin:0 0 22px;}
+  .phasecard{display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px 16px;
+    box-shadow:var(--shadow);cursor:pointer;position:relative;overflow:hidden;font-family:inherit;
+    transition:transform .12s ease;}
+  .phasecard:active{transform:scale(.985);}
+  .phasecard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--ac,var(--rose));}
+  .phasecard .pe{flex:0 0 auto;width:52px;height:52px;border-radius:15px;background:var(--ac,var(--rose));
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:27px;line-height:1;
+    box-shadow:0 4px 10px rgba(0,0,0,.12);}
+  .phasecard .pm{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .phasecard .pstage{font-size:13px;font-weight:800;letter-spacing:1px;color:var(--ac,var(--rose));}
+  .phasecard .pttl{font-size:19px;font-weight:800;color:var(--ink);line-height:1.3;margin:1px 0 2px;}
+  .phasecard .psub{font-size:14.5px;color:var(--ink-soft);line-height:1.5;}
+  .phasecard .parrow{flex:0 0 auto;color:#C9BBB2;font-size:24px;font-weight:700;}
+
+  /* ===== 勾選清單（行前／聖禮） ===== */
+  .checklist{display:flex;flex-direction:column;gap:9px;}
+  .checkrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font-family:inherit;
+    border:2px solid var(--line);background:#fff;border-radius:13px;padding:12px 13px;cursor:pointer;
+    color:var(--ink);transition:.12s;}
+  .checkrow .ce{font-size:22px;flex:0 0 auto;}
+  .checkrow .ct{flex:1;font-size:16px;font-weight:600;line-height:1.5;}
+  .checkrow .ctsub{display:block;font-size:13px;color:var(--ink-soft);font-weight:500;margin-top:2px;}
+  .checkrow .cbox{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:2px solid #D8C6BB;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;}
+  .checkrow.on{border-color:var(--ac,var(--green));background:var(--tint,#E5F0E8);}
+  .checkrow.on .cbox{background:var(--ac,var(--green));border-color:var(--ac,var(--green));}
+
+  /* ===== 七日禱告鏈 ===== */
+  .pray7{display:flex;flex-direction:column;gap:8px;}
+  .prayday{display:flex;align-items:center;gap:11px;width:100%;text-align:left;font-family:inherit;
+    border:2px solid var(--line);background:#fff;border-radius:13px;padding:11px 13px;cursor:pointer;
+    color:var(--ink);transition:.12s;}
+  .prayday .pd{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:#F2EBE5;color:#8A6800;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;}
+  .prayday .pp{flex:1;font-size:15.5px;line-height:1.5;}
+  .prayday .pc{flex:0 0 auto;font-size:20px;color:#D8C6BB;}
+  .prayday.on{border-color:var(--gold);background:#FBF3DC;}
+  .prayday.on .pd{background:var(--gold);color:#fff;}
+  .prayday.on .pc{color:var(--gold);}
+
+  /* ===== 現場進度列（七專題／聖禮） ===== */
+  .cprow{display:flex;align-items:center;gap:11px;border:1px solid var(--line);background:#fff;
+    border-radius:14px;padding:12px 13px;margin-bottom:10px;box-shadow:var(--shadow);}
+  .cprow .cpi{font-size:24px;flex:0 0 auto;}
+  .cprow .cpm{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .cprow .cpl{font-size:12.5px;font-weight:800;color:var(--ink-soft);letter-spacing:.5px;}
+  .cprow .cpt{font-size:16.5px;font-weight:800;color:var(--ink);line-height:1.35;}
+  .cprow .cps{font-size:13.5px;color:var(--ink-soft);line-height:1.45;margin-top:1px;}
+  .cprow .cpgo{flex:0 0 auto;font-size:13px;font-weight:800;color:var(--rose);background:var(--rose-tint);
+    border:none;border-radius:999px;padding:7px 11px;cursor:pointer;font-family:inherit;line-height:1.1;}
+  .cprow .cpcheck{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:2px solid #D8C6BB;background:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;cursor:pointer;line-height:1;}
+  .cprow .cpcheck.on{background:var(--green);border-color:var(--green);}
+
   /* ===== 底部分頁 ===== */
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;
     background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
@@ -419,10 +524,31 @@
   </div>
 </section>
 
-<!-- 複習 -->
+<!-- 複習（營會旅程三階段） -->
 <section class="page active" id="page-learn">
   <div class="lead">
-    <h2>七個專題　重點複習</h2>
+    <h2>營會旅程・三個階段</h2>
+    <p>從會前的鬆土，到會時的領受，再到會後的落實——讓耶穌在你們的婚姻裡，一步步作王。</p>
+  </div>
+  <div class="phasenav">
+    <button class="phasecard" id="open-prep" style="--ac:var(--gold)">
+      <span class="pe">🧳</span>
+      <span class="pm"><span class="pstage">會前・預備</span><span class="pttl">行前預備</span><span class="psub">鬆土・謙卑・我先改變</span></span>
+      <span class="parrow">›</span>
+    </button>
+    <button class="phasecard" id="open-camp" style="--ac:var(--rose)">
+      <span class="pe">⛺</span>
+      <span class="pm"><span class="pstage">會時・現場</span><span class="pttl">會時模式</span><span class="psub">領受・經歷・六個聖禮・立約</span></span>
+      <span class="parrow">›</span>
+    </button>
+    <button class="phasecard" id="go-aftercamp" style="--ac:var(--navy)">
+      <span class="pe">📖</span>
+      <span class="pm"><span class="pstage">會後・落實</span><span class="pttl">帶回家複習</span><span class="psub">七個專題・天天操練・愈來愈好</span></span>
+      <span class="parrow">›</span>
+    </button>
+  </div>
+  <div class="lead" style="margin-top:6px;">
+    <h2 style="font-size:20px;">📖 會後・七個專題重點複習</h2>
     <p>營會的領受帶回家。前六個專題是建造婚姻的材料與工法，專題七是整棟房子的房角石。</p>
   </div>
   <div class="topiclist" id="topiclist"></div>
@@ -438,7 +564,27 @@
     <div class="dsub" id="d-sub"></div>
   </div>
   <div class="dbody" id="d-body"></div>
+  <button class="note-fab" id="note-fab"><span class="nfi">📓</span>筆記</button>
 </section>
+
+<!-- 專題筆記本 -->
+<div class="note-sheet" id="note-sheet">
+  <div class="nmask" id="note-mask"></div>
+  <div class="note-panel">
+    <div class="note-phead">
+      <div class="npt">
+        <div class="nl" id="note-label">我的筆記</div>
+        <div class="nt" id="note-title"></div>
+      </div>
+      <button class="note-close" id="note-close" aria-label="關閉">×</button>
+    </div>
+    <div class="note-cbody">
+      <p class="note-tip">📖 寫下你的領悟、感動，與想要操練的地方。會自動存在這支手機裡。</p>
+      <textarea class="note-area" id="note-area" placeholder="例如：&#10;・今天最打動我的一句話是……&#10;・我看見自己的問題是……&#10;・這一週我要操練的是……"></textarea>
+      <div class="note-saved" id="note-saved"></div>
+    </div>
+  </div>
+</div>
 
 <!-- 操練 -->
 <section class="page" id="page-practice">
@@ -640,6 +786,30 @@
   <div class="dbody" id="group-body"></div>
 </section>
 
+<!-- 行前預備 子頁 -->
+<section class="bankview" id="prepview">
+  <div class="dhead" style="background:linear-gradient(135deg,var(--gold),#8A6800);">
+    <button class="back" id="prep-back">‹ 返回</button>
+    <div class="dicon">🧳</div>
+    <div class="dlabel">會前・行前預備</div>
+    <div class="dttl">行前預備</div>
+    <div class="dsub">鬆土、謙卑，帶一顆「我先改變」的心進場。</div>
+  </div>
+  <div class="dbody" id="prep-body"></div>
+</section>
+
+<!-- 會時模式 子頁 -->
+<section class="bankview" id="campview">
+  <div class="dhead" style="background:linear-gradient(135deg,var(--rose),#92274A);">
+    <button class="back" id="camp-back">‹ 返回</button>
+    <div class="dicon">⛺</div>
+    <div class="dlabel">會時・營會現場</div>
+    <div class="dttl">會時模式</div>
+    <div class="dsub">領受、經歷耶穌，讓祂在你們中間作王。</div>
+  </div>
+  <div class="dbody" id="camp-body"></div>
+</section>
+
 <!-- 我們 -->
 <section class="page" id="page-us">
   <div class="greet">
@@ -654,16 +824,24 @@
       <input type="text" id="pf-husband" placeholder="例：志明" maxlength="12">
     </div>
     <div class="field">
-      <label>丈夫的愛的語言</label>
+      <label>丈夫的愛的語言（主要）</label>
       <select id="pf-hlove"></select>
+    </div>
+    <div class="field">
+      <label>丈夫的愛的語言（次要，可不選）</label>
+      <select id="pf-hlove2"></select>
     </div>
     <div class="field">
       <label>妻子的稱呼</label>
       <input type="text" id="pf-wife" placeholder="例：春嬌" maxlength="12">
     </div>
     <div class="field">
-      <label>妻子的愛的語言</label>
+      <label>妻子的愛的語言（主要）</label>
       <select id="pf-wlove"></select>
+    </div>
+    <div class="field">
+      <label>妻子的愛的語言（次要，可不選）</label>
+      <select id="pf-wlove2"></select>
     </div>
     <button class="bigbtn" id="save-profile">儲存檔案</button>
     <div class="saved" id="pf-saved"></div>
@@ -699,6 +877,7 @@ const TOPICS = [
     title:"建立幸福婚姻的理念（上）",
     sub:"三一原型理論．馬車理論",
     summary:"從創造、墮落到救贖更新——婚姻是兩個「新人」的連合。",
+    examples:[{s:"早上各自趕著出門、心裡有點氣",a:"提醒自己「我是新人，不是舊人」，先深呼吸，讓耶穌坐上馬車作王，用一句祝福送對方出門。"},{s:"為了原生家庭的事意見不同",a:"記得「離開父母、與配偶連合」，先站在夫妻一體這邊，再一起面對，不被舊習慣牽著走。"},{s:"覺得對方很難改變",a:"兩個都是「施工中的新人」，給彼此犯錯的空間和成長的時間，不急著定罪。"}],
     cards:[
       {t:"scripture",ref:"創世記 1：26-27",v:"神說：我們要照著我們的形像、按著我們的樣式造人，使他們管理海裡的魚、空中的鳥、地上的牲畜，和全地，並地上所爬的一切昆蟲。神就照著自己的形像造人，乃是照著他的形像造男造女。"},
       {t:"point",h:"原型・創造",b:"上帝照他的形像樣式造人，人受造奇妙可畏。<br><b>六字真言</b>：<ul><li><b>為寶為尊</b>——靈魂寶貴，形像尊貴</li><li><b>又美又善</b>——外貌美麗，內心善良</li><li><b>為樂為榮</b>——喜樂泉源，榮耀冠冕</li></ul>"},
@@ -706,7 +885,7 @@ const TOPICS = [
       {t:"point",h:"伊甸原型・共同點",b:"<ul><li>人要離開父母 <span class='arrowmap'>→</span> 成熟獨立</li><li>與妻子連合 <span class='arrowmap'>→</span> 親密聯結</li><li>二人成為一體 <span class='arrowmap'>→</span> 合而為一</li></ul>"},
       {t:"point",h:"種子原型・獨特性",b:"<ul><li>個人要離開個人的父母</li><li>個人與個人的妻子連合</li><li>兩個個人成為一體</li></ul>"},
       {t:"point",h:"後原型・墮落（弗 4：22）",b:"舊人因私慾的迷惑，漸漸變壞。<ul><li>離開上帝，卻離不開父母</li><li>與妻子隔閡</li><li>二人仍為二體</li></ul>"},
-      {t:"point",h:"恢復原型・救贖（弗 5：31-32）",b:"基督離開上帝來到地上，擔當我們的罪，完成救贖。<ul><li>基督與教會連合，我們成為新人</li><li>二靈成為一靈</li><li>基督是新郎，教會是新婦，二人成為一體</li></ul>"},
+      {t:"point",h:"恢復原型・救贖（弗 5：31-32）",b:"基督離開上帝來到地上，擔當我們的罪，完成救贖。<ul><li>基督與教會連合，我們成為新人</li><li>二靈成為一靈</li><li>基督是新郎，教會是新婦，二人成為一體</li></ul><b>夫妻與基督</b>：離開情慾罪惡 <span class='arrowmap'>→</span> 與基督連合 <span class='arrowmap'>→</span> 二靈成為一靈，身體成為基督的肢體。"},
       {t:"point",h:"成長原型・更新（弗 4：24）",b:"穿上新人，這新人是照著神的形像造的，有真理的仁義和聖潔。<ul><li>脫去舊人，穿上新人</li><li>與妻子的新人連合</li><li>兩個新人成為一體</li></ul>"},
       {t:"point",h:"馬車理論",b:"<ul><li>身體是馬</li><li>心是韁繩</li><li>魂是車夫</li><li>靈是管家</li><li><b>耶穌是王</b></li></ul>"},
       {t:"prin",b:"婚姻的更新，是兩個「新人」的連合。唯有<b>無己</b>，才能讓耶穌坐上馬車作王，駕馭身體、心、魂，走在合神心意的道路上。"}
@@ -717,6 +896,7 @@ const TOPICS = [
     title:"建立幸福婚姻的理念（下）",
     sub:"321 理念．建立健康安全的生態環境",
     summary:"三個基礎、兩個核心、一個目的——把 321 落實在每一次的選擇。",
+    examples:[{s:"家事誰做得多、心裡開始計較",a:"選「無己」不選「有己」，用謙卑三招「我要服事你」，主動多做一點、少計較一點。"},{s:"講道理講到僵住、誰也不讓",a:"選「重人」不選「重事」，先顧關係——停下來牽手，事情明天再談。"},{s:"對方又犯了同樣的錯",a:"記得「不是馬上變好，肯定愈來愈好」，給空間與時間，不翻舊帳。"}],
     cards:[
       {t:"point",h:"三個基礎",b:"<ul><li><b>耶穌是我的榜樣</b>——謙卑容易驕傲難</li><li><b>聖經是我的準則</b>——神說的算，不是人說的算</li><li><b>聖靈是我的引導</b>——用心靠聖靈，不是用腦靠自己</li></ul>"},
       {t:"point",h:"兩個核心",b:"<ul><li><b>讓耶穌作王</b>——無己容易有己難</li><li><b>讓耶穌得到一切的榮耀</b>——一切都是恩典</li></ul>"},
@@ -729,6 +909,7 @@ const TOPICS = [
       {t:"point",h:"謙卑三招",b:"<ul><li>都是我的錯</li><li>你是我老師</li><li>我要服事你</li></ul>"},
       {t:"point",h:"溝通三招",b:"<ul><li>感覺沒有對錯</li><li>建議不是決定</li><li>檢討不是批評</li></ul>"},
       {t:"point",h:"除掉兩種邪「較」與兩種害蟲",b:"<ul><li><b>不比較</b>——誰大誰小</li><li><b>不計較</b>——誰多誰少</li><li><b>不嫉妒</b>——別人比我好</li><li><b>不猜疑</b>——別人對我不好</li></ul>"},
+      {t:"point",h:"落實原則",b:"<ul><li>錯了就改</li><li>跌倒了站起來</li><li>困難的耶穌做，簡單的我們做</li><li>聽起來容易，做起來更容易</li><li>不是馬上變好，肯定愈來愈好</li></ul>"},
       {t:"prin",b:"困難的耶穌做，簡單的我們做。不是馬上變好，肯定愈來愈好。改變，從我開始。"}
     ]
   },
@@ -737,13 +918,15 @@ const TOPICS = [
     title:"經營正向的婚姻",
     sub:"看聽想講行．播放唱片理論",
     summary:"正面的解讀才能正確解毒——把壞唱片換成好唱片。",
+    examples:[{s:"對方忘了你交代的事",a:"用信心解讀「他不是不在乎，是太忙了」，換上好唱片，講一句體諒的話。"},{s:"一句話讓你不太舒服",a:"先「用心聽」找出他真正的意思，再回應；轉化思緒，就能轉化情緒。"},{s:"今天諸事不順、心情很差",a:"想「凡事必有上帝的美意、必有我的功課」，用感恩回應，把壞事操練成祝福。"}],
     cards:[
       {t:"point",h:"人生的正事",b:"<b>身體</b>五件正事：吃、喝、拉、撒、睡——正確地做，身體必健康。<br><b>心靈</b>五件正事：看、聽、想、講、行——做得好，人生必美好。"},
       {t:"point",h:"正確的看",b:"<ul><li>看別人：為寶為尊、又美又善、為樂為榮、比自己強</li><li>看自己：合乎中道</li><li>看事情：都是美好的——上帝有本事把壞事變好事</li></ul>"},
       {t:"point",h:"正確的聽",b:"用心聽、專心聽、同理心聽。<br><b>傾聽就是愛，瞭解中有醫治。</b>"},
       {t:"point",h:"正確的想",b:"<ul><li>凡事必有上帝的美意</li><li>凡事必有我的功課</li><li>苦難之後必有更大的祝福</li></ul>"},
       {t:"point",h:"正確的講與行",b:"講感謝、讚美、祝福的好話。<br>你願意人怎樣待你，就怎樣待人；施比受更為有福。"},
-      {t:"point",h:"從壞事操練",b:"正面解讀才能正確解毒；負面解讀會產生心靈的毒素。<ul><li>危機就是轉機</li><li>正向回應產生良性循環，最後反敗為勝</li><li>不要以惡報惡，倒要以善勝惡</li></ul>"},
+      {t:"point",h:"從好事操練",b:"<b>用謙卑解讀</b>：不是我比別人更好，乃是我比別人更蒙恩。<br><b>用感恩回應</b>：<ul><li>感謝主——都是主的恩典，把榮耀歸給主</li><li>感謝你——都是你的幫忙，把功勞歸給人</li><li>很開心——這是我的榮幸，把喜樂歸自己</li><li>不辛苦——很幸福，而且很享受</li></ul>"},
+      {t:"point",h:"從壞事操練",b:"正面的解讀才能正確解毒；負面解讀會產生心靈的毒素。<br><b>用信心解讀</b>：危機就是轉機——正向的回應產生良性循環，最後反敗為勝；反向的回應會導致反向的骨牌效應。<br><b>用愛心回應</b>：不要以惡報惡，倒要以善勝惡。"},
       {t:"point",h:"播放唱片理論",b:"<b>壞唱片</b>：看不好→聽不好→想不好→講不好→行不好，封閉沒有出路。<br><b>好唱片</b>：看與聽常常無法改變，但<b>想、講、行</b>可以改變——產生新的良性循環的軌道。"},
       {t:"prin",b:"用心靠聖靈，不要用腦靠自己；用心就開心，用腦就煩惱。一生的果效從心發出。"}
     ]
@@ -753,12 +936,15 @@ const TOPICS = [
     title:"性福！幸福！",
     sub:"聖經中對性的看見",
     summary:"性是神賜給已婚夫妻純潔、聖潔又美好的恩典。",
+    examples:[{s:"想親近卻不好意思開口",a:"先製造溫馨的氣氛、坦誠溝通，記得最重要的性器官是「腦」，用愛和溫柔表達。"},{s:"一方比較累、沒有興致",a:"彼此體諒，不勉強、不冒犯，雙方都願意時再進行，找彼此都合適的時間。"},{s:"覺得親密變得像例行公事",a:"用心堅固「熱情、愛慕、享樂」三樣，安排約會、加點創意與心意。"}],
     cards:[
-      {t:"note",b:"本專題為<b>已婚夫妻</b>內容。聖經以尊貴、聖潔的眼光看待夫妻的親密，這裡整理屬靈與關係的原則；更詳細的實用內容請參閱學員手冊，與配偶一同閱讀分享。"},
-      {t:"point",h:"聖經對性的看見",b:"<ul><li>性是神對已婚夫妻的心意，在墮落之前就是神的心意</li><li>性幫助夫妻進入聯合，沒有什麼好羞恥</li><li>性是用來向伴侶傳達愛——完全敞開自己被愛</li><li>婚姻中的性是純潔和神聖的</li><li>性是為要享受，也為要生育下一代</li><li>夫妻一生都要享受性</li></ul>"},
-      {t:"point",h:"在性上彼此滿足的心",b:"<ul><li>人最重要的性器官是腦——心思與態度先預備好</li><li>充滿愛和溫柔地滿足配偶的需要</li><li>為性製造正確的氣氛</li><li>好的性是有效的屬靈爭戰</li><li>坦誠溝通彼此的需要，不做冒犯配偶的事</li></ul>"},
-      {t:"point",h:"持續堅固三樣",b:"<ul><li>熱情</li><li>愛慕</li><li>享樂</li></ul>"},
-      {t:"point",h:"夫妻分享題",b:"<ul><li>這個專題，你有什麼領受和學習？</li><li>你對彼此性生活的感恩</li><li>分享你在這方面的需要</li><li>你們可以如何增進和諧與樂趣？</li></ul>"},
+      {t:"note",b:"本專題為<b>已婚夫妻</b>內容。聖經以尊貴、聖潔的眼光看待夫妻的親密，這裡整理屬靈與關係的原則；更親密的實際細節，請夫妻二人在隱私中一同翻閱學員手冊，以愛、尊重與感恩學習。"},
+      {t:"point",h:"聖經對性的十個觀點",b:"<ul><li>性是神對已婚夫妻的心意</li><li>在人類墮落之前，性就是神的心意</li><li>性是要幫助夫妻進入聯合</li><li>性沒有什麼好羞恥的</li><li>性是用來向伴侶傳達愛——讓人完全敞開自己被愛</li><li>婚姻當中的性是純潔和神聖的</li><li>婚姻之外的性是苟合和姦淫</li><li>性是為要享受的</li><li>性是為要生育下一代</li><li>夫妻一生都要享受性</li></ul>"},
+      {t:"point",h:"在性上滿足配偶的十個方式",b:"<ul><li>期待性是一種享受（最重要的性器官是「腦」——心思態度先預備好）</li><li>經常滿足配偶在性上的需要</li><li>充滿愛和溫柔地滿足配偶</li><li>尊重配偶有權為身體作主、得享受</li><li>唯有雙方都同意時，才可暫時禁慾</li><li>儘快恢復正常的性關係</li><li>好的性是有效的屬靈爭戰</li><li>為性製造正確的氣氛</li><li>坦誠和配偶溝通自己的需要</li><li>不做任何會冒犯配偶的舉動</li></ul><i>配偶對性不感興趣，可能是技巧、情緒或生理的原因，要彼此體諒、好好溝通。</i>"},
+      {t:"point",h:"成為好情人的七個方法",b:"<ul><li>要有時間</li><li>要沒有顧慮</li><li>要充滿吸引力</li><li>要渴望</li><li>要有創意</li><li>要無拘無束</li><li>要充滿熱情</li></ul>"},
+      {t:"point",h:"持續不斷堅固三樣",b:"<ul><li>熱情</li><li>愛慕</li><li>享樂</li></ul>"},
+      {t:"point",h:"實用篇・用心預備",b:"手冊「實用篇」分五個階段：<b>預備、前戲、進行、後戲、善後</b>。在「預備」上夫妻可以一起用心經營：<ul><li>預備約會與心情——期待、放鬆、不擔憂不焦慮</li><li>預備時間與地點——找彼此都合適的時刻與空間</li><li>預備身體與環境——整潔、燈光、音樂、溫度</li><li>坦誠溝通、彼此尊重，不勉強、不冒犯</li></ul>更親密的實際細節，請夫妻二人在隱私中一同翻閱學員手冊「實用篇」。"},
+      {t:"point",h:"夫妻分享題",b:"<ul><li>這個專題，你有什麼領受和學習？</li><li>你對彼此性生活的感恩</li><li>分享你在這方面的需要</li><li>你們可以如何增進性生活的和諧與樂趣？</li></ul>"},
       {t:"prin",b:"在神的計畫裡，夫妻的親密是讓人完全敞開、被愛、合一的方式——以愛、以尊重、以感恩，把這份恩典經營得又純潔又甜美。"}
     ]
   },
@@ -767,13 +953,15 @@ const TOPICS = [
     title:"經營美滿婚姻的方法（上）",
     sub:"屬神的價值觀．五種愛的語言．愛的存款",
     summary:"改變別人最快的路，是改變自己；天天為情感帳戶存款。",
+    examples:[{s:"對方要的是陪伴，你卻一直送禮物",a:"用「對方的」愛的語言存款——投其所好、滿足所需，愛才存得進心裡。"},{s:"太忙，不知不覺忽略了配偶",a:"記得次序「夫妻→兒女→父母、婚姻→家庭→工作」，每天至少存一筆愛的存款。"},{s:"想稱讚對方卻不知怎麼說",a:"用肯定話語——讚美一項優點、感謝一件事情、祝福一個盼望。"}],
     cards:[
       {t:"point",h:"正確的先後次序",b:"不要本末倒置。<ul><li>頭 <span class='arrowmap'>→</span> 身體 <span class='arrowmap'>→</span> 雙腳</li><li>生命 <span class='arrowmap'>→</span> 關係 <span class='arrowmap'>→</span> 事工</li><li>夫妻 <span class='arrowmap'>→</span> 兒女 <span class='arrowmap'>→</span> 父母</li><li>婚姻 <span class='arrowmap'>→</span> 家庭 <span class='arrowmap'>→</span> 工作</li></ul>"},
       {t:"point",h:"經營的方法",b:"做沒做過的事是成長，做不敢做的事是勇敢，做不想做的事是突破。<br><b>改變別人最快的路，是改變自己。</b><br>右手握拳宣告：我要改變、我必須改變、我能改變、我正在改變、我已經改變。"},
       {t:"point",h:"五種愛的語言",b:"<ul><li>身體接觸——牽手、擁抱</li><li>肯定話語——五種好話</li><li>精心時刻——約會、散步、按摩</li><li>接受禮物——鮮花、卡片、短信</li><li>服務行動——家事、服務</li></ul>"},
-      {t:"point",h:"肯定話語：五種好話",b:"讚美、感謝、鼓勵、引導、祝福。<br><b>讚美的好話</b>：右眼看優點、左眼看缺點；憑事實、憑愛心、憑信心讚美。配偶是<b>施工中的傑作</b>，上帝是作者——讚美作品，榮耀歸給作者。"},
+      {t:"point",h:"肯定話語：五種好話",b:"讚美、感謝、鼓勵、引導、祝福。<br><b>讚美的好話</b>：右眼看優點、左眼看缺點；憑事實、憑愛心、憑信心讚美。配偶是<b>施工中的傑作</b>，上帝是作者——讚美作品，榮耀歸給作者。<br><b>三甜的配偶</b>：臉甜、心甜、嘴巴甜。"},
       {t:"point",h:"感謝的好話",b:"<ul><li>不要覺得自然而然</li><li>不要當作理所當然</li><li>不要以為偶然突然</li><li>都是上帝恩典使然</li></ul>所以——<b>凡事要感謝</b>。"},
       {t:"point",h:"愛的存款",b:"每個人心裡都有一個<b>情感帳戶</b>。<ul><li><b>存款</b>：讓對方開心、感到被愛</li><li><b>提款</b>：讓對方傷心、感到不被愛</li></ul>智慧存款——投其所好，滿足所需。"},
+      {t:"point",h:"愛的存款這樣做",b:"彼此<b>手牽手、眼看眼、心連心</b>。<br><b>存款的人</b>說出：<ul><li>感謝的話——感謝一件事情</li><li>讚美的話——讚美一項優點</li><li>祝福的話——祝福一個盼望</li></ul><b>被存款的人</b>回應：簡單覆述、真心道謝、愛心擁抱。"},
       {t:"prin",b:"改變別人是上帝的工作，改變自己要與上帝合作。先生命、再關係、後事工。"}
     ]
   },
@@ -782,8 +970,10 @@ const TOPICS = [
     title:"經營美滿婚姻的方法（下）",
     sub:"珍珠時刻．處理衝突三階段．溝通之手",
     summary:"把一粒沙包容成一顆珍珠；衝突時，先選擇穿上新人。",
+    examples:[{s:"又為了小事吵起來",a:"先做第一階段——看見自己的問題（我選了驕傲），選擇穿上新人，再用溝通之手好好談。"},{s:"對方的缺點讓你快受不了",a:"做包容沙的珍珠貝，用記憶力想起他的好，把一粒沙慢慢包成一顆珍珠。"},{s:"冷戰中，誰都不想先開口",a:"用「肯定句表達否定事」（對不起，你說對不對？），主動牽手破冰。"}],
     cards:[
       {t:"point",h:"珍珠時刻",b:"你要做吐沙的蛤蜊，還是包容沙的珍珠貝？<br>配偶的缺點和過錯像一粒沙，你可以選擇吐出去，或用愛包容——<b>從一粒沙變成一顆珍珠，從一堆沙變成一串珍珠項鍊。</b>"},
+      {t:"point",h:"經營珍珠時刻",b:"主動製造、用心記錄、常常回味美好：<ul><li><b>美好的時光</b>——生日、週年慶祝、夫妻營</li><li><b>美好的事情</b>——聚餐、旅遊、看電影</li><li><b>美好的物品</b>——紀念品、禮物</li><li><b>美好的記錄</b>——相片、影片、手冊</li><li><b>美好的回憶</b>——常常回想、珍藏記憶</li></ul>"},
       {t:"point",h:"上帝給我們的兩大能力",b:"記憶力與想像力——能重溫舊夢，能轉移注意力，從看到的缺點轉到想到的美好。<br><b>轉化思緒，就能轉化情緒。</b>"},
       {t:"point",h:"衝突的產生",b:"男女大不同，個性、原生家庭、成長背景不同，差異產生衝突。<br>身體正面是<b>新人（謙卑）</b>，背面是<b>舊人（驕傲）</b>。<b>驕傲是造成衝突最大的原因。</b>"},
       {t:"point",h:"處理衝突・第一階段",b:"<b>解決我的問題</b>——看見自己的問題。衝突引起我的生氣傷心，是因為我選擇了背面的舊人、選擇了驕傲。耶穌是醫生，藉著配偶觸診我的痛點。看見自己的問題，接納別人就很自然。"},
@@ -802,11 +992,14 @@ const TOPICS = [
     title:"美滿婚姻的秘訣",
     sub:"更新婚約盟約禮證道．以弗所書 5：21-33",
     summary:"房角石——讓基督作頭、作王，是美滿婚姻最深的秘訣。",
+    examples:[{s:"大事要做決定、兩人僵持不下",a:"讓「基督是頭」作決定——神腦人腦一起提供意見，先同心禱告尋求主的心意。"},{s:"丈夫覺得不被尊重／妻子覺得不被疼愛",a:"妻子說「你好棒」、尊重他的判斷；丈夫說「我愛你」、給她一個擁抱。"},{s:"結婚或立約週年到了",a:"一起重讀立約書、更新婚約，宣告讓耶穌一直在你們的婚姻裡作王。"}],
     cards:[
       {t:"scripture",ref:"以弗所書 5：21、22、25、31-33",v:"又當存敬畏基督的心，彼此順服。你們作妻子的，當順服自己的丈夫，如同順服主。你們作丈夫的，要愛你們的妻子，正如基督愛教會，為教會捨己。⋯⋯為這個緣故，人要離開父母，與妻子連合，二人成為一體。這是極大的奧祕，但我是指著基督和教會說的。然而，你們各人都當愛妻子，如同愛自己一樣。妻子也當敬重她的丈夫。"},
       {t:"point",h:"一、夫妻的角色",b:"<ul><li><b>離開</b>——夫妻要成熟獨立</li><li><b>連合</b>——夫妻要親密相連</li><li><b>合一</b>——夫妻要成為一體</li></ul>丈夫是頭：要<b>帶頭，不要出頭</b>。<br>妻子是身體：要<b>體貼體諒，不要替代</b>。<br>丈夫像老闆，妻子像秘書——秘書可以比老闆聰明能幹，但秘書的意見是<b>建議，不是決定</b>。"},
       {t:"point",h:"頭與兩個腦",b:"<ul><li><b>個人</b>：左腦右腦提供意見，頭作決定——一頭二臂</li><li><b>夫妻</b>：男腦女腦提供意見，丈夫是頭——二頭四臂</li><li><b>靠主</b>：神腦人腦提供意見，<b>基督是頭</b>作決定——三頭六臂</li></ul>"},
       {t:"point",h:"二、夫妻的職責",b:"<b>丈夫</b>愛妻子，正如基督愛教會——疼愛呵護，給她安全感（對妻子說：我愛你）。<br><b>妻子</b>順服丈夫，正如教會順服基督——尊重順服，給他自信心（對丈夫說：你好棒）。<br>彼此選擇謙卑、捨己、無己，就能彼此相愛、彼此順服、彼此敬重。"},
+      {t:"point",h:"妻子尊重丈夫的五個方式",b:"頭負責決策帶領，需要自信心——男人被尊重就感到被愛。<ul><li>尊重他的判斷</li><li>尊重他的能力</li><li>尊重他完成的事</li><li>溝通時的尊重</li><li>公開場合的尊重</li></ul>對丈夫說：<b>你好棒！</b>"},
+      {t:"point",h:"丈夫疼愛妻子的五個方式",b:"身體負責配搭幫助，需要安全感——女人被疼惜就感到被愛。<ul><li>衝突吵架時，仍確定你愛她</li><li>你需要空間時，讓她知道與她無關</li><li>她生氣不開心時，給她一個擁抱</li><li>她想談關係時，傾聽、不急著辯護</li><li>她很難相處時，不停止、仍確定地愛她</li></ul>對妻子說：<b>我愛你！</b>"},
       {t:"point",h:"三、夫妻的使命",b:"<ul><li><b>彰顯奧祕</b>——如同基督與教會連合，二人成為一體</li><li><b>彰顯榮耀</b>——成就上帝的旨意，教會成為聖潔，與基督在天上作王</li></ul>"},
       {t:"prin",b:"美滿婚姻最深的秘訣，就是<b>讓基督作頭、讓耶穌作王</b>。無己，讓基督在我們的婚姻裡居首位——這是整棟房子的房角石。"}
     ]
@@ -830,6 +1023,7 @@ function renderList(){
 }
 
 /* ============ 渲染專題內頁 ============ */
+function getCmp(){ return jget('compare_marks',{}); }
 function cardHTML(c,accent){
   if(c.t==='scripture')
     return `<div class="scripture" style="--ac:${accent}"><div class="ref">📖 ${c.ref}</div><div class="verse">${c.v}</div></div>`;
@@ -838,14 +1032,46 @@ function cardHTML(c,accent){
   if(c.t==='note')
     return `<div class="note">${c.b}</div>`;
   if(c.t==='compare'){
-    const rows=c.rows.map(r=>`<div class="crow"><div class="bad">${r[0]}</div><div class="vs">vs</div><div class="good">${r[1]}</div></div>`).join('');
-    return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>${c.h}</h3><div class="compare">${rows}</div></div>`;
+    const m=getCmp();
+    const rows=c.rows.map(r=>{
+      const w=r[1], on=k=>(m[w]&&m[w][k])?' on':'';
+      return `<div class="crow">`
+        +`<button class="cmp-tog grow${on('grow')}" data-w="${w}" data-t="grow">需要改變</button>`
+        +`<div class="cmid"><span class="bad">${r[0]}</span><span class="vs">vs</span><span class="good">${r[1]}</span></div>`
+        +`<button class="cmp-tog done${on('done')}" data-w="${w}" data-t="done">願意落實</button>`
+        +`</div>`;
+    }).join('');
+    return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>${c.h}</h3>`
+      +`<p class="cmp-legend">點左邊「需要改變」標記想加強的；點右邊「願意落實」標記已經活出的。會幫你記住。</p>`
+      +`<div class="compare">${rows}</div></div>`;
   }
   if(c.t==='hand'){
     const items=c.rows.map(r=>`<li><b>${r[0]}</b>　${r[1]}</li>`).join('');
     return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>🖐️ ${c.h}</h3><ul class="handlist">${items}</ul></div>`;
   }
   return `<div class="kcard" style="--ac:${accent}"><h3><span class="dot"></span>${c.h}</h3><p>${c.b}</p></div>`;
+}
+
+/* ===== 落實應用 ===== */
+function getApply(){ return jget('topic_apply',{}); }
+function applyExHTML(tp){
+  if(!tp.examples||!tp.examples.length) return '';
+  return tp.examples.map(e=>`<div class="apx"><div class="apx-s">情境：${e.s}</div><div class="apx-a">${e.a}</div></div>`).join('');
+}
+function applyListHTML(n){
+  const list=getApply()[n]||[];
+  const rows=list.map((t,i)=>`<div class="aprow"><input class="apply-inp" data-n="${n}" data-i="${i}" placeholder="例：晚上睡前，先放下手機，為對方禱告一句"><button class="apply-del" data-n="${n}" data-i="${i}" aria-label="刪除">－</button></div>`).join('');
+  return rows+`<button class="apply-add" data-n="${n}">＋ 新增一個我們要落實的場景</button>`;
+}
+function fillApplyValues(n){
+  const list=getApply()[n]||[];
+  document.querySelectorAll('#apply-list .apply-inp').forEach(inp=>{ inp.value=list[Number(inp.dataset.i)]||''; });
+}
+function applyHTML(tp){
+  return `<div class="kcard apply-card" style="--ac:${tp.accent}">`
+    +`<h3><span class="dot"></span>🏠 怎麼落實在生活中</h3>${applyExHTML(tp)}`
+    +`<div class="apdiv">✏️ 我們要落實的場景（自己編寫）</div>`
+    +`<div id="apply-list">${applyListHTML(tp.n)}</div></div>`;
 }
 
 function openTopic(i){
@@ -858,16 +1084,82 @@ function openTopic(i){
   document.getElementById('d-label').textContent='專題'+tp.n+(tp.capstone?'　·　房角石':'');
   document.getElementById('d-ttl').textContent=tp.title;
   document.getElementById('d-sub').textContent=tp.sub;
-  document.getElementById('d-body').innerHTML=tp.cards.map(c=>cardHTML(c,tp.accent)).join('');
+  document.getElementById('d-body').innerHTML=tp.cards.map(c=>cardHTML(c,tp.accent)).join('')+applyHTML(tp);
+  fillApplyValues(tp.n);
+  curTopic=i;
+  document.getElementById('note-fab').classList.add('show');
   document.getElementById('page-learn').classList.remove('active');
   document.getElementById('detail').classList.add('active');
   window.scrollTo(0,0);
 }
+document.getElementById('d-body').addEventListener('click',e=>{
+  const b=e.target.closest('.cmp-tog');
+  if(b){
+    const w=b.dataset.w, t=b.dataset.t, m=getCmp();
+    if(!m[w]) m[w]={};
+    m[w][t]=!m[w][t]; jset('compare_marks',m);
+    b.classList.toggle('on', !!m[w][t]);
+    return;
+  }
+  const add=e.target.closest('.apply-add');
+  if(add){
+    const n=add.dataset.n, a=getApply();
+    a[n]=a[n]||[]; a[n].push(''); jset('topic_apply',a);
+    document.getElementById('apply-list').innerHTML=applyListHTML(n);
+    fillApplyValues(n);
+    const ins=document.querySelectorAll('#apply-list .apply-inp');
+    if(ins.length) ins[ins.length-1].focus();
+    return;
+  }
+  const del=e.target.closest('.apply-del');
+  if(del){
+    const n=del.dataset.n, i=Number(del.dataset.i), a=getApply();
+    if(a[n]){ a[n].splice(i,1); jset('topic_apply',a); }
+    document.getElementById('apply-list').innerHTML=applyListHTML(n);
+    fillApplyValues(n);
+    return;
+  }
+});
+document.getElementById('d-body').addEventListener('input',e=>{
+  const inp=e.target.closest('.apply-inp'); if(!inp) return;
+  const n=inp.dataset.n, i=Number(inp.dataset.i), a=getApply();
+  a[n]=a[n]||[]; a[n][i]=inp.value; jset('topic_apply',a);
+});
 function closeTopic(){
   document.getElementById('detail').classList.remove('active');
+  document.getElementById('note-fab').classList.remove('show');
+  closeNote();
   document.getElementById('page-learn').classList.add('active');
   window.scrollTo(0,0);
 }
+
+/* ============ 專題筆記本 ============ */
+let curTopic=0, noteTimer=null;
+function getNotes(){ return jget('topic_notes',{}); }
+function openNote(){
+  const tp=TOPICS[curTopic];
+  document.getElementById('note-label').textContent='專題'+tp.n+'　筆記';
+  document.getElementById('note-title').textContent=tp.title;
+  const ta=document.getElementById('note-area');
+  ta.value=getNotes()[tp.n]||'';
+  document.getElementById('note-saved').textContent='';
+  document.getElementById('note-sheet').classList.add('open');
+  document.getElementById('note-fab').classList.remove('show');
+}
+function closeNote(){
+  document.getElementById('note-sheet').classList.remove('open');
+  if(document.getElementById('detail').classList.contains('active'))
+    document.getElementById('note-fab').classList.add('show');
+}
+document.getElementById('note-fab').addEventListener('click',openNote);
+document.getElementById('note-close').addEventListener('click',closeNote);
+document.getElementById('note-mask').addEventListener('click',closeNote);
+document.getElementById('note-area').addEventListener('input',e=>{
+  const n=getNotes(); n[TOPICS[curTopic].n]=e.target.value; jset('topic_notes',n);
+  clearTimeout(noteTimer);
+  const s=document.getElementById('note-saved'); s.textContent='已自動儲存 ✓';
+  noteTimer=setTimeout(()=>{ s.textContent=''; },1600);
+});
 
 /* ============ 底部分頁切換 ============ */
 document.getElementById('tabbar').addEventListener('click',e=>{
@@ -875,6 +1167,8 @@ document.getElementById('tabbar').addEventListener('click',e=>{
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('detail').classList.remove('active');
+  document.getElementById('note-fab').classList.remove('show');
+  if(typeof closeNote==='function') closeNote();
   document.getElementById('bankview').classList.remove('active');
   document.getElementById('assessview').classList.remove('active');
   document.getElementById('habitview').classList.remove('active');
@@ -883,6 +1177,8 @@ document.getElementById('tabbar').addEventListener('click',e=>{
   document.getElementById('covenantview').classList.remove('active');
   document.getElementById('pearlsview').classList.remove('active');
   document.getElementById('groupview').classList.remove('active');
+  document.getElementById('prepview').classList.remove('active');
+  document.getElementById('campview').classList.remove('active');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(btn.dataset.target).classList.add('active');
   if(typeof renderBalance==='function'){ renderBalance(); updateGreeting(); renderHabitToday(); renderAnniv(); }
@@ -912,23 +1208,26 @@ function jset(k,v){ store.set(k, JSON.stringify(v)); }
 
 /* ============ 夫妻檔案 ============ */
 const LOVE_LANGS=['身體接觸','肯定話語','精心時刻','接受禮物','服務行動'];
-function getProfile(){ return jget('couple_profile',{husband:'',wife:'',hLove:'',wLove:''}); }
+function getProfile(){ return jget('couple_profile',{husband:'',wife:'',hLove:'',hLove2:'',wLove:'',wLove2:''}); }
 function fillSelect(sel){ sel.innerHTML='<option value="">（未選）</option>'+LOVE_LANGS.map(l=>`<option>${l}</option>`).join(''); }
 function initProfileUI(){
   const p=getProfile();
-  fillSelect(document.getElementById('pf-hlove'));
-  fillSelect(document.getElementById('pf-wlove'));
+  ['pf-hlove','pf-hlove2','pf-wlove','pf-wlove2'].forEach(id=>fillSelect(document.getElementById(id)));
   document.getElementById('pf-husband').value=p.husband||'';
   document.getElementById('pf-wife').value=p.wife||'';
   document.getElementById('pf-hlove').value=p.hLove||'';
+  document.getElementById('pf-hlove2').value=p.hLove2||'';
   document.getElementById('pf-wlove').value=p.wLove||'';
+  document.getElementById('pf-wlove2').value=p.wLove2||'';
 }
 document.getElementById('save-profile').addEventListener('click',()=>{
   jset('couple_profile',{
     husband:document.getElementById('pf-husband').value.trim(),
     wife:document.getElementById('pf-wife').value.trim(),
     hLove:document.getElementById('pf-hlove').value,
-    wLove:document.getElementById('pf-wlove').value
+    hLove2:document.getElementById('pf-hlove2').value,
+    wLove:document.getElementById('pf-wlove').value,
+    wLove2:document.getElementById('pf-wlove2').value
   });
   const s=document.getElementById('pf-saved');
   s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
@@ -1479,22 +1778,22 @@ const ACTIONS=[
   steps:['被洗腳者坐在椅子上，洗腳者跪在腳前','先洗右腳再洗左腳，洗腳時不說話','雙腳洗完後站起來擁抱，並為對方祝福','然後互換']},
  {n:'二',icon:'💧',title:'都是我的錯',sub:'浴水重生',ref:'羅馬書 6：4',
   verse:'所以，我們藉著洗禮歸入死，和他一同埋葬，原是叫我們一舉一動有新生的樣式，像基督藉著父的榮耀從死裡復活一樣。',
-  prep:'在家可用淋浴或一盆清水象徵（營會中穿著泳裝、泳帽）。',
+  prep:'毛巾、碗、水。',
   meaning:'結束舊生命，埋葬舊生活，開始新人生。',
   share:['一方承認以前所犯的過錯、得罪配偶的事','另一方承擔責任、負起責任，表明都是我的錯','然後互換'],
-  steps:['手牽手浸入水中（或一同淋水），憋氣','站起來彼此擁抱','高舉雙手，高喊哈利路亞，榮耀歸給神']},
+  steps:['手牽手、閉上眼睛，一起深深吸一口氣','憋著氣，慢慢蹲下、跪在地上（象徵與基督同死、埋葬舊人）','憋到最後，輕握對方的手，然後一起站起來（象徵與基督同復活、有新生的樣式）','高舉雙手，高喊哈利路亞，彼此擁抱，把榮耀歸給神']},
  {n:'三',icon:'🙌',title:'我要陪伴你',sub:'按手祝福',ref:'使徒行傳 8：17；提摩太後書 1：6',
   verse:'於是使徒按手在他們頭上，他們就受了聖靈。／為此我提醒你，使你將神藉我按手所給你的恩賜再如火挑旺起來。',
-  prep:'安靜的空間。',
+  prep:'黑色貼紙（每人一些）、手冊、安靜的空間。',
   meaning:'按手表示連結、認同、支持，願意用行動陪伴他一起去尋求耶穌的幫助。',
-  share:['一方向配偶表明你的軟弱、缺點，和需要對方陪伴扶持的事','另一方表達願意無條件地愛他、接納他、陪伴他、祝福他','然後互換'],
-  steps:['為對方按手','祝福禱告，求聖靈充滿他']},
+  share:['一方向配偶表明你的軟弱、缺點，和需要對方陪伴扶持的事；每分享一個缺點，就把一張黑色貼紙貼在自己的手背上','另一方表達願意無條件地愛他、接納他、陪伴他、祝福他，並把對方手背上的黑貼紙一張一張撕下來，貼在自己的手心上（象徵願意承擔對方的軟弱），再貼到手冊上','然後互換'],
+  steps:['為對方按手','祝福禱告，求聖靈充滿他、扶持他的軟弱']},
  {n:'四',icon:'🫒',title:'我以你為榮',sub:'抹油禱告',ref:'詩篇 104：15；雅各書 5：14',
   verse:'又得酒能悅人心，得油能潤人面，得糧能養人心。／你們中間有病了的呢，他就該請教會的長老來；他們可以奉主的名用油抹他，為他禱告。',
-  prep:'一小瓶油（如橄欖油）。',
+  prep:'金色貼紙（每人一些）、一小瓶油（如橄欖油）、手冊。',
   meaning:'油能潤人面，使臉有榮光。抹油表示尊榮對方，以對方為榮。',
-  share:['向配偶稱讚他的優點、你以他為榮的地方','表達他是上帝給你最大的恩典，能與他結為夫妻是你最大的榮幸','然後互換'],
-  steps:['在對方的額頭用油抹圓，表示在基督裡，配偶是圓滿完全的','為他宣告禱告']},
+  share:['向配偶稱讚他的優點、你以他為榮的地方；表達他是上帝給你最大的恩典，能與他結為夫妻是你最大的榮幸。每稱讚一個優點，就把一張金色貼紙貼在對方的手心上','完成後，配偶為你感恩禱告，高舉貼了金貼紙的手，把榮耀歸給上帝，再把金色貼紙貼到手冊上；另一方表達感謝配偶的肯定與稱讚','然後互換'],
+  steps:['在對方的額頭用油抹一個圓，表示在我心中、在基督裡，配偶是圓滿完全的','為他宣告、祝福禱告']},
  {n:'五',icon:'🍞',title:'我為你捨命',sub:'同領餅跟杯',ref:'哥林多前書 11：23-25',
   verse:'主耶穌……拿起餅來，祝謝了，就擘開，說：「這是我的身體，為你們捨的，你們應當如此行，為的是紀念我。」……「這杯是用我的血所立的新約，你們每逢喝的時候，要如此行，為的是紀念我。」',
   prep:'每人一片蘇打餅乾、一杯葡萄汁。',
@@ -1530,21 +1829,21 @@ const ACTION_GUIDES=[
   {label:'妻子回應接納',body:'妻子，承擔自己的那一份，對丈夫說「都是我的錯」，並表達你的饒恕與接納。',eg:'「謝謝你願意說對不起。其實我也有不對，那天我口氣很衝、把話講得很難聽，都是我的錯。我願意饒恕你，也求你饒恕我。」'},
   {label:'妻子認錯',body:'換妻子，誠實承認以前得罪丈夫、虧待他的地方，真心地說「對不起」。<div class="gs-hint">丈夫：用愛心聆聽，不翻舊帳、不趁機指責。</div>',eg:'「對不起，我常常嫌你做得不夠好，卻很少看見你的努力，也常用言語刺傷你，是我不對。」',echo:'「我聽到你說，你常常嫌我做得不夠好、忽略了我的努力，也對我說了一些重話，是這個意思嗎？」',chips:{title:'常見的過錯，點選你要向對方認的',items:FAULT_ITEMS}},
   {label:'丈夫回應接納',body:'丈夫，承擔自己的那一份，對妻子說「都是我的錯」，並表達你的饒恕與接納。',eg:'「都是我的錯，我也沒有把你的辛苦放在心上。我願意饒恕你，我們重新開始。」'},
-  {label:'收尾',body:'一同把舊人埋葬，彼此擁抱，高舉雙手，感謝主賜下全新的生命與全新的開始。',pray:'主啊，謝謝你的寶血洗淨我們，把舊人埋葬。求你賜給我們全新的生命、全新的開始。哈利路亞，榮耀歸給你。阿們。'}
+  {label:'收尾',body:'一同照「進行步驟」——手牽手、閉眼、深吸一口氣，憋著氣慢慢蹲下、跪在地上（與基督同死、埋葬舊人），再一起站起來、高舉雙手，高喊哈利路亞，彼此擁抱，把榮耀歸給神。',pray:'主啊，謝謝你的寶血洗淨我們，把舊人埋葬。求你賜給我們全新的生命、全新的開始。哈利路亞，榮耀歸給你。阿們。'}
  ],
  [
   {label:'預備心',body:'營造一個安全、被接納的氛圍。<div class="gs-hint">提醒自己：我是來陪伴的，不是來論斷的。無條件的愛，才能讓人安心敞開。</div>',pray:'主啊，求你幫助我，不是來論斷，而是來陪伴。讓我成為對方安全的避風港，能無條件地接納他。奉主名禱告，阿們。'},
-  {label:'丈夫敞開軟弱',body:'丈夫，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方。<div class="gs-hint">妻子：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我心裡其實很害怕失敗，常常擔心自己不夠好、養不起這個家。這些我很少跟人說，但我需要你的支持。」',echo:'「你是說，你心裡其實很害怕失敗、擔心自己不夠好，需要我的支持，是嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:HUSBAND_WEAKNESS}},
-  {label:'妻子回應陪伴',body:'妻子，緊握他的手，對他說：「無論如何，我都愛你、接納你，願意陪你一起面對。」並為他祝福。',eg:'「謝謝你願意告訴我這些。不管你成功還是失敗，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
-  {label:'妻子敞開軟弱',body:'換妻子，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方。<div class="gs-hint">丈夫：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我有時候很沒有安全感，會胡思亂想，需要你常常給我肯定。」',echo:'丈夫先覆述：「你的意思是，你比較沒有安全感、容易胡思亂想，需要我常常給你肯定，是這個意思嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:WIFE_WEAKNESS}},
-  {label:'丈夫回應陪伴',body:'丈夫，緊握她的手，對她說：「無論如何，我都愛你、接納你，願意陪你一起面對。」並為她祝福。',eg:'「謝謝你願意告訴我這些。不管發生什麼，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
+  {label:'丈夫敞開軟弱',body:'丈夫，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方；每說出一個，就把一張黑色貼紙貼在自己的手背上。<div class="gs-hint">妻子：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我心裡其實很害怕失敗，常常擔心自己不夠好、養不起這個家。這些我很少跟人說，但我需要你的支持。」',echo:'「你是說，你心裡其實很害怕失敗、擔心自己不夠好，需要我的支持，是嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:HUSBAND_WEAKNESS}},
+  {label:'妻子回應陪伴',body:'妻子，緊握他的手，對他說：「無論如何，我都愛你、接納你，願意陪你一起面對。」然後把他手背上的黑貼紙一張一張撕下來，貼在自己的手心上（象徵我願意承擔你的軟弱），再貼到手冊上，並為他祝福。',eg:'「謝謝你願意告訴我這些。不管你成功還是失敗，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
+  {label:'妻子敞開軟弱',body:'換妻子，誠實說出你的軟弱、缺點，和需要對方陪伴扶持的地方；每說出一個，就把一張黑色貼紙貼在自己的手背上。<div class="gs-hint">丈夫：只要安靜聆聽與接納，先不要給建議、不要批評。</div>',eg:'「我有時候很沒有安全感，會胡思亂想，需要你常常給我肯定。」',echo:'丈夫先覆述：「你的意思是，你比較沒有安全感、容易胡思亂想，需要我常常給你肯定，是這個意思嗎？」',chips:{title:'常見的軟弱，點選你想分享的',items:WIFE_WEAKNESS}},
+  {label:'丈夫回應陪伴',body:'丈夫，緊握她的手，對她說：「無論如何，我都愛你、接納你，願意陪你一起面對。」然後把她手背上的黑貼紙一張一張撕下來，貼在自己的手心上（象徵我願意承擔你的軟弱），再貼到手冊上，並為她祝福。',eg:'「謝謝你願意告訴我這些。不管發生什麼，我都愛你、接納你，我會一直陪在你身邊，我們一起面對。」'},
   {label:'收尾',body:'為對方按手禱告，求聖靈充滿、扶持，使你們在軟弱中彼此成為依靠。',pray:'主啊，求你的聖靈充滿我所愛的人，扶持他的軟弱，挑旺他裡面的恩賜。讓我們在軟弱中彼此成為依靠。奉主名禱告，阿們。'}
  ],
  [
   {label:'預備心',body:'調整眼光——用右眼看優點，憑愛心、憑信心讚美。<div class="gs-hint">記得：配偶是上帝施工中的傑作。讚美作品，把榮耀歸給作者。</div>',pray:'主啊，幫助我用你的眼光看我的配偶，看見他是你手中的傑作。讓我的口充滿讚美，把榮耀歸給你。阿們。'},
-  {label:'丈夫稱讚妻子',body:'丈夫，具體說出三個你欣賞她、以她為榮的優點，愈具體愈好。<div class="gs-hint">妻子：安靜領受，不要推辭，真心向他道謝。</div>',eg:'「我很欣賞你對孩子的耐心、你做事的細心，還有你總是把家裡打理得很溫暖。能娶到你，是我的福氣。」',echo:'',resp:'妻子：安靜領受，把他欣賞你的覆述一次並道謝，例如：「你欣賞我對孩子的耐心、做事的細心，還有把家打理得溫暖，謝謝你這樣看我，我很感動。」',chips:{title:'參考這些優點，點選你想稱讚妻子的',items:WIFE_STRENGTH}},
-  {label:'妻子稱讚丈夫',body:'換妻子，具體說出三個你欣賞他、以他為榮的優點。<div class="gs-hint">丈夫：安靜領受，真心道謝。</div>',eg:'「我以你為榮——你工作很負責任，對長輩很孝順，遇到困難總是不放棄。謝謝你一直撐著這個家。」',resp:'丈夫：安靜領受，把她欣賞你的覆述一次並道謝，例如：「你以我工作負責任、孝順長輩、遇難不放棄為榮，謝謝你的肯定，這對我很重要。」',chips:{title:'參考這些優點，點選你想稱讚丈夫的',items:HUSBAND_STRENGTH}},
-  {label:'以對方為榮',body:'彼此對望，對對方說出你以他為榮、視他為恩典的話。',eg:'「能與你結為夫妻，是我這一生最大的榮幸；你是上帝給我最好的禮物。」'},
+  {label:'丈夫稱讚妻子',body:'丈夫，具體說出三個你欣賞她、以她為榮的優點，愈具體愈好；每稱讚一個，就把一張金色貼紙貼在她的手心上。<div class="gs-hint">妻子：安靜領受，不要推辭，真心向他道謝。</div>',eg:'「我很欣賞你對孩子的耐心、你做事的細心，還有你總是把家裡打理得很溫暖。能娶到你，是我的福氣。」',echo:'',resp:'妻子：安靜領受，把他欣賞你的覆述一次並道謝，例如：「你欣賞我對孩子的耐心、做事的細心，還有把家打理得溫暖，謝謝你這樣看我，我很感動。」',chips:{title:'參考這些優點，點選你想稱讚妻子的',items:WIFE_STRENGTH}},
+  {label:'妻子稱讚丈夫',body:'換妻子，具體說出三個你欣賞他、以他為榮的優點；每稱讚一個，就把一張金色貼紙貼在他的手心上。<div class="gs-hint">丈夫：安靜領受，真心道謝。</div>',eg:'「我以你為榮——你工作很負責任，對長輩很孝順，遇到困難總是不放棄。謝謝你一直撐著這個家。」',resp:'丈夫：安靜領受，把她欣賞你的覆述一次並道謝，例如：「你以我工作負責任、孝順長輩、遇難不放棄為榮，謝謝你的肯定，這對我很重要。」',chips:{title:'參考這些優點，點選你想稱讚丈夫的',items:HUSBAND_STRENGTH}},
+  {label:'以對方為榮',body:'彼此對望，對對方說出你以他為榮、視他為恩典的話。然後各自高舉貼了金貼紙的手，為對方感恩禱告，把榮耀歸給上帝，再把金色貼紙貼到手冊上。',eg:'「能與你結為夫妻，是我這一生最大的榮幸；你是上帝給我最好的禮物。」'},
   {label:'收尾',body:'在對方額頭用油抹一個圓，宣告「在基督裡，你是圓滿完全的」，並為他祝福禱告。',pray:'主啊，奉你的名為他抹油。我宣告在基督裡，他是圓滿完全、滿有榮光的。求你使用他、祝福他，使他一生榮耀你的名。阿們。'}
  ],
  [
@@ -1794,7 +2093,7 @@ function renderGroup(){
       <div class="field"><label>聯絡方式</label><input type="text" class="gm-contact" value="${esc(m.contact||'')}" placeholder="電話／LINE"></div>
       <div class="field"><label>平時崗位（維繫運作）</label><select class="gm-rd">${opt(ROLES_DAILY,m.roleDaily||'')}</select></div>
       <div class="field" style="margin-bottom:8px;"><label>聚集崗位（跟進聚會）</label><select class="gm-rm">${opt(ROLES_MEET,m.roleMeet||'')}</select></div>
-      <button class="gm-del" data-i="${i}">－ 刪除這一戶</button>
+      <button class="gm-del" data-i="${i}">－ 刪除這一對</button>
     </div>`).join('');
   body.innerHTML=`
     <div class="hand-reminder">把你們的<b>愛的小家</b>連結起來——陪伴員、小家長與小家裡的每對夫妻，彼此以「2」的關係同行，操練 235，成為屬靈同伴、屬靈父母兒女、屬靈戰友。<br>「無論在哪裡，有兩三個人奉我的名聚會，那裡就有我在他們中間。」（太十八20）</div>
@@ -1838,7 +2137,7 @@ function renderGroup(){
       <div class="form-lbl" style="font-size:17px;margin-bottom:6px;">👨‍👩‍👧 小家成員（夫妻／家人）</div>
       <p class="a-intro" style="margin:0 0 12px;font-size:14.5px;color:var(--ink-soft);">小家裡一起同行的夫妻與家人，各自認領平時與聚集的服事崗位。</p>
       <div id="gm-list">${members||'<p class="a-intro" style="font-size:14.5px;margin:0 0 12px;color:var(--ink-soft);">還沒有成員，點下面新增。</p>'}</div>
-      <button class="gm-add" id="gm-add">＋ 新增一戶夫妻／家人</button>
+      <button class="gm-add" id="gm-add">＋ 新增一對夫妻／家人</button>
     </div>
     <div class="dashcard">
       <div class="form-lbl" style="font-size:17px;margin-bottom:12px;">📅 跟進聚會</div>
@@ -1959,6 +2258,260 @@ function renderPearlList(){
     node.querySelector('.ptitle').textContent=list[i].title||'（無標題）';
     node.querySelector('.dtext').textContent=list[i].text||'';
   });
+}
+
+/* ============ 營會旅程：會前・行前預備 + 會時・會時模式 ============ */
+/* 三階段導覽 */
+document.getElementById('go-aftercamp').addEventListener('click',()=>{
+  const t=document.getElementById('topiclist'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+/* ---- 會前・行前預備 ---- */
+const PREP_CHECK=[
+ {e:'🧒',t:'安排好孩子的照顧'},
+ {e:'🗓️',t:'跟公司請好假、排開工作'},
+ {e:'🧳',t:'準備換洗衣物、盥洗用品、聖經與筆'},
+ {e:'📵',t:'與配偶約定營會中的「數位齋戒」',s:'把手機放下，把心留給神與彼此'},
+ {e:'🤫',t:'答應彼此：營會所分享的，彼此保密',s:'給對方完全的安全感'},
+ {e:'🕊️',t:'預留一顆安靜、柔軟、願意親近神的心'}
+];
+const PREP_PRAY=[
+ '為我自己的心禱告——求主軟化我，除去成見與防衛。',
+ '為我的配偶禱告——求主祝福他，讓我用神的眼光看他。',
+ '為我們的婚姻禱告——求主醫治、更新我們的關係。',
+ '認罪的禱告——求聖靈光照，看見我裡面的「有己」與驕傲。',
+ '為營會禱告——為講員、同工、敬拜與場地獻上感恩。',
+ '為陪伴員與小家禱告——求主使我們在愛裡彼此連結。',
+ '預備領受——主啊，求祢在營會中親自向我們說話。'
+];
+let prepTo='h', prepTimer=null;
+function getPrepCheck(){ return jget('prep_checklist',{}); }
+function getPrepPray(){ return jget('prep_prayer',{}); }
+function openPrep(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview','pearlsview','groupview','campview'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active');});
+  document.getElementById('prepview').classList.add('active');
+  renderPrep();
+  window.scrollTo(0,0);
+}
+function closePrep(){
+  document.getElementById('prepview').classList.remove('active');
+  document.getElementById('page-learn').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-prep').addEventListener('click',openPrep);
+document.getElementById('prep-back').addEventListener('click',closePrep);
+function renderPrep(){
+  const chk=getPrepCheck(), pray=getPrepPray();
+  const cdone=PREP_CHECK.filter((_,i)=>chk[i]).length;
+  const pdone=PREP_PRAY.filter((_,i)=>pray[i]).length;
+  const checkRows=PREP_CHECK.map((c,i)=>`<button class="checkrow${chk[i]?' on':''}" data-i="${i}" style="--ac:var(--gold);--tint:#FBF3DC;">
+      <span class="ce">${c.e}</span>
+      <span class="ct">${c.t}${c.s?`<span class="ctsub">${c.s}</span>`:''}</span>
+      <span class="cbox">${chk[i]?'✓':''}</span></button>`).join('');
+  const prayRows=PREP_PRAY.map((p,i)=>`<button class="prayday${pray[i]?' on':''}" data-i="${i}">
+      <span class="pd">${pray[i]?'✓':(i+1)}</span><span class="pp">${p}</span><span class="pc">${pray[i]?'🙏':'○'}</span></button>`).join('');
+  const body=document.getElementById('prep-body');
+  body.innerHTML=`
+    <div class="hand-reminder">
+      歡迎你們報名夫妻成長營！這幾天最重要的預備，不是行李，是一顆<b>柔軟的心</b>。請記得——<b>焦點在耶穌，不在配偶，不在環境</b>。我們不是來修理對方，是來讓耶穌修剪自己。<b>改變，從我開始。</b>
+    </div>
+    <div class="scripture" style="--ac:var(--gold)"><div class="ref">📖 雅各書 4：6</div><div class="verse">神阻擋驕傲的人，賜恩給謙卑的人。</div></div>
+
+    <div class="dashcard">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+        <div class="form-lbl" style="font-size:18px;margin:0;">🧳 行前清單</div>
+        <span style="margin-left:auto;color:#8A6800;font-weight:800;font-size:18px;">${cdone}/${PREP_CHECK.length}</span>
+      </div>
+      <div class="checklist" id="prep-check">${checkRows}</div>
+    </div>
+
+    <div class="dashcard">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+        <div class="form-lbl" style="font-size:18px;margin:0;">🙏 會前七日禱告鏈</div>
+        <span style="margin-left:auto;color:#8A6800;font-weight:800;font-size:18px;">${pdone}/7</span>
+      </div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 12px;">營會前一週，每天一個禱告焦點。為自己、為配偶、為這趟旅程禱告，預備領受。</p>
+      <div class="pray7" id="prep-pray">${prayRows}</div>
+    </div>
+
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;margin-bottom:6px;">💛 先存三筆愛（鬆土）</div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 12px;">進營會前，先為對方存三筆感謝，軟化我們的心。這會存進你們的「情感帳戶」。</p>
+      <div class="form-lbl">這三筆存給誰？</div>
+      <div class="seg" id="prep-to"></div>
+      <div class="field"><input type="text" class="apply-inp" id="prep-g1" placeholder="例：謝謝你願意一起來參加營會。"></div>
+      <div class="field"><input type="text" class="apply-inp" id="prep-g2" placeholder="例：謝謝你這些年為這個家的擺上。"></div>
+      <div class="field" style="margin-bottom:12px;"><input type="text" class="apply-inp" id="prep-g3" placeholder="例：謝謝你常常包容我的不足。"></div>
+      <button class="bigbtn" id="prep-gsave" style="background:var(--gold);">存進情感帳戶 💛</button>
+      <div class="saved" id="prep-gsaved"></div>
+    </div>
+
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;margin-bottom:6px;">🪞 誠實面對我的「有己」</div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 10px;">在神面前安靜——我裡面的「舊人有己」，曾經怎樣傷害了這段關係？誠實寫下，帶到營會交給神。（只存在這支手機裡）</p>
+      <textarea class="depo" id="prep-conf" placeholder="例：我常常為了講贏、為了面子，選擇了驕傲，傷了他的心……">${esc(jget('prep_confession',''))}</textarea>
+      <div class="note-saved" id="prep-conf-saved"></div>
+    </div>
+
+    <div class="dashcard">
+      <div class="minicard"><div class="mi">📊</div><div style="flex:1;"><div class="mt">會前自評（前測）</div><div class="md">做第一次「親密關係評估」，建立基準線。營會之後再測，就能看見你們愈來愈好。</div></div></div>
+      <button class="bigbtn" id="prep-assess" style="background:var(--green);margin-top:12px;">開始會前評估（前測）</button>
+    </div>
+
+    <div class="hand-reminder" style="margin-top:2px;">
+      預備好了嗎？把這顆柔軟、謙卑、「我先改變」的心帶進營會。<b>困難的耶穌做，簡單的我們做；不是馬上變好，肯定愈來愈好。</b>
+    </div>`;
+  body.querySelector('#prep-check').addEventListener('click',e=>{
+    const b=e.target.closest('.checkrow'); if(!b) return;
+    const i=Number(b.dataset.i), m=getPrepCheck(); m[i]=!m[i]; jset('prep_checklist',m); renderPrep();
+  });
+  body.querySelector('#prep-pray').addEventListener('click',e=>{
+    const b=e.target.closest('.prayday'); if(!b) return;
+    const i=Number(b.dataset.i), m=getPrepPray(); m[i]=!m[i]; jset('prep_prayer',m); renderPrep();
+  });
+  const toSeg=body.querySelector('#prep-to');
+  const drawTo=()=>{ toSeg.innerHTML=`<button data-to="h"${prepTo==='h'?' class="on"':''}>給 ${NAMES.h}</button><button data-to="w"${prepTo==='w'?' class="on"':''}>給 ${NAMES.w}</button>`; };
+  drawTo();
+  toSeg.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; prepTo=b.dataset.to; drawTo(); });
+  body.querySelector('#prep-gsave').addEventListener('click',()=>{
+    const texts=['#prep-g1','#prep-g2','#prep-g3'].map(id=>body.querySelector(id).value.trim()).filter(Boolean);
+    if(!texts.length){ body.querySelector('#prep-g1').focus(); return; }
+    const list=getDeposits();
+    texts.forEach(t=>list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:Date.now(),to:prepTo,type:'感謝',text:t}));
+    jset('love_deposits',list); renderBalance();
+    ['#prep-g1','#prep-g2','#prep-g3'].forEach(id=>{const el=body.querySelector(id); if(el) el.value='';});
+    const s=body.querySelector('#prep-gsaved'); s.textContent=`已存入 ${texts.length} 筆愛 ✓`; setTimeout(()=>{s.textContent='';},2200);
+  });
+  body.querySelector('#prep-conf').addEventListener('input',e=>{
+    jset('prep_confession', e.target.value);
+    clearTimeout(prepTimer);
+    const s=body.querySelector('#prep-conf-saved'); s.textContent='已自動儲存 ✓';
+    prepTimer=setTimeout(()=>{ s.textContent=''; },1600);
+  });
+  body.querySelector('#prep-assess').addEventListener('click',()=>{
+    document.getElementById('prepview').classList.remove('active');
+    document.getElementById('page-learn').classList.add('active');
+    openAssess();
+  });
+  window.scrollTo(0,0);
+}
+
+/* ---- 會時・會時模式 ---- */
+const CAMP_RITES=[
+ {e:'🦶',t:'洗腳',s:'彼此服事、彼此饒恕',ref:'約十三14'},
+ {e:'💧',t:'浴水重生',s:'脫去舊人、穿上新人',ref:'弗四22-24'},
+ {e:'🙌',t:'按手',s:'彼此祝福、彼此扶持',ref:'可十16'},
+ {e:'🫒',t:'抹油',s:'求聖靈充滿、得著醫治',ref:'雅五14'},
+ {e:'🍞',t:'領餅杯',s:'同領主身體、與主與彼此合一',ref:'林前十17'},
+ {e:'📜',t:'立約',s:'在神面前立下婚姻的盟約',ref:'瑪二14'}
+];
+let campTimer=null;
+function getCampProg(){ return jget('camp_progress',{}); }
+function getCampRites(){ return jget('camp_rites',{}); }
+function openCamp(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview','pearlsview','groupview','prepview'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active');});
+  document.getElementById('campview').classList.add('active');
+  renderCamp();
+  window.scrollTo(0,0);
+}
+function closeCamp(){
+  document.getElementById('campview').classList.remove('active');
+  document.getElementById('page-learn').classList.add('active');
+  window.scrollTo(0,0);
+}
+document.getElementById('open-camp').addEventListener('click',openCamp);
+document.getElementById('camp-back').addEventListener('click',closeCamp);
+function campJump(fn){
+  document.getElementById('campview').classList.remove('active');
+  document.getElementById('page-learn').classList.add('active');
+  fn();
+}
+function renderCamp(){
+  const prog=getCampProg(), rites=getCampRites();
+  const tdone=TOPICS.filter((_,i)=>prog[i]).length;
+  const rdone=CAMP_RITES.filter((_,i)=>rites[i]).length;
+  const topicRows=TOPICS.map((tp,i)=>`<div class="cprow">
+      <span class="cpi">${tp.icon}</span>
+      <span class="cpm"><span class="cpl">專題${tp.n}${tp.capstone?'　·　房角石':''}</span><span class="cpt">${tp.title}</span><span class="cps">${tp.sub}</span></span>
+      <button class="cpgo" data-go="${i}">看內容</button>
+      <button class="cpcheck${prog[i]?' on':''}" data-tp="${i}">${prog[i]?'✓':''}</button>
+    </div>`).join('');
+  const riteRows=CAMP_RITES.map((r,i)=>`<div class="cprow">
+      <span class="cpi">${r.e}</span>
+      <span class="cpm"><span class="cpt">${r.t}</span><span class="cps">${r.s}（${r.ref}）</span></span>
+      <button class="cpcheck${rites[i]?' on':''}" data-rite="${i}">${rites[i]?'✓':''}</button>
+    </div>`).join('');
+  const body=document.getElementById('camp-body');
+  body.innerHTML=`
+    <div class="hand-reminder">
+      現在，放下手機，放下手邊的事，安靜下來。這幾天，<b>讓耶穌在你們中間作王</b>。用心領受，不要用腦分析——<b>用心就開心，用腦就煩惱</b>。
+    </div>
+    <div class="scripture" style="--ac:var(--rose)"><div class="ref">📖 詩篇 46：10</div><div class="verse">你們要休息，要知道我是神！</div></div>
+
+    <div class="dashcard">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+        <div class="form-lbl" style="font-size:18px;margin:0;">📖 七專題・現場進度</div>
+        <span style="margin-left:auto;color:var(--rose);font-weight:800;font-size:18px;">${tdone}/7</span>
+      </div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 12px;">每上完一個專題，點右邊打勾；想複習隨時點「看內容」。</p>
+      ${topicRows}
+    </div>
+
+    <div class="dashcard">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+        <div class="form-lbl" style="font-size:18px;margin:0;">🤲 六個愛的行動・現場聖禮</div>
+        <span style="margin-left:auto;color:var(--rose);font-weight:800;font-size:18px;">${rdone}/6</span>
+      </div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 12px;">在現場一一經歷這六個聖禮，每完成一個就打勾。</p>
+      ${riteRows}
+      <button class="bigbtn" id="camp-actions" style="background:var(--gold);margin-top:6px;">看完整引導 🤲</button>
+    </div>
+
+    <div class="dashcard">
+      <div class="form-lbl" style="font-size:18px;margin-bottom:6px;">🦪 現場的感動・第一顆珍珠</div>
+      <p class="a-intro" style="font-size:14px;color:var(--ink-soft);margin:0 0 10px;">營會中，神對我說的一句話、最受觸動、最想記住的一刻。寫下來，串成你們的第一顆珍珠。</p>
+      <textarea class="depo" id="camp-moment" placeholder="例：當我們彼此洗腳的時候，我忽然明白……">${esc(jget('camp_moment',''))}</textarea>
+      <div class="note-saved" id="camp-moment-saved" style="margin-bottom:8px;"></div>
+      <button class="bigbtn" id="camp-pearl" style="background:var(--purple);">把這一刻存成珍珠 🦪</button>
+      <div class="saved" id="camp-pearl-saved"></div>
+    </div>
+
+    <div class="dashcard">
+      <div class="minicard"><div class="mi">📜</div><div style="flex:1;"><div class="mt">現場立約</div><div class="md">在營會現場，一起填寫立約書、宣讀、簽名——在神面前立下你們的盟約。</div></div></div>
+      <button class="bigbtn" id="camp-cov" style="background:var(--navy);margin-top:12px;">前往立約書 📜</button>
+    </div>
+
+    <div class="hand-reminder" style="margin-top:2px;">
+      把營會中領受的，化成回家後天天的操練。<b>先生命、再關係、後事工</b>——願耶穌得著你們的婚姻，得著一切的榮耀。
+    </div>`;
+  body.querySelectorAll('.cpcheck[data-tp]').forEach(b=>b.addEventListener('click',()=>{
+    const i=Number(b.dataset.tp), m=getCampProg(); m[i]=!m[i]; jset('camp_progress',m); renderCamp();
+  }));
+  body.querySelectorAll('.cpgo[data-go]').forEach(b=>b.addEventListener('click',()=>{
+    campJump(()=>openTopic(Number(b.dataset.go)));
+  }));
+  body.querySelectorAll('.cpcheck[data-rite]').forEach(b=>b.addEventListener('click',()=>{
+    const i=Number(b.dataset.rite), m=getCampRites(); m[i]=!m[i]; jset('camp_rites',m); renderCamp();
+  }));
+  body.querySelector('#camp-actions').addEventListener('click',()=>campJump(openActions));
+  body.querySelector('#camp-cov').addEventListener('click',()=>campJump(openCovenant));
+  body.querySelector('#camp-moment').addEventListener('input',e=>{
+    jset('camp_moment', e.target.value);
+    clearTimeout(campTimer);
+    const s=body.querySelector('#camp-moment-saved'); s.textContent='已自動儲存 ✓';
+    campTimer=setTimeout(()=>{ s.textContent=''; },1600);
+  });
+  body.querySelector('#camp-pearl').addEventListener('click',()=>{
+    const txt=(body.querySelector('#camp-moment').value||'').trim();
+    if(!txt){ body.querySelector('#camp-moment').focus(); return; }
+    const list=jget('pearls',[]);
+    list.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:dateKey(),cat:'回憶',title:'營會的感動',text:txt});
+    jset('pearls',list);
+    const s=body.querySelector('#camp-pearl-saved'); s.textContent='已串成一顆珍珠 ✓（在成長 → 珍珠時刻）'; setTimeout(()=>{s.textContent='';},2600);
+  });
+  window.scrollTo(0,0);
 }
 
 /* ============ PWA 離線註冊 ============ */
