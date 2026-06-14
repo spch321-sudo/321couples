@@ -473,11 +473,23 @@
     display:flex;padding:6px 4px calc(env(safe-area-inset-bottom) + 4px);
     box-shadow:0 -4px 18px rgba(140,60,80,.07);}
   .tab{flex:1;background:none;border:none;cursor:pointer;
-    display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;
-    color:#A89AA0;font-size:12px;font-weight:700;transition:color .15s;}
-  .tab .ti{font-size:24px;line-height:1;filter:grayscale(.4) opacity(.7);transition:.15s;}
+    display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 1px;
+    color:#A89AA0;font-size:11px;font-weight:700;transition:color .15s;}
+  .tab .ti{font-size:22px;line-height:1;filter:grayscale(.4) opacity(.7);transition:.15s;}
   .tab.active{color:var(--rose);}
   .tab.active .ti{filter:none;transform:translateY(-1px);}
+
+  /* ===== 小家跟進・聚會流程 ===== */
+  .fstep{display:flex;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;
+    padding:13px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+  .fstep .ftime{flex:0 0 auto;width:50px;text-align:center;padding-top:2px;}
+  .fstep .ftime .fm{font-size:21px;font-weight:800;color:var(--ac,var(--rose));line-height:1;}
+  .fstep .ftime .fu{font-size:11px;color:var(--ink-soft);}
+  .fstep .fmain{flex:1;min-width:0;}
+  .fstep .flabel{font-size:16.5px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+  .fstep .fbody{font-size:15px;color:var(--ink);line-height:1.72;}
+  .fstep .fbody b{color:var(--ac,var(--rose));}
+  .fstep.fcore{border:2px solid var(--ac,var(--rose));background:var(--rose-tint);}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
@@ -814,6 +826,30 @@
   <div class="dbody" id="camp-body"></div>
 </section>
 
+<!-- 跟進（小家七次跟進聚會） -->
+<section class="page" id="page-followup">
+  <div class="lead">
+    <h2>小家跟進・七次聚會</h2>
+    <p>把營會的領受帶回小家，七次聚會、每次兩小時，由小家長夫妻帶領，幫助每對夫妻把專題的真理具體操練在生活裡。</p>
+  </div>
+  <div class="hand-reminder">
+    每次聚會都有<b>固定的節奏</b>：迎接破冰 → 敬拜宣告 → 回顧上週 → 真理回顧 → <b>夫妻操練</b>（核心）→ 小組分享 → 立志代禱。重點不在聽得多，而在<b>每對夫妻當場操練、回家落實</b>。<br>「兩三個人奉我的名聚會，那裡就有我在他們中間。」（太十八20）
+  </div>
+  <div class="topiclist" id="followup-list"></div>
+</section>
+
+<!-- 跟進聚會內頁 -->
+<section class="bankview" id="followupview">
+  <div class="dhead" id="fuphead" style="background:linear-gradient(135deg,var(--rose),#7A2540);">
+    <button class="back" id="fup-back">‹ 返回</button>
+    <div class="dicon" id="fup-icon">🍵</div>
+    <div class="dlabel" id="fup-label"></div>
+    <div class="dttl" id="fup-ttl"></div>
+    <div class="dsub" id="fup-sub"></div>
+  </div>
+  <div class="dbody" id="fup-body"></div>
+</section>
+
 <!-- 我們 -->
 <section class="page" id="page-us">
   <div class="greet">
@@ -871,6 +907,7 @@
   <button class="tab" data-target="page-learn"><span class="ti">📖</span>專題</button>
   <button class="tab" data-target="page-practice"><span class="ti">❤️</span>操練</button>
   <button class="tab" data-target="page-grow"><span class="ti">🌱</span>成長</button>
+  <button class="tab" data-target="page-followup"><span class="ti">🍵</span>跟進</button>
   <button class="tab" data-target="page-us"><span class="ti">⚙️</span>我們</button>
 </nav>
 
@@ -1185,6 +1222,7 @@ document.getElementById('tabbar').addEventListener('click',e=>{
   document.getElementById('groupview').classList.remove('active');
   document.getElementById('prepview').classList.remove('active');
   document.getElementById('campview').classList.remove('active');
+  var _fuv=document.getElementById('followupview'); if(_fuv) _fuv.classList.remove('active');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(btn.dataset.target).classList.add('active');
   if(typeof renderBalance==='function'){ renderBalance(); updateGreeting(); renderHabitToday(); renderAnniv(); }
@@ -2166,7 +2204,7 @@ document.getElementById('group-back').addEventListener('click',closeGroup);
 updateBrand();
 
 /* ============ 字級調整 ============ */
-function getFontScale(){ return store.get('fontScale')||'1'; }
+function getFontScale(){ return store.get('fontScale')||'1.15'; }
 function applyFontScale(s){ document.body.style.zoom = (s && s!=='1') ? s : ''; }
 function renderFontSeg(){
   const seg=document.getElementById('font-seg'); if(!seg) return;
@@ -2538,6 +2576,177 @@ function renderCamp(){
   });
   window.scrollTo(0,0);
 }
+
+/* ============ 小家跟進・七次聚會 ============ */
+const FOLLOWUPS=[
+ {n:'一',icon:'🌳',accent:'var(--rose)',title:'建立幸福婚姻的理念（上）',sub:'三一原型・馬車理論',
+  ref:'以弗所書 4：24',verse:'並且穿上新人；這新人是照著神的形像造的，有真理的仁義和聖潔。',
+  goal:'看見婚姻是兩個「新人」的連合；操練讓耶穌坐上馬車作王，脫去舊人有己、穿上新人無己。',
+  materials:'白紙與筆、本 app、茶點。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'小家長夫妻迎接每對夫妻、倒杯茶。破冰活動<b>「夫妻默契大考驗」</b>：發給每對夫妻一張紙，兩人<b>先不討論</b>，各自寫下你猜「配偶會怎麼回答」這三題——①最喜歡的一道菜　②最想一起去的地方　③覺得自己最大的優點。然後同時亮答案，猜中就擊掌歡呼，猜不中就笑著對他說一句「我要更認識你」。帶出：夫妻成長的第一步，是用心、用神的眼光重新認識對方。'},
+   {t:'10',label:'敬拜・宣告',body:'唱一兩首詩歌。一起宣告 321：耶穌是我的榜樣、聖經是我的準則、聖靈是我的引導；讓耶穌作王、讓耶穌得榮耀。開場禱告求聖靈帶領。'},
+   {t:'15',label:'彼此認識・立約',body:'這是第一次聚會。每對夫妻自我介紹，說出<b>「參加這七次，我最期待我們的婚姻有什麼改變」</b>。彼此約定：固定出席、彼此保密、給對方安全感。'},
+   {t:'20',label:'真理回顧',body:'回顧專題一：創造→墮落→救贖→更新，婚姻是兩個新人的連合。<b>馬車理論</b>——身體是馬、心是韁繩、魂是車夫、靈是管家、<b>耶穌是王</b>。討論：現在是誰在當我們婚姻的「車夫」（用腦靠自己／有己）？'},
+   {t:'40',core:true,label:'夫妻操練：讓耶穌上王位',body:'①各自在紙上畫一台馬車，標出最近一週「<b>誰坐在車夫的位子</b>」。<br>②夫妻彼此分享一個「舊人有己」上位、傷了對方的場景。<br>③手牽手禱告，把車夫的位子讓出來，宣告：<b>「耶穌，我們請祢坐上王位，在我們的婚姻裡作王。」</b>'},
+   {t:'15',label:'小組分享',body:'每對夫妻用一句話分享：<b>「我願意先讓耶穌在哪一件事上作王。」</b>彼此鼓勵、為對方鼓掌。'},
+   {t:'10',label:'立志・彼此代禱',body:'兩兩夫妻為彼此「脫去舊人、穿上新人」按手代禱。小家長作結束祝福。'}
+  ],
+  hw:'每天打開 app「今天」的<b>幸福習慣</b>打卡（出門祝福、牽手、擁抱、睡前禱告），每次提醒自己：「我是新人，不是舊人。」',
+  pin:'婚姻的更新，是兩個「新人」的連合。唯有無己，才能讓耶穌坐上馬車作王。改變，從我開始。'},
+
+ {n:'二',icon:'🧭',accent:'var(--gold)',title:'建立幸福婚姻的理念（下）',sub:'321 理念・選對的那一邊',
+  ref:'雅各書 4：6',verse:'神阻擋驕傲的人，賜恩給謙卑的人。',
+  goal:'落實 321，在每一次選擇上選對的那一邊；以謙卑戰勝驕傲，看見「有己是墮落的根源、驕傲是問題的根源」。',
+  materials:'本 app（專題二「落實理念」對照表）、茶點。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題：<b>分享這一週最想感謝配偶的一件事。</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，一起宣告 321 理念，開場禱告。'},
+   {t:'15',label:'回顧上週功課',body:'每對夫妻簡短分享：上週幸福習慣打卡的領受、在哪件事上讓耶穌作王。彼此鼓勵。'},
+   {t:'20',label:'真理回顧',body:'三個基礎、兩個核心、一個目的。<b>謙卑三招</b>：都是我的錯、你是我老師、我要服事你。<b>溝通三招</b>：感覺沒有對錯、建議不是決定、檢討不是批評。'},
+   {t:'40',core:true,label:'夫妻操練：選對的那一邊',body:'①打開 app <b>專題二 →「落實理念・選對的那一邊」對照表</b>。<br>②各自圈出最「需要改變」的三項（如：有己 vs 無己、重事 vs 重人、用腦 vs 用心）。<br>③彼此分享為什麼選這幾項。<br>④面對面練習<b>謙卑三招</b>：輪流看著對方說「都是我的錯、你是我老師、我要服事你」。'},
+   {t:'15',label:'小組分享',body:'分享一項你最「需要改變」的功課，以及這一週要採取的一個具體行動。'},
+   {t:'10',label:'立志・彼此代禱',body:'為彼此「以謙卑戰勝驕傲」按手代禱。小家長祝福。'}
+  ],
+  hw:'每天在 app 對照表上標記「需要改變／願意落實」；本週遇到磨擦時，先用<b>謙卑三招</b>回應。',
+  pin:'困難的耶穌做，簡單的我們做。不是馬上變好，肯定愈來愈好。謙卑是復興的鑰匙。'},
+
+ {n:'三',icon:'☀️',accent:'var(--green)',title:'經營正向的婚姻',sub:'看聽想講行・播放唱片理論',
+  ref:'箴言 4：23',verse:'你要保守你心，勝過保守一切，因為一生的果效是由心發出。',
+  goal:'用心靠聖靈、不用腦靠自己；把對配偶的「壞唱片」換成「好唱片」，操練「傾聽就是愛」。',
+  materials:'紙筆、本 app（愛的存款）、茶點。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題：<b>分享最近配偶做了一件讓你窩心的小事。</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，宣告 321，開場禱告。'},
+   {t:'15',label:'回顧上週功課',body:'分享上週用謙卑三招、標記對照表的經歷與改變。'},
+   {t:'20',label:'真理回顧',body:'心靈五件正事：看、聽、想、講、行。<b>正面的解讀才能正確解毒。</b>壞唱片（看不好→想不好→講不好）vs 好唱片——看與聽常無法改變，但<b>想、講、行</b>可以改變。'},
+   {t:'40',core:true,label:'夫妻操練：換好唱片＋傾聽',body:'①各自寫下最近一個對配偶的「<b>壞唱片</b>」（負面解讀）。<br>②練習用信心解讀，<b>換成「好唱片」</b>並寫下來（例：他不是不在乎，是太累了）。<br>③<b>傾聽操練</b>：一方說三分鐘心裡的話，另一方只用心聽、不回應、不辯解，最後覆述：「你的意思是……是嗎？」然後互換。'},
+   {t:'15',label:'小組分享',body:'分享一張你今天換好的唱片，以及傾聽時的感受。'},
+   {t:'10',label:'立志・彼此代禱',body:'為彼此「轉化思緒、轉化情緒」代禱。小家長祝福。'}
+  ],
+  hw:'每天用 app 記一筆<b>愛的存款</b>（感謝／讚美／祝福）；遇到負面念頭，刻意換上好唱片。',
+  pin:'用心靠聖靈，不要用腦靠自己；用心就開心，用腦就煩惱。一生的果效從心發出。'},
+
+ {n:'四',icon:'💞',accent:'var(--rose-soft)',title:'性福！幸福！',sub:'聖經中對性的看見',
+  ref:'箴言 5：18',verse:'要使你的泉源蒙福；要喜悅你幼年所娶的妻。',
+  goal:'以聖潔、尊重、感恩的眼光看待夫妻的親密；學習溝通、體貼與彼此尊重。',
+  materials:'本 app、信封與卡片（夫妻私下交換用）、「夫妻私下分享題」單。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題（保持得體）：<b>分享配偶最吸引你的一個特質。</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，宣告 321，開場禱告。<b>提醒：本專題的分享務必保密、得體，不在小組公開任何私密細節。</b>'},
+   {t:'15',label:'回顧上週功課',body:'分享上週「換好唱片、愛的存款」的經歷。'},
+   {t:'20',label:'真理回顧',body:'性是神賜給<b>已婚夫妻</b>純潔、聖潔又美好的恩典。最重要的性器官是「腦」（心思態度先預備好）。原則：彼此溝通、彼此尊重、不勉強、不冒犯；持續堅固熱情、愛慕、享樂。'},
+   {t:'40',core:true,label:'夫妻操練（私下進行）',body:'①發給每對夫妻一份「<b>夫妻私下分享題</b>」與卡片。<br>②請各對夫妻找一個安靜的角落（或約定今晚回家）<b>私下、溫柔地對談</b>：彼此的感恩、需要、如何增進和諧與樂趣。<br>③小組<b>不收集、不追問</b>任何內容，完全保密、彼此尊重。'},
+   {t:'15',label:'小組分享（僅限原則）',body:'只分享「<b>這個專題帶給我的提醒</b>」（原則層面），不涉任何私密內容。'},
+   {t:'10',label:'立志・彼此代禱',body:'丈夫們、妻子們各自（或在心中）為自己的婚姻親密與合一默禱祝福。小家長作得體的祝福。'}
+  ],
+  hw:'夫妻私下完成分享題；本週安排一次兩人的約會；用 app「成長 → 珍珠時刻」記下一段美好回憶。',
+  pin:'在神的計畫裡，夫妻的親密是讓人完全敞開、被愛、合一的方式——以愛、以尊重、以感恩，把這份恩典經營得又純潔又甜美。'},
+
+ {n:'五',icon:'💬',accent:'var(--blue)',title:'經營美滿婚姻的方法（上）',sub:'五種愛的語言・愛的存款',
+  ref:'以弗所書 4：29',verse:'污穢的言語，一句不可出口，只要隨事說造就人的好話，叫聽見的人得益處。',
+  goal:'認識並使用「對方的」愛的語言為情感帳戶存款；明白改變別人最快的路，是改變自己。',
+  materials:'本 app（我們 → 夫妻檔案；操練 → 愛的存款）、茶點。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題：<b>猜猜看——我的配偶最主要的「愛的語言」是哪一種？</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，宣告 321，開場禱告。'},
+   {t:'15',label:'回顧上週功課',body:'分享上週的約會與珍珠時刻、愛的存款的經歷。'},
+   {t:'20',label:'真理回顧',body:'五種愛的語言：身體接觸、肯定話語、精心時刻、接受禮物、服務行動。<b>情感帳戶</b>——存款讓對方感到被愛，提款讓對方感到不被愛；智慧存款是<b>投其所好、滿足所需</b>。'},
+   {t:'40',core:true,label:'夫妻操練：愛的存款',body:'①打開 app「<b>我們 → 夫妻檔案</b>」，確認／填寫彼此主要與次要的愛的語言，核對「我猜對了嗎」。<br>②現場做一次<b>愛的存款</b>：手牽手、眼看眼、心連心；存款的一方說「感謝一件事＋讚美一個優點＋祝福一個盼望」，被存款的一方<b>覆述、道謝、擁抱</b>。<br>③互換。'},
+   {t:'15',label:'小組分享',body:'分享：「我才發現，原來我的配偶要的是……」。'},
+   {t:'10',label:'立志・彼此代禱',body:'為彼此「天天用對方的語言存款」代禱。小家長祝福。'}
+  ],
+  hw:'每天用 app 記一筆<b>愛的存款</b>，刻意用對方的愛的語言；本週至少一次身體接觸的關心（牽手、擁抱）。',
+  pin:'改變別人是上帝的工作，改變自己要與上帝合作。先生命、再關係、後事工。'},
+
+ {n:'六',icon:'🦪',accent:'var(--purple)',title:'經營美滿婚姻的方法（下）',sub:'珍珠時刻・處理衝突・溝通之手',
+  ref:'歌羅西書 3：13',verse:'倘若這人與那人有嫌隙，總要彼此包容，彼此饒恕；主怎樣饒恕了你們，你們也要怎樣饒恕人。',
+  goal:'把一粒沙包容成一顆珍珠；用「溝通之手」七步化解衝突，操練衝突三階段。',
+  materials:'本 app（操練 → 和好工具・溝通之手；成長 → 珍珠時刻）、茶點。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題：<b>分享配偶一個我以前看不順眼、現在能會心一笑的小習慣。</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，宣告 321，開場禱告。'},
+   {t:'15',label:'回顧上週功課',body:'分享上週愛的存款、用對方愛的語言的經歷。'},
+   {t:'20',label:'真理回顧',body:'要做<b>包容沙的珍珠貝</b>，不做吐沙的蛤蜊。衝突三階段：解決我的問題 → 接納別人 → 調整彼此。<b>驕傲是衝突最大的原因。</b>'},
+   {t:'40',core:true,label:'夫妻操練：溝通之手',body:'①選一個最近<b>真實的小磨擦</b>（不要選大爆點）。<br>②打開 app「<b>操練 → 和好工具・溝通之手</b>」，照七步輪流練習：手腕（感謝付出）→ 姆指（描述情境）→ 食指（述說感受）→ 中指（表達需求）→ 無名指（表示歉意）→ 小指（提出建議）→ 手掌（感謝傾聽）。<br>③練完彼此擁抱，把這次磨擦<b>記成一顆珍珠</b>。'},
+   {t:'15',label:'小組分享',body:'分享：「用溝通之手之後，我的感受有什麼不同？」'},
+   {t:'10',label:'立志・彼此代禱',body:'為彼此「選擇穿上新人、化干戈為珍珠」代禱。小家長祝福。'}
+  ],
+  hw:'衝突當下用 app <b>溝通之手</b>好好說；本週至少在「成長 → 珍珠時刻」串一顆珍珠。',
+  pin:'衝突時是我做錯了選擇——選擇穿上舊人、選擇驕傲。選擇謙卑、選擇新人，就能化干戈為珍珠。'},
+
+ {n:'七',icon:'👑',accent:'var(--navy)',capstone:true,title:'美滿婚姻的秘訣',sub:'房角石・更新婚約・邁向繁殖',
+  ref:'詩篇 127：1',verse:'若不是耶和華建造房屋，建造的人就枉然勞力；若不是耶和華看守城池，看守的人就枉然警醒。',
+  goal:'讓基督作頭、作王，是美滿婚姻的房角石；更新婚約，並立志成為得勝者、陪伴下一對夫妻（235 繁殖）。',
+  materials:'本 app（成長 → 立約書）、餅與杯或一小瓶油（可選聖禮）、見證時間。',
+  flow:[
+   {t:'10',label:'迎接・破冰',body:'迎接、倒茶。破冰題：<b>走完這七次，我最大的改變是……</b>'},
+   {t:'10',label:'敬拜・宣告',body:'詩歌敬拜，宣告 321，開場禱告，感謝主一路的同行。'},
+   {t:'15',label:'回顧這段旅程',body:'每對夫妻簡短回顧：這七次最深的領受、看見的改變。彼此感恩、為對方鼓掌。'},
+   {t:'20',label:'真理回顧',body:'離開、連合、合一。丈夫是頭——<b>帶頭，不出頭</b>，愛妻如基督愛教會；妻子尊重順服，如教會順服基督。神腦人腦提供意見，<b>基督是頭</b>作決定。彰顯奧祕、彰顯榮耀。'},
+   {t:'40',core:true,label:'夫妻操練：更新婚約',body:'①打開 app「<b>成長 → 立約書</b>」，一起重讀／更新立約書並簽名。<br>②面對面：妻子對丈夫說「<b>你好棒</b>」並說出尊重他的一件事；丈夫對妻子說「<b>我愛你</b>」並給她一個擁抱。<br>③彼此<b>按手祝福</b>，宣告讓基督在婚姻裡作頭、作王。（可結合「六個愛的行動」的立約或按手聖禮。）'},
+   {t:'15',label:'見證・差遣',body:'每對夫妻用一兩句話作這段旅程的見證。小家長分享<b>235 繁殖</b>的異象：得幫助的夫妻，預備成為陪伴下一對夫妻的同工。'},
+   {t:'10',label:'立志・彼此代禱',body:'立志成為<b>得勝者</b>，並開始為一對你們想陪伴的夫妻禱告。小家長為每對夫妻按手差遣祝福。'}
+  ],
+  hw:'到 app「成長 → 立約書」把結婚／立約日設為<b>週年提醒</b>；開始為一對你們想陪伴的夫妻禱告，邁向繁殖。',
+  pin:'美滿婚姻最深的秘訣，是讓基督作頭、讓耶穌作王——無己，讓基督在婚姻裡居首位，這是整棟房子的房角石。'}
+];
+
+function renderFollowupList(){
+  const wrap=document.getElementById('followup-list'); if(!wrap) return;
+  wrap.innerHTML=FOLLOWUPS.map((f,i)=>`
+    <div class="tcard${f.capstone?' capstone':''}" style="--ac:${f.accent}" data-fi="${i}">
+      <div class="num" style="background:${f.accent}">${f.icon}</div>
+      <div class="meta">
+        <div class="label">第${f.n}次</div>
+        <div class="ttl">${f.title}</div>
+        <div class="sub">${f.sub}</div>
+        ${f.capstone?'<span class="capseal">房角石</span>':''}
+      </div>
+      <div class="arrow">›</div>
+    </div>`).join('');
+  wrap.querySelectorAll('.tcard').forEach(c=>c.addEventListener('click',()=>openFollowup(Number(c.dataset.fi))));
+}
+function openFollowup(i){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview','pearlsview','groupview','prepview','campview'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active');});
+  document.getElementById('followupview').classList.add('active');
+  showFollowup(i);
+  window.scrollTo(0,0);
+}
+function closeFollowup(){
+  document.getElementById('followupview').classList.remove('active');
+  document.getElementById('page-followup').classList.add('active');
+  if(typeof setTabActive==='function') setTabActive('page-followup');
+  window.scrollTo(0,0);
+}
+document.getElementById('fup-back').addEventListener('click',closeFollowup);
+function showFollowup(i){
+  const f=FOLLOWUPS[i];
+  document.getElementById('fuphead').style.background = f.capstone
+    ? 'linear-gradient(135deg,#23406F,#16294B)'
+    : `linear-gradient(135deg,${f.accent},rgba(0,0,0,.28))`;
+  document.getElementById('fup-icon').textContent=f.icon;
+  document.getElementById('fup-label').textContent='第'+f.n+'次聚會'+(f.capstone?'　·　房角石':'');
+  document.getElementById('fup-ttl').textContent=f.title;
+  document.getElementById('fup-sub').textContent=f.sub;
+  const flow=f.flow.map(s=>`<div class="fstep${s.core?' fcore':''}">
+      <div class="ftime"><div class="fm">${s.t}</div><div class="fu">分鐘</div></div>
+      <div class="fmain"><div class="flabel">${s.label}</div><div class="fbody">${s.body}</div></div>
+    </div>`).join('');
+  const body=document.getElementById('fup-body');
+  body.style.setProperty('--ac', f.accent);
+  body.innerHTML=
+     `<div class="scripture" style="--ac:${f.accent}"><div class="ref">📖 ${f.ref}</div><div class="verse">${f.verse}</div></div>`
+    +`<div class="kcard" style="--ac:${f.accent}"><h3><span class="dot"></span>🎯 本次目標</h3><p>${f.goal}</p></div>`
+    +`<div class="kcard" style="--ac:${f.accent}"><h3><span class="dot"></span>🧰 預備</h3><p>${f.materials}</p></div>`
+    +`<div class="form-lbl" style="font-size:18px;margin:6px 2px 10px;">🕘 聚會流程（共 2 小時）</div>`
+    +`<div>${flow}</div>`
+    +`<div class="hand-reminder">🏠 <b>本週功課：</b>${f.hw}</div>`
+    +`<div class="pcard"><div class="ptag">✦ 落實 321 理念</div><p>${f.pin}</p></div>`;
+  window.scrollTo(0,0);
+}
+renderFollowupList();
 
 /* ============ PWA 離線註冊 ============ */
 if('serviceWorker' in navigator){
