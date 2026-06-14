@@ -524,11 +524,11 @@
   </div>
 </section>
 
-<!-- 複習（營會旅程三階段） -->
-<section class="page active" id="page-learn">
+<!-- 旅程（營會旅程三階段） -->
+<section class="page active" id="page-journey">
   <div class="lead">
     <h2>營會旅程・三個階段</h2>
-    <p>從會前的鬆土，到會時的領受，再到會後的落實——讓耶穌在你們的婚姻裡，一步步作王。</p>
+    <p>從會前的鬆土，到會中的領受，再到會後的落實——讓耶穌在你們的婚姻裡，一步步作王。</p>
   </div>
   <div class="phasenav">
     <button class="phasecard" id="open-prep" style="--ac:var(--gold)">
@@ -538,7 +538,7 @@
     </button>
     <button class="phasecard" id="open-camp" style="--ac:var(--rose)">
       <span class="pe">⛺</span>
-      <span class="pm"><span class="pstage">會時・現場</span><span class="pttl">會時模式</span><span class="psub">領受・經歷・六個聖禮・立約</span></span>
+      <span class="pm"><span class="pstage">會中・現場</span><span class="pttl">營會中學習</span><span class="psub">領受・經歷・六個聖禮・立約</span></span>
       <span class="parrow">›</span>
     </button>
     <button class="phasecard" id="go-aftercamp" style="--ac:var(--navy)">
@@ -547,8 +547,12 @@
       <span class="parrow">›</span>
     </button>
   </div>
-  <div class="lead" style="margin-top:6px;">
-    <h2 style="font-size:20px;">📖 會後・七個專題重點複習</h2>
+</section>
+
+<!-- 專題（七個專題重點複習） -->
+<section class="page" id="page-learn">
+  <div class="lead">
+    <h2>七個專題　重點複習</h2>
     <p>營會的領受帶回家。前六個專題是建造婚姻的材料與工法，專題七是整棟房子的房角石。</p>
   </div>
   <div class="topiclist" id="topiclist"></div>
@@ -798,13 +802,13 @@
   <div class="dbody" id="prep-body"></div>
 </section>
 
-<!-- 會時模式 子頁 -->
+<!-- 營會中學習 子頁 -->
 <section class="bankview" id="campview">
   <div class="dhead" style="background:linear-gradient(135deg,var(--rose),#92274A);">
     <button class="back" id="camp-back">‹ 返回</button>
     <div class="dicon">⛺</div>
-    <div class="dlabel">會時・營會現場</div>
-    <div class="dttl">會時模式</div>
+    <div class="dlabel">會中・營會現場</div>
+    <div class="dttl">營會中學習</div>
     <div class="dsub">領受、經歷耶穌，讓祂在你們中間作王。</div>
   </div>
   <div class="dbody" id="camp-body"></div>
@@ -863,7 +867,8 @@
 
 <nav class="tabbar" id="tabbar">
   <button class="tab" data-target="page-home"><span class="ti">🏠</span>今天</button>
-  <button class="tab active" data-target="page-learn"><span class="ti">📖</span>複習</button>
+  <button class="tab active" data-target="page-journey"><span class="ti">🧭</span>旅程</button>
+  <button class="tab" data-target="page-learn"><span class="ti">📖</span>專題</button>
   <button class="tab" data-target="page-practice"><span class="ti">❤️</span>操練</button>
   <button class="tab" data-target="page-grow"><span class="ti">🌱</span>成長</button>
   <button class="tab" data-target="page-us"><span class="ti">⚙️</span>我們</button>
@@ -1130,6 +1135,7 @@ function closeTopic(){
   document.getElementById('note-fab').classList.remove('show');
   closeNote();
   document.getElementById('page-learn').classList.add('active');
+  if(typeof setTabActive==='function') setTabActive('page-learn');
   window.scrollTo(0,0);
 }
 
@@ -2260,11 +2266,21 @@ function renderPearlList(){
   });
 }
 
-/* ============ 營會旅程：會前・行前預備 + 會時・會時模式 ============ */
-/* 三階段導覽 */
-document.getElementById('go-aftercamp').addEventListener('click',()=>{
-  const t=document.getElementById('topiclist'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
-});
+/* ============ 營會旅程：行前預備 + 營會中學習 ============ */
+/* 分頁高亮與切換助手 */
+function setTabActive(targetId){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.target===targetId));
+}
+function goTab(targetId){
+  ['detail','bankview','assessview','habitview','handview','actionsview','covenantview','pearlsview','groupview','prepview','campview'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active');});
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById(targetId); if(pg) pg.classList.add('active');
+  setTabActive(targetId);
+  if(typeof renderBalance==='function'){ renderBalance(); updateGreeting(); renderHabitToday(); renderAnniv(); }
+  window.scrollTo(0,0);
+}
+/* 「帶回家複習」→ 切換到「專題」分頁 */
+document.getElementById('go-aftercamp').addEventListener('click',()=>goTab('page-learn'));
 
 /* ---- 會前・行前預備 ---- */
 const PREP_CHECK=[
@@ -2296,7 +2312,8 @@ function openPrep(){
 }
 function closePrep(){
   document.getElementById('prepview').classList.remove('active');
-  document.getElementById('page-learn').classList.add('active');
+  document.getElementById('page-journey').classList.add('active');
+  setTabActive('page-journey');
   window.scrollTo(0,0);
 }
 document.getElementById('open-prep').addEventListener('click',openPrep);
@@ -2391,13 +2408,14 @@ function renderPrep(){
   });
   body.querySelector('#prep-assess').addEventListener('click',()=>{
     document.getElementById('prepview').classList.remove('active');
-    document.getElementById('page-learn').classList.add('active');
+    document.getElementById('page-journey').classList.add('active');
+    setTabActive('page-journey');
     openAssess();
   });
   window.scrollTo(0,0);
 }
 
-/* ---- 會時・會時模式 ---- */
+/* ---- 會中・營會中學習 ---- */
 const CAMP_RITES=[
  {e:'🦶',t:'洗腳',s:'彼此服事、彼此饒恕',ref:'約十三14'},
  {e:'💧',t:'浴水重生',s:'脫去舊人、穿上新人',ref:'弗四22-24'},
@@ -2418,15 +2436,22 @@ function openCamp(){
 }
 function closeCamp(){
   document.getElementById('campview').classList.remove('active');
-  document.getElementById('page-learn').classList.add('active');
+  document.getElementById('page-journey').classList.add('active');
+  setTabActive('page-journey');
   window.scrollTo(0,0);
 }
 document.getElementById('open-camp').addEventListener('click',openCamp);
 document.getElementById('camp-back').addEventListener('click',closeCamp);
 function campJump(fn){
   document.getElementById('campview').classList.remove('active');
-  document.getElementById('page-learn').classList.add('active');
+  document.getElementById('page-journey').classList.add('active');
   fn();
+}
+function campOpenTopic(i){
+  document.getElementById('campview').classList.remove('active');
+  document.getElementById('page-learn').classList.add('active');
+  setTabActive('page-learn');
+  openTopic(i);
 }
 function renderCamp(){
   const prog=getCampProg(), rites=getCampRites();
@@ -2490,7 +2515,7 @@ function renderCamp(){
     const i=Number(b.dataset.tp), m=getCampProg(); m[i]=!m[i]; jset('camp_progress',m); renderCamp();
   }));
   body.querySelectorAll('.cpgo[data-go]').forEach(b=>b.addEventListener('click',()=>{
-    campJump(()=>openTopic(Number(b.dataset.go)));
+    campOpenTopic(Number(b.dataset.go));
   }));
   body.querySelectorAll('.cpcheck[data-rite]').forEach(b=>b.addEventListener('click',()=>{
     const i=Number(b.dataset.rite), m=getCampRites(); m[i]=!m[i]; jset('camp_rites',m); renderCamp();
