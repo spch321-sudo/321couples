@@ -67,6 +67,10 @@
   .brandbar.collapsed .dove{max-height:0;opacity:0;margin-bottom:0;}
   .brandbar.collapsed .apptitle{font-size:18px;gap:0;}
   .brandbar.collapsed .apptitle small{font-size:0;opacity:0;max-width:0;letter-spacing:0;}
+  .brandbar{cursor:pointer;}
+  .brandbar .bcaret{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;}
+  .brandbar .bcg{color:#fff;font-size:18px;line-height:1;display:block;transition:transform .25s ease;}
+  .brandbar.collapsed .bcg{transform:rotate(180deg);}
 
   /* ===== 頁面容器 ===== */
   .page{display:none;padding:18px 16px 8px;max-width:680px;margin:0 auto;animation:fade .35s ease;}
@@ -2766,7 +2770,7 @@ renderFollowupList();
 
 /* ============ PWA 離線註冊 ============ */
 if('serviceWorker' in navigator){
-  (function(){var brand=document.querySelector('.brandbar');if(brand){var c=function(){var y=window.scrollY||document.documentElement.scrollTop||0;if(y>36){brand.classList.add('collapsed');}else{brand.classList.remove('collapsed');}};window.addEventListener('scroll',c,{passive:true});c();}})();
+  (function(){var brand=document.querySelector('.brandbar');if(!brand)return;var caret=document.createElement('div');caret.className='bcaret';caret.setAttribute('aria-hidden','true');caret.innerHTML='<span class="bcg">\u2304</span>';brand.appendChild(caret);var KEY='brandCollapsed';try{if(localStorage.getItem(KEY)==='1')brand.classList.add('collapsed');}catch(e){}brand.addEventListener('click',function(){var c=brand.classList.toggle('collapsed');try{localStorage.setItem(KEY,c?'1':'0');}catch(e){}});})();
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
