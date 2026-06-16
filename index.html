@@ -11,6 +11,18 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <title>321 夫妻成長營</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="國度321空中團契">
+<meta property="og:title" content="321 夫妻成長營・愛的小家">
+<meta property="og:description" content="把營會的學習帶回家，天天操練，活出基督的愛。點一下就能開始使用。">
+<meta property="og:image" content="https://spch321-sudo.github.io/321couples/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:url" content="https://spch321-sudo.github.io/321couples/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="321 夫妻成長營・愛的小家">
+<meta name="twitter:description" content="把營會的學習帶回家，天天操練，活出基督的愛。點一下就能開始使用。">
+<meta name="twitter:image" content="https://spch321-sudo.github.io/321couples/icon-512.png">
 <style>
   :root{
     --rose:#B0345A;      /* 主玫瑰 */
@@ -42,15 +54,19 @@
   }
   /* ===== 品牌列 ===== */
   .brandbar{
-    position:sticky;top:0;z-index:50;
+    position:sticky;top:0;z-index:50;transition:padding .25s ease;
     background:linear-gradient(135deg,var(--rose) 0%,#92274A 100%);
     color:#fff;
     padding:calc(env(safe-area-inset-top) + 12px) 18px 12px;
     box-shadow:0 2px 12px rgba(146,39,74,.28);
   }
-  .brandbar .dove{font-size:15px;opacity:.92;letter-spacing:.5px;}
-  .brandbar .apptitle{font-size:25px;font-weight:800;letter-spacing:1px;margin-top:2px;display:flex;align-items:baseline;gap:8px;}
-  .brandbar .apptitle small{font-size:14px;font-weight:500;opacity:.85;letter-spacing:2px;}
+  .brandbar .dove{font-size:15px;opacity:.92;letter-spacing:.5px;max-height:26px;overflow:hidden;transition:max-height .25s ease,opacity .2s ease,margin .25s ease;}
+  .brandbar .apptitle{font-size:25px;font-weight:800;letter-spacing:1px;margin-top:2px;display:flex;align-items:baseline;gap:8px;transition:font-size .25s ease,gap .25s ease;}
+  .brandbar .apptitle small{font-size:14px;font-weight:500;opacity:.85;letter-spacing:2px;transition:font-size .25s ease,opacity .2s ease,max-width .25s ease;}
+  .brandbar.collapsed{padding-top:calc(env(safe-area-inset-top) + 6px);padding-bottom:7px;}
+  .brandbar.collapsed .dove{max-height:0;opacity:0;margin-bottom:0;}
+  .brandbar.collapsed .apptitle{font-size:18px;gap:0;}
+  .brandbar.collapsed .apptitle small{font-size:0;opacity:0;max-width:0;letter-spacing:0;}
 
   /* ===== 頁面容器 ===== */
   .page{display:none;padding:18px 16px 8px;max-width:680px;margin:0 auto;animation:fade .35s ease;}
@@ -2750,6 +2766,7 @@ renderFollowupList();
 
 /* ============ PWA 離線註冊 ============ */
 if('serviceWorker' in navigator){
+  (function(){var brand=document.querySelector('.brandbar');if(brand){var c=function(){var y=window.scrollY||document.documentElement.scrollTop||0;if(y>36){brand.classList.add('collapsed');}else{brand.classList.remove('collapsed');}};window.addEventListener('scroll',c,{passive:true});c();}})();
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
