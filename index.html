@@ -750,16 +750,23 @@
 
   .rh-head{display:flex;align-items:center;gap:10px;cursor:pointer;flex-wrap:wrap;-webkit-tap-highlight-color:transparent;}
   .rh-head h2{margin:0;}
-  .rh-mini{margin-left:auto;font-size:14px;font-weight:800;color:#8A6A22;white-space:nowrap;}
-  .rh-mini b{color:#BF8F00;font-size:17px;}
-  .rh-chev{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid #D9BC6E;background:rgba(255,255,255,.55);
+  .rh-chev{flex:0 0 auto;margin-left:auto;width:30px;height:30px;border-radius:50%;border:1.5px solid #D9BC6E;background:rgba(255,255,255,.55);
     color:#8A6200;font-size:16px;line-height:1;cursor:pointer;transition:transform .25s ease;font-family:inherit;}
-  .ringhero .rh-body{overflow:hidden;max-height:2000px;opacity:1;transition:max-height .35s ease,opacity .3s ease,margin-top .3s ease;margin-top:2px;}
+  .ringhero .ringprog{margin-top:14px;}
+  .ringhero .rh-body{overflow:hidden;max-height:3000px;opacity:1;transition:max-height .35s ease,opacity .3s ease,margin-top .3s ease;margin-top:2px;}
   .ringhero.collapsed .rh-body{max-height:0;opacity:0;margin-top:0;pointer-events:none;}
   .ringhero.collapsed .rh-chev{transform:rotate(-90deg);}
-  .ringhero:not(.collapsed) .rh-mini{display:none;}
-  .rh-msgwrap{margin:4px 2px 18px;}
+  .ringhero.collapsed .ringprog{margin-bottom:2px;}
+  .rh-msgwrap{margin:16px 0 8px;}
   .rh-msgwrap .msg-open{margin-top:0;}
+  .ex-chips{display:flex;flex-direction:column;gap:7px;margin:0 0 14px;}
+  .ex-chip{text-align:left;border:1px solid #E7C3CE;background:#FFF7F9;color:#6a3548;border-radius:11px;
+    padding:9px 12px;font-size:14px;line-height:1.55;font-family:inherit;cursor:pointer;}
+  .ex-chip:active{background:#FBE4E9;}
+  .ex-lbl{font-size:12.5px;color:var(--ink-soft);margin:-4px 0 8px;}
+  .xz-back{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:999px;
+    padding:7px 13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;}
+  .xz-back:active{background:rgba(255,255,255,.32);}
 </style>
 </head>
 <body>
@@ -798,7 +805,7 @@
   </div>
   <div class="dashcard" id="anniv-card" style="cursor:pointer;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-      <div class="form-lbl" style="font-size:18px;margin:0;">📅 週年與立約</div>
+      <div class="form-lbl" style="font-size:18px;margin:0;">📅 週年與生日</div>
       <span class="arrow" style="margin-left:auto;">›</span>
     </div>
     <div id="anniv-body"></div>
@@ -941,6 +948,8 @@
         <button data-type="祝福">祝福</button>
       </div>
       <div class="hint" id="type-hint">感謝一件事——謝謝他為這個家所做的。</div>
+      <div class="ex-lbl" id="ex-lbl"></div>
+      <div class="ex-chips" id="ex-chips"></div>
 
       <div class="form-lbl">想說的話</div>
       <textarea class="depo" id="depo-text" placeholder="例：謝謝你今天接送孩子，讓我可以安心工作。"></textarea>
@@ -1135,6 +1144,10 @@
       <input type="text" id="pf-husband" placeholder="例：志明" maxlength="12">
     </div>
     <div class="field">
+      <label>丈夫的生日</label>
+      <input type="date" id="pf-hbday" value="">
+    </div>
+    <div class="field">
       <label>丈夫的愛的語言（主要）</label>
       <select id="pf-hlove"></select>
     </div>
@@ -1145,6 +1158,10 @@
     <div class="field">
       <label>妻子的稱呼</label>
       <input type="text" id="pf-wife" placeholder="例：春嬌" maxlength="12">
+    </div>
+    <div class="field">
+      <label>妻子的生日</label>
+      <input type="date" id="pf-wbday" value="">
     </div>
     <div class="field">
       <label>妻子的愛的語言（主要）</label>
@@ -1444,24 +1461,24 @@ function renderRingMap(){
     ? `<div class="rp-win">${RING_UI.allDone}</div>`
     : `<div class="rp-head"><span class="rp-t">${RING_UI.progHead}</span><span class="rp-c">${RING_UI.progOf} <b>${cnt}</b> ${RING_UI.progUnit}</span></div>`;
   const prog = `<div class="ringprog${cnt>=7?' full':''}">${rpHead}<div class="rp-dots">${dots}</div></div>`;
-  const msg = (typeof window.msgHTML==='function') ? msgHTML(-1) : '';
+  const msgRaw = (typeof window.msgHTML==='function') ? msgHTML(-1) : '';
+  const msgBlock = msgRaw ? ('<div class="rh-msgwrap">'+msgRaw+'</div>') : '';
   box.innerHTML=`
     <div class="ringhero${open?'':' collapsed'}">
       <div class="rh-head" onclick="toggleRingHero(event)">
         <span class="rh-badge">${RING_UI.badge}</span>
         <h2>${RING_UI.h2}</h2>
-        <span class="rh-mini">${RING_UI.progOf} <b>${cnt}</b> ${RING_UI.progUnit}</span>
         <button class="rh-chev" aria-label="toggle">\u2304</button>
       </div>
+      ${prog}
       <div class="rh-body">
         <div class="rh-sub">${RING_UI.sub}</div>
         <div class="rh-quote">${RING_UI.quote}</div>
-        ${prog}
         <div class="ringchain">${links}</div>
         <div class="rh-foot">${RING_UI.foot}</div>
+        ${msgBlock}
       </div>
-    </div>
-    ${msg?`<div class="rh-msgwrap">${msg}</div>`:''}`;
+    </div>`;
   box.querySelectorAll('.rlink').forEach(el=>{
     el.addEventListener('click',()=>{ openTopic(Number(el.dataset.idx)); });
   });
@@ -1681,8 +1698,8 @@ document.getElementById('tabbar').addEventListener('click',e=>{
   window.scrollTo(0,0);
 });
 
-renderList();
-renderRingMap();
+try{ renderList(); }catch(e){ console.error("renderList failed:",e); }
+try{ renderRingMap(); }catch(e){ console.error("renderRingMap failed:",e); }
 
 /* ============ 事件委派（取代行內 onclick，相容 LINE 等內建瀏覽器） ============ */
 document.getElementById('topiclist').addEventListener('click',e=>{
@@ -1705,7 +1722,7 @@ function jset(k,v){ store.set(k, JSON.stringify(v)); }
 
 /* ============ 夫妻檔案 ============ */
 const LOVE_LANGS=['身體接觸','肯定話語','精心時刻','接受禮物','服務行動'];
-function getProfile(){ return jget('couple_profile',{husband:'',wife:'',hLove:'',hLove2:'',wLove:'',wLove2:''}); }
+function getProfile(){ return jget('couple_profile',{husband:'',wife:'',hLove:'',hLove2:'',wLove:'',wLove2:'',hBday:'',wBday:''}); }
 function fillSelect(sel){ sel.innerHTML='<option value="">（未選）</option>'+LOVE_LANGS.map(l=>`<option>${l}</option>`).join(''); }
 function initProfileUI(){
   const p=getProfile();
@@ -1716,6 +1733,8 @@ function initProfileUI(){
   document.getElementById('pf-hlove2').value=p.hLove2||'';
   document.getElementById('pf-wlove').value=p.wLove||'';
   document.getElementById('pf-wlove2').value=p.wLove2||'';
+  document.getElementById('pf-hbday').value=p.hBday||'';
+  document.getElementById('pf-wbday').value=p.wBday||'';
 }
 document.getElementById('save-profile').addEventListener('click',()=>{
   jset('couple_profile',{
@@ -1724,7 +1743,9 @@ document.getElementById('save-profile').addEventListener('click',()=>{
     hLove:document.getElementById('pf-hlove').value,
     hLove2:document.getElementById('pf-hlove2').value,
     wLove:document.getElementById('pf-wlove').value,
-    wLove2:document.getElementById('pf-wlove2').value
+    wLove2:document.getElementById('pf-wlove2').value,
+    hBday:document.getElementById('pf-hbday').value,
+    wBday:document.getElementById('pf-wbday').value
   });
   const s=document.getElementById('pf-saved');
   s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
@@ -1748,6 +1769,14 @@ const TYPE_HINTS={
   '讚美':'讚美一個優點——他是上帝施工中的傑作。',
   '祝福':'祝福一個盼望——為他說一句帶著信心的好話。'
 };
+const TYPE_EXAMPLES={"感謝": ["謝謝你今天接送孩子，讓我可以安心工作。", "謝謝你聽我抱怨了那麼久，還是耐心陪著我。", "謝謝你昨晚把碗洗了，讓我能早點休息。"], "讚美": ["你今天處理孩子的情緒，好有智慧、好溫柔。", "你在難處裡還是願意信靠神，這一點很讓我佩服。", "你把家裡打理得這麼好，真的很不簡單。"], "祝福": ["願神在你今天的工作上，賜給你格外的智慧與平安。", "願神紀念你這一路的辛苦，加倍恩待你。", "願你今天不論走到哪裡，都被神的同在圍繞。"]};
+function renderExChips(){
+  const box=document.getElementById('ex-chips'), lbl=document.getElementById('ex-lbl');
+  if(!box) return;
+  const exs=TYPE_EXAMPLES[bankState.type]||[];
+  if(lbl) lbl.textContent = exs.length? "點一下，直接帶入這句話：" : '';
+  box.innerHTML = exs.map(t=>`<button class="ex-chip">${t}</button>`).join('');
+}
 const TYPE_CLASS={'感謝':'gan','讚美':'zan','祝福':'zhu'};
 let bankState={to:'h',type:'感謝'};
 let bankReturn='page-home';
@@ -1805,7 +1834,7 @@ function openBank(){
   document.getElementById('habitview').classList.remove('active');
   document.getElementById('handview').classList.remove('active');
   document.getElementById('bankview').classList.add('active');
-  renderBalance(); renderToSeg(); renderDepoList();
+  renderBalance(); renderToSeg(); renderDepoList(); renderExChips();
   window.scrollTo(0,0);
 }
 function closeBank(){
@@ -1827,6 +1856,11 @@ document.getElementById('seg-type').addEventListener('click',e=>{
   document.querySelectorAll('#seg-type button').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');
   document.getElementById('type-hint').textContent=TYPE_HINTS[bankState.type];
+  renderExChips();
+});
+document.getElementById('ex-chips').addEventListener('click',e=>{
+  const b=e.target.closest('.ex-chip'); if(!b) return;
+  const ta=document.getElementById('depo-text'); ta.value=b.textContent; ta.focus();
 });
 document.getElementById('save-depo').addEventListener('click',()=>{
   const ta=document.getElementById('depo-text'), text=ta.value.trim();
@@ -1843,10 +1877,10 @@ document.getElementById('depo-list').addEventListener('click',e=>{
 });
 
 /* ============ 初始化 ============ */
-initProfileUI();
-refreshNames();
-updateGreeting();
-renderBalance();
+try{ initProfileUI(); }catch(e){ console.error("initProfileUI failed:",e); }
+try{ refreshNames(); }catch(e){ console.error("refreshNames failed:",e); }
+try{ updateGreeting(); }catch(e){ console.error("updateGreeting failed:",e); }
+try{ renderBalance(); }catch(e){ console.error("renderBalance failed:",e); }
 
 /* ============ 親密關係評估 ============ */
 const ASSESS2=['金錢管理','感受關愛','衝突管理','性關係','家務分配','子女教養','姻親關係','朋友交往','休閒娛樂','宗教信仰'];
@@ -2134,7 +2168,7 @@ function renderHabitGrid(){
     </div>
     <div class="dashcard"><div class="minicard"><div class="mi">🌱</div><div><div class="mt">近 14 天共完成 ${totalDone} 次</div><div class="md">習慣是愛的存款的延伸——困難的耶穌做，簡單的我們做，肯定愈來愈好。</div></div></div></div>`;
 }
-renderHabitToday();
+try{ renderHabitToday(); }catch(e){ console.error("renderHabitToday failed:",e); }
 
 /* ============ 和好工具・溝通之手 ============ */
 const HAND_STEPS=[
@@ -2479,11 +2513,16 @@ function annivLine(emoji,label,dateStr){
   const txt=a.days===0? '就是今天 🎉' : `還有 ${a.days} 天`;
   return `<div class="anniv-line"><span class="ae">${emoji}</span><span>${label} ${a.years} 週年</span><span class="ad${a.days===0?' today':''}">${txt}</span></div>`;
 }
+function birthdayLine(emoji,name,dateStr){
+  const a=nextAnniv(dateStr); if(!a) return '';
+  const txt=a.days===0? '生日快樂 🎉' : `還有 ${a.days} 天`;
+  return `<div class="anniv-line"><span class="ae">${emoji}</span><span>${name}生日（將滿 ${a.years} 歲）</span><span class="ad${a.days===0?' today':''}">${txt}</span></div>`;
+}
 function renderAnniv(){
   const wrap=document.getElementById('anniv-body'); if(!wrap) return;
-  const c=getCovenant();
-  const lines=annivLine('💍','結婚',c.marriageDate)+annivLine('📜','立約',c.covenantDate);
-  wrap.innerHTML=lines||'<div class="anniv-empty">還沒有設定紀念日。到「成長 → 立約書」填上結婚與立約的日子，這裡就會為你們倒數。</div>';
+  const c=getCovenant(), p=getProfile();
+  const lines=annivLine('💍','結婚',c.marriageDate)+birthdayLine('🎂',NAMES.h||'丈夫',p.hBday)+birthdayLine('🎂',NAMES.w||'妻子',p.wBday);
+  wrap.innerHTML=lines||'<div class="anniv-empty">還沒有設定紀念日。到「成長 → 立約書」填上結婚紀念日，並在「我們」頁面填上兩人的生日，這裡就會為你們倒數。</div>';
 }
 function openCovenant(){
   bankReturn=(document.querySelector('.page.active')||{id:'page-grow'}).id;
@@ -2503,14 +2542,15 @@ document.getElementById('anniv-card').addEventListener('click',openCovenant);
 document.getElementById('open-covenant').addEventListener('click',openCovenant);
 document.getElementById('covenant-back').addEventListener('click',closeCovenant);
 function renderCovenant(){
-  const c=getCovenant(), body=document.getElementById('covenant-body');
+  const c=getCovenant(), p=getProfile(), body=document.getElementById('covenant-body');
   body.innerHTML=`
     <div class="hand-reminder">
       這是你們在上帝面前所立的盟約。每年的結婚或立約週年，可以一起重讀、重新宣告，<b>更新婚約</b>——讓基督一直在你們的婚姻裡作王。
     </div>
     <div class="dashcard">
       <div class="field"><label>💍 結婚紀念日</label><input type="date" id="cov-marriage" value="${c.marriageDate||''}"></div>
-      <div class="field" style="margin-bottom:0;"><label>📜 立約日</label><input type="date" id="cov-covenant" value="${c.covenantDate||''}"></div>
+      <div class="field"><label>🎂 丈夫的生日</label><input type="date" id="cov-hbday" value="${p.hBday||''}"></div>
+      <div class="field" style="margin-bottom:0;"><label>🎂 妻子的生日</label><input type="date" id="cov-wbday" value="${p.wBday||''}"></div>
     </div>
     <div class="dashcard">
       <div class="field" style="margin-bottom:10px;"><label>我們的立約書</label>
@@ -2532,17 +2572,22 @@ function renderCovenant(){
   body.querySelector('#cov-save').addEventListener('click',()=>{
     jset('covenant',{
       marriageDate:body.querySelector('#cov-marriage').value,
-      covenantDate:body.querySelector('#cov-covenant').value,
+      covenantDate:getCovenant().covenantDate,
       vow:body.querySelector('#cov-vow').value,
       hVow:body.querySelector('#cov-hvow').value,
       wVow:body.querySelector('#cov-wvow').value
     });
+    const prof=getProfile();
+    prof.hBday=body.querySelector('#cov-hbday').value;
+    prof.wBday=body.querySelector('#cov-wbday').value;
+    jset('couple_profile',prof);
+    if(typeof initProfileUI==='function') initProfileUI();
     const s=body.querySelector('#cov-saved'); s.textContent='已儲存 ✓'; setTimeout(()=>{s.textContent='';},2000);
     renderAnniv();
   });
   window.scrollTo(0,0);
 }
-renderAnniv();
+try{ renderAnniv(); }catch(e){ console.error("renderAnniv failed:",e); }
 
 /* ============ 愛的小家：通訊與跟進 ============ */
 let groupDraft=null;
@@ -2654,7 +2699,7 @@ function renderGroup(){
 }
 document.getElementById('open-group').addEventListener('click',openGroup);
 document.getElementById('group-back').addEventListener('click',closeGroup);
-updateBrand();
+try{ updateBrand(); }catch(e){ console.error("updateBrand failed:",e); }
 
 /* ============ 字級調整 ============ */
 function getFontScale(){ return store.get('fontScale')||'1.15'; }
@@ -2671,7 +2716,7 @@ document.getElementById('font-seg').addEventListener('click',e=>{
   renderFontSeg();
 });
 applyFontScale(getFontScale());
-renderFontSeg();
+try{ renderFontSeg(); }catch(e){ console.error("renderFontSeg failed:",e); }
 
 /* ============ 珍珠時刻 ============ */
 const PEARL_CATS=[{k:'時光',e:'🎉'},{k:'事情',e:'🍽️'},{k:'物品',e:'🎁'},{k:'回憶',e:'💭'}];
@@ -3199,7 +3244,7 @@ function showFollowup(i){
     +`<div class="pcard"><div class="ptag">✦ 落實 321 理念</div><p>${f.pin}</p></div>`;
   window.scrollTo(0,0);
 }
-renderFollowupList();
+try{ renderFollowupList(); }catch(e){ console.error("renderFollowupList failed:",e); }
 
 /* ============ PWA 離線註冊 ============ */
 if('serviceWorker' in navigator){
@@ -3222,7 +3267,7 @@ if('serviceWorker' in navigator){
   var SPEECH_LANG="zh-TW";           /* 瀏覽器備援語言 */
   var XZ_TOPICS=[{"c": "婚姻異象與根基", "qs": ["神設立婚姻的心意到底是什麼？", "為什麼說「先生命、再關係、後事工」？", "婚姻要建立在什麼根基上才穩固？", "三股合成的繩子，跟我們的婚姻有什麼關係？", "夫妻如何一起立定婚姻的異象？", "什麼是「建立屬神的體系」在家中的樣子？", "我們的婚姻可以榮耀神嗎？怎麼做？", "為什麼婚姻不是為了讓我快樂，而是使我聖潔？", "如何讓耶穌成為我們婚姻的第三者（作王）？", "結婚多年失去初衷，如何重尋異象？", "夫妻同心可以帶來什麼祝福？", "如何為我們的婚姻寫下共同的使命宣言？", "婚姻遇到風浪時，根基如何幫助我們站穩？", "為什麼「焦點在耶穌」能保守婚姻？", "如何把「321理念」落實在婚姻裡？", "婚姻的最終目的是什麼？", "如何看待「兩人成為一體」的奧祕？", "夫妻要一起建立哪些屬靈的習慣？", "如何讓家成為神國的領土？", "求神堅立我們的婚姻，可以怎麼禱告？"]}, {"c": "謙卑無己的生命（第一金環）", "qs": ["什麼是「無己」的生命？跟婚姻有什麼關係？", "為什麼說「有己」是婚姻問題的根源？", "如何在婚姻中脫下舊人、穿上新人？", "驕傲怎麼悄悄破壞夫妻關係？", "「謙卑戰勝驕傲」在吵架時怎麼運用？", "我很難認錯，如何操練謙卑？", "無己是不是要我一味委屈自己？", "如何分辨「捨己」和「無己」？", "老我常常浮現，如何天天治死它？", "為什麼「無己才能合一」？", "如何讓耶穌在我裡面活、而不是我作主？", "總覺得都是對方的錯，怎麼看見自己？", "謙卑和軟弱有什麼不同？", "如何在小事上就選擇謙卑無己？", "無己的生命會為婚姻帶來什麼改變？", "怎麼放下「我是對的」這個執著？", "如何求聖靈幫助我活出無己？", "配偶還沒改變，我先無己會不會吃虧？", "謙卑如何成為我們婚姻復興的鑰匙？", "求神給我無己的心，怎麼禱告？"]}, {"c": "落實321於婚姻（第二金環）", "qs": ["如何在婚姻中「讓耶穌作王」？", "夫妻怎麼一起操練「用心不用腦」？", "「讓耶穌得著一切榮耀」在家庭怎麼活出來？", "三個基礎（榜樣、準則、引導）如何用在婚姻？", "如何以耶穌為我們夫妻的榜樣？", "聖經如何成為我們婚姻的準則？", "怎麼一起尋求並順從聖靈的引導？", "改變觀念的八步驟如何用在婚姻更新？", "如何從「人的觀點」轉為「神的觀點」看配偶？", "「改變從我開始」在婚姻裡是什麼意思？", "夫妻價值觀不同，如何用321對齊？", "怎麼把321變成我們每天的生活方式？", "當我想控制對方時，如何回到讓神作神？", "如何操練「離開本位、放下權力」？", "焦點跑到自己或環境時，如何拉回耶穌？", "321如何幫助我們反敗為勝？", "怎麼帶著另一半一起認識321？", "落實321後，婚姻會有什麼不一樣？", "如何在衝突當下想起321？", "求神幫助我們天天落實321，怎麼禱告？"]}, {"c": "看聽想講行（第三金環）", "qs": ["什麼是用耶穌的生命去「看」配偶？", "如何用主的眼光看待另一半的軟弱？", "怎麼練習「聽」的功課，而不急著回應？", "我很容易打斷對方，如何改善？", "如何在開口前先讓聖靈掌管我的「想」？", "負面念頭一起來就翻舊帳，怎麼辦？", "如何讓我「講」出來的話帶出生命？", "說話容易傷人，如何讓舌頭被主管理？", "怎麼把「行動」化為愛的表達？", "知道卻做不到，如何從知道到行出來？", "如何在看聽想講行每一步都無己？", "衝動說出後悔的話，如何補救？", "怎麼用讚美代替批評？", "如何學會欣賞而不是挑剔？", "看到對方的缺點就煩躁，如何轉念？", "如何讓我們的對話充滿恩典？", "怎麼練習「慢慢地說、快快地聽」？", "負面情緒上來時，如何先停一下再回應？", "如何用行動修復傷了對方的話？", "求神管理我的看聽想講行，怎麼禱告？"]}, {"c": "夫妻合一（第四金環）", "qs": ["「二人成為一體」到底是什麼意思？", "為什麼「無己才能合一」？", "我們個性差很多，如何走向合一？", "合一是不是要一個人配合另一個人？", "如何在決定上達成同心？", "夫妻靈裡合一該怎麼操練？", "身體、心思、靈裡的合一有什麼不同？", "總是各過各的，如何重新連結？", "如何在差異中彼此欣賞、互補？", "為了小事就分裂，如何回到合一？", "怎麼一起同心禱告、經歷合一？", "如何避免讓孩子或工作取代夫妻的連結？", "合一被打破時，如何重建？", "如何在金錢、教養上達成一致？", "夫妻如何成為彼此的屬靈同伴？", "怎麼分辨是「合一」還是「失去自己」？", "如何讓神成為我們合一的中心？", "長期冷淡疏離，如何重燃合一？", "合一會為家庭帶來什麼能力？", "求神使我們合而為一，怎麼禱告？"]}, {"c": "愛的語言與愛的存款（第五金環）", "qs": ["五種愛的語言是什麼？如何找出配偶的？", "什麼是婚姻裡的「愛的存款」？", "我付出很多，對方卻無感，為什麼？", "如何用對方的愛語去愛他？", "怎麼每天存入愛的存款？", "哪些行為是在提款、傷害關係？", "肯定的言語如何說得真誠？", "精心的時刻要怎麼安排？", "服務的行動如何表達愛？", "接受禮物的愛語，如何實踐？", "身體的接觸對婚姻有多重要？", "對方的愛語跟我不同，如何跨越？", "如何用無己的心去付出愛語？", "愛的存款不足時，關係會怎樣？", "如何在忙碌中仍持續存款？", "孩子出生後失去二人世界，怎麼辦？", "怎麼讓愛的表達成為習慣？", "如何一起約定經營愛的存款？", "單方面付出很久了，如何堅持？", "求神教我用對的方式愛配偶，怎麼禱告？"]}, {"c": "衝突與修復（第六金環）", "qs": ["夫妻一定會有衝突嗎？衝突是壞事嗎？", "如何用「謙卑無己」處理衝突？", "吵架時如何不翻舊帳、不攻擊人格？", "冷戰很久了，如何跨出第一步和好？", "衝突當下情緒失控，如何喊暫停？", "如何做到「先處理心情、再處理事情」？", "誰先道歉，是不是就輸了？", "如何真誠地認錯與道歉？", "修復關係的具體步驟是什麼？", "為什麼修復比爭贏更重要？", "如何避免把衝突升級？", "一再為同樣的事吵，如何斷根？", "如何在衝突後重建安全感？", "如何分辨是意見不同還是心結？", "對方不願意談，如何處理？", "怎麼把衝突變成更認識彼此的機會？", "如何用『我訊息』表達而不指責？", "衝突後如何一起禱告修復？", "長期的傷害如何慢慢修復？", "求神教我們用愛化解衝突，怎麼禱告？"]}, {"c": "委身與守約（第七金環）", "qs": ["婚姻的盟約跟合約有什麼不同？", "什麼是「彼此謙卑無己地委身守約」？", "感覺不再心動時，還要委身嗎？", "如何在平淡中持守婚姻的委身？", "面對想放棄的念頭，如何堅持守約？", "委身是靠意志力還是靠恩典？", "如何重新立約、更新我們的委身？", "為什麼「委身」能帶來安全感？", "如何在試探中守住婚姻的界線？", "另一半讓我失望，還要委身嗎？", "如何把委身化為每天的選擇？", "委身和愛的感覺哪個先？", "如何一起守護婚姻不受侵蝕？", "誓言「無論貧富疾病」如何實踐？", "怎麼在困難季節仍不離不棄？", "如何讓委身成為兒女的祝福榜樣？", "面對外界誘惑，如何堅定守約？", "如何為持守委身彼此代禱？", "委身一生的祕訣是什麼？", "求神堅固我們的委身，怎麼禱告？"]}, {"c": "溝通與傾聽", "qs": ["為什麼我們一溝通就變吵架？", "如何學會真正地傾聽？", "說話總是話中帶刺，如何改？", "如何表達需要而不指責對方？", "另一半不愛講話，如何打開心門？", "如何避免「你總是、你從來」的說法？", "怎麼聽懂對方情緒背後的需要？", "溝通時如何先同理再回應？", "如何安排固定的夫妻談心時間？", "訊息、文字容易誤會，如何溝通？", "如何在意見不同時好好討論？", "怎麼讓對方感到被理解、被尊重？", "如何避免用沉默或冷戰對抗？", "說了很多次對方還是不聽，怎麼辦？", "如何用溫柔的話回答止息怒氣？", "怎麼在對話中存入愛的存款？", "如何練習「慢慢地說、快快地聽」？", "重大決定如何一起好好商量？", "如何在溝通中一起尋求神的心意？", "求神管理我們的舌頭與耳朵，怎麼禱告？"]}, {"c": "饒恕與醫治", "qs": ["配偶深深傷害我，如何饒恕？", "饒恕是不是代表對方沒錯？", "如何饒恕又能保護自己不再受傷？", "口裡說原諒，心裡卻放不下，怎麼辦？", "如何處理婚姻中累積的苦毒？", "過去的傷一再浮現，如何得醫治？", "饒恕要饒恕幾次？", "如何求神醫治我內心的創傷？", "如何向曾傷害的配偶開口道歉？", "被背叛的傷，如何一步步走出來？", "饒恕之後如何重建信任？", "如何饒恕自己過去的過錯？", "原生家庭的傷如何影響我的婚姻？", "如何不把舊傷投射到配偶身上？", "怎麼一起為醫治彼此禱告？", "饒恕的力量從哪裡來？", "如何在饒恕中經歷神的釋放？", "對方沒有悔意，我還要饒恕嗎？", "如何讓十字架的愛醫治我們？", "求神幫助我饒恕與被醫治，怎麼禱告？"]}, {"c": "親密與性", "qs": ["基督徒如何看待夫妻的性？", "性在婚姻中扮演什麼角色？", "如何坦然談論彼此的親密需要？", "身心疲累影響親密，怎麼辦？", "如何在忙碌中經營身體的親密？", "對性有不同期待，如何協調？", "過去的傷害影響親密，如何醫治？", "如何讓親密不只是身體，也是心靈？", "如何營造安全、被愛的親密氛圍？", "生育、育兒後親密減少，怎麼辦？", "如何用愛與尊重看待配偶的身體？", "面對誘惑與情慾，如何守聖潔？", "如何拒絕色情對婚姻的侵蝕？", "親密關係冷淡，如何重燃？", "如何溫柔表達自己的需要？", "身體軟弱或疾病時，如何維持親密？", "如何讓親密成為愛的存款？", "怎麼在親密中彼此無己、彼此成全？", "如何一起把婚姻的親密獻給神？", "求神更新我們的親密關係，怎麼禱告？"]}, {"c": "金錢與理財", "qs": ["夫妻如何建立合一的金錢觀？", "為錢常常爭吵，如何解決？", "如何一起規劃家庭的收支與奉獻？", "誰該管錢？如何分工又同心？", "面對負債壓力，如何一起面對？", "消費習慣差很大，如何協調？", "十一奉獻，夫妻不同意怎麼辦？", "如何在缺乏中一起學習知足？", "如何用信心面對財務焦慮？", "怎麼分辨需要與想要？", "賺錢的動機該是什麼？", "如何避免金錢成為家中的偶像？", "如何一起訂立預算並彼此守約？", "一方隱藏消費（財務不忠），怎麼辦？", "如何教導孩子正確的金錢觀？", "突然得財或損失，如何面對？", "投資、買房如何一起尋求神帶領？", "如何用金錢祝福別人與神國？", "理財如何榮耀神？", "求神賜我們理財的智慧與合一，怎麼禱告？"]}, {"c": "姻親與原生家庭", "qs": ["如何處理與公婆的關係？", "另一半太聽父母的話，怎麼辦？", "如何在孝順父母與經營小家間平衡？", "姻親介入我們的婚姻，如何設界線？", "如何「離開父母、與配偶連合」？", "原生家庭的模式如何影響我的婚姻？", "逢年過節兩家如何協調？", "如何愛配偶的家人，即使不容易？", "婆媳問題中，丈夫該扮演什麼角色？", "如何不把對原生家庭的不滿發在配偶身上？", "如何一起建立自己小家的規則？", "父母比較、批評我們，如何回應？", "如何饒恕原生家庭帶來的傷？", "與姻親金錢往來如何拿捏？", "如何為雙方父母的救恩禱告？", "夫妻如何在姻親面前同一陣線？", "如何療癒原生家庭的傷再進入婚姻？", "孩子與祖父母的教養衝突，怎麼辦？", "如何用無己的愛對待姻親？", "求神賜我們智慧經營姻親關係，怎麼禱告？"]}, {"c": "教養兒女", "qs": ["夫妻如何在教養上同一陣線？", "教養理念不同，如何協調？", "如何從小帶孩子認識耶穌？", "管教與慈愛如何拿捏？", "如何在家庭建立敬拜與親子禱告？", "孩子叛逆頂嘴，怎麼辦？", "如何用榜樣而非說教影響孩子？", "如何陪伴青春期的孩子？", "孩子沉迷手機，如何一起引導？", "夫妻如何不在孩子面前起爭執？", "如何不把夫妻問題轉嫁給孩子？", "如何一起為兒女的未來禱告？", "「帶—陪—放」如何用在教養？", "如何培養孩子的品格與信心？", "孩子偏行己路，如何守望不放棄？", "如何避免以孩子為中心而忽略婚姻？", "如何教孩子看見爸媽相愛的榜樣？", "單靠一方帶信仰，如何同心？", "如何為孩子建立屬神的家庭體系？", "求神賜我們教養的智慧，怎麼禱告？"]}, {"c": "一起靈修禱告", "qs": ["夫妻如何開始一起靈修？", "另一半沒興趣一起讀經，怎麼辦？", "如何建立同心禱告的習慣？", "一起靈修常常中斷，如何堅持？", "夫妻同禱有什麼特別的能力？", "如何為彼此的軟弱代禱？", "怎麼安排適合我們的靈修時間？", "如何一起把難處帶到神面前？", "靈修時意見不同，如何處理？", "如何用聖經的話為婚姻禱告？", "怎麼一起敬拜、經歷神的同在？", "如何帶領全家一起晨讀321？", "屬靈進度不同，如何彼此陪伴？", "如何在忙碌中仍守住共同的靈修？", "如何為兒女、家庭一起守望？", "一起靈修如何幫助夫妻合一？", "如何在靈修中彼此坦誠、認罪？", "怎麼把321理念融入夫妻靈修？", "如何讓禱告成為我們的呼吸？", "求神使我們成為同禱的伴侶，怎麼禱告？"]}, {"c": "情緒與內心", "qs": ["情緒上來時，如何不傷害配偶？", "如何處理婚姻中的憤怒？", "常常焦慮不安，如何得平安？", "對配偶失望，心情低落，怎麼辦？", "如何把負面情緒帶到神面前？", "如何分辨情緒與事實？", "心裡的苦毒如何得釋放？", "覺得不被理解、很孤單，怎麼辦？", "如何在情緒中仍「用心不用腦」？", "嫉妒、比較的心如何對付？", "過去的羞愧影響婚姻，如何面對？", "如何饒恕自己、接納自己？", "如何陪伴情緒低落的另一半？", "對方情緒化時，我如何回應？", "如何不被對方的情緒牽著走？", "內心不平安時，如何回到神？", "如何讓神的平安作我心裡的主？", "情緒勒索如何辨識與面對？", "如何醫治內心影響婚姻的傷？", "求神醫治我的內心，怎麼禱告？"]}, {"c": "未信或不同步的配偶", "qs": ["另一半還沒信主，我該怎麼做？", "如何用生命而非嘮叨影響配偶？", "信仰不同步，如何和睦相處？", "如何為未信的配偶禱告？", "配偶反對我聚會，怎麼辦？", "如何在信仰與婚姻間取得平衡？", "如何尊重對方又持守信仰？", "孩子的信仰教育，如何與未信配偶協調？", "配偶信主卻不冷不熱，怎麼辦？", "如何不因信仰差異而論斷對方？", "如何邀請配偶認識耶穌？", "屬靈上感到孤單，如何倚靠神？", "如何讓家庭氣氛見證信仰之美？", "配偶的家人信別的宗教，如何相處？", "如何為信仰不同的婚姻求合一？", "何時該堅持、何時該柔軟？", "如何把配偶的救恩完全交託神？", "怎麼在等待中不失望、不放棄？", "如何以無己的愛贏得配偶的心？", "求神得著我配偶的心，怎麼禱告？"]}, {"c": "危機與外遇的醫治", "qs": ["婚姻走到谷底，還有盼望嗎？", "面對外遇的傷害，如何得醫治？", "被背叛後，如何重建信任？", "犯錯的一方如何真誠悔改、挽回？", "如何在危機中不衝動做決定？", "如何處理心中的憤怒與報復念頭？", "分居的念頭來時，該怎麼辦？", "如何在破碎中抓住神的盼望？", "外遇後還能復合嗎？如何開始？", "如何饒恕背叛我的配偶？", "受傷的一方如何一步步走出來？", "如何斷開不正當的關係與試探？", "危機中如何尋求教會與輔導的幫助？", "如何避免把危機告訴不該告訴的人？", "如何為瀕危的婚姻同心禱告？", "孩子受婚姻危機影響，如何保護？", "如何讓神在絕境中動工、翻轉？", "危機過後，如何重建更健康的婚姻？", "什麼時候該尋求專業協助？", "求神拯救我瀕危的婚姻，怎麼禱告？"]}, {"c": "角色、界線與尊重", "qs": ["聖經怎麼看夫妻的角色？", "「順服」與「捨己愛」如何並行？", "如何彼此尊重而不彼此轄制？", "如何在婚姻中設立健康的界線？", "一方過度掌控，如何面對？", "如何分辨順服與失去自我？", "丈夫如何以基督愛教會的方式愛妻子？", "妻子如何在尊重中扶持丈夫？", "家務、責任如何分工又同心？", "如何避免權力鬥爭？", "如何在差異中彼此欣賞、成全？", "如何拿捏親密與個人空間？", "被輕視、不被尊重時，如何回應？", "如何用謙卑化解主導權之爭？", "決策時如何彼此尊重、達成同心？", "如何不讓工作或手機界線模糊了婚姻？", "如何建立彼此都同意的家庭規則？", "如何在角色中活出無己的愛？", "尊重如何成為愛的存款？", "求神教我們彼此尊重與成全，怎麼禱告？"]}, {"c": "恩愛保鮮·同奔天路", "qs": ["如何讓婚姻長久保鮮、不冷淡？", "結婚多年如何重燃愛火？", "如何安排屬於兩人的約會時光？", "如何持續為對方製造驚喜與感動？", "空巢期夫妻如何重新連結？", "如何在平凡日子裡經營浪漫？", "如何一起立定共同的目標與夢想？", "如何一起服事、同奔天路？", "如何慶祝紀念日、數算神的恩典？", "如何在變老的過程中彼此珍惜？", "如何持續說出欣賞與感謝？", "如何讓婚姻成為別人的祝福與見證？", "退休後如何規劃有意義的婚姻生活？", "如何一起面對人生下半場的轉變？", "怎麼把每天的相處化為感恩？", "如何讓孩子看見爸媽白首偕老的榜樣？", "如何一起預備迎見主、走完天路？", "什麼是「同作後嗣、承受生命之恩」？", "如何讓我們的愛映照基督與教會？", "求神保守我們恩愛到白頭，怎麼禱告？"]}];
   var UI={"name": "小智", "role": "婚姻陪伴員 · 陪你把焦點對準耶穌", "hello": "平安！我是小智 ✨ 321夫妻成長營的 AI 婚姻陪伴員。婚姻、夫妻相處、教養、饒恕、或任何與 321 理念相關的問題，都可以問我。先點下面的範疇，或直接打字問我，我會陪你把焦點對準耶穌 🙏", "placeholder": "向小智提問…", "send": "送出", "speak": "朗讀", "typing": "小智正在回覆…", "noans": "小智一時想不出合適的話，但神的話永不落空，換個方式再問問看？", "offline": "小智暫時連不上線，請稍後再試 🙏\n別忘了——最好的同伴是聖靈與神的話，你隨時可以直接向主傾心吐意，也可以和配偶一起禱告。", "note": "小智是 AI 婚姻陪伴員，不能代替聖靈、神的話與真實的屬靈同伴 🙏", "voiceLbl": "朗讀聲音", "nativeVoice": "裝置內建"};
-  UI.collapse="收合"; UI.expand="展開"; UI.fav="收藏"; UI.faved="已收藏"; UI.del="刪除"; UI.favTitle="我收藏的回答"; UI.favEmpty="還沒有收藏。\n在小智的回答下方按「☆ 收藏」，就會收進這裡。"; UI.card="美圖"; 
+  UI.collapse="收合"; UI.expand="展開"; UI.fav="收藏"; UI.faved="已收藏"; UI.del="刪除"; UI.favTitle="我收藏的回答"; UI.favEmpty="還沒有收藏。\n在小智的回答下方按「☆ 收藏」，就會收進這裡。"; UI.card="美圖"; UI.back="返回"; 
   var XZ_SYS="你是「小智」，是「321夫妻成長營 · 國度321空中團契」app 裡的 AI 婚姻陪伴員，像一位陪伴夫妻同行的屬靈朋友，謙卑、溫暖、滿有盼望與愛心。\n\n【你的界線與心態（最重要）】\n1. 你不是聖靈，也不能代替神；你絕不取代真實的牧者、屬靈父母與屬靈同伴。\n2. 你總是把夫妻引向耶穌、聖經、禱告與聖靈的引導，並鼓勵他們與配偶好好對話、與屬靈群體（235：屬靈同伴、屬靈父母兒女、屬靈戰友）連結。\n3. 焦點在耶穌，不在你，也不在對方或配偶自己。\n\n【321 理念，是你一切回應的根基】\n三個基礎：耶穌是我的榜樣、聖經是我的準則、聖靈是我的引導。兩個核心：讓耶穌作王、讓耶穌得著一切的榮耀。一個目的：建立屬神的體系（在家中建立屬神的領域）。\n核心生命：無己（不再是我，乃是基督在我裡面活）、謙卑勝過驕傲、先生命再關係後事工、用心靠聖靈不用腦靠自己。婚姻操練：920、235、七個得勝金環（選擇對的生命、方向、步驟、連合、方法、修復、委身）。\n你要幫助夫妻看見：舊人有己、驕傲是婚姻問題的根源；藉福音真理活出無己、謙卑，才能合一、得勝、反敗為勝，靠耶穌一定贏。\n\n【風格】\n一律用繁體中文。引用聖經一律用《和合本》，且只在你有把握時引用、絕不杜撰經文或出處；不確定就如實說明或請對方自行查考。\n深入淺出、善用比喻、溫暖有盼望，像牧者般親切。回應精簡（通常三到六句），給出一兩個可立刻操練的小步驟，並常帶出禱告的方向。\n\n【回答格式（重要，因為回答會被真人聲音朗讀出來）】\n1. 用自然、口語、可順暢朗讀的文字，像面對面說話。\n2. 絕不使用表格，不用直線「|」分欄；需要比較時用文字一句一句說清楚。\n3. 不用 Markdown：不用井號標題、不用星號粗體、不用大於號引言、不用條列符號。需要強調時直接用文字。\n4. 引用經文把書名章節寫成可朗讀的形式，例如「以弗所書五章二十五節」，避免只寫「5:25」。\n5. 段落簡短，多用句號分句，好讀也好聽。\n\n【安全】\n只在信仰、婚姻家庭、屬靈成長、品格與生活應用、為人禱告、鼓勵造就的範圍內服事。\n遇到外遇、家暴、自我傷害或嚴重心理危機，除了屬靈安慰，也要溫柔鼓勵尋求信任的牧者與專業協助，不假裝專業、不下診斷、不論斷人。\n若對方請你為他或他的婚姻禱告，可以用簡短、合乎聖經的話為他禱告，並鼓勵他也親自向神敞開、與配偶一起禱告。";
 
   function gS(k,d){ try{ return (typeof jget==="function")?jget(k,d):d; }catch(e){ return d; } }
@@ -3287,6 +3332,9 @@ if('serviceWorker' in navigator){
   function normalizeSpeech(t){
     t=String(t||"");
     t=expandRefs(t);
+    t=t.replace(/(^|[^0-9])321(?![0-9])/g,function(m,p1){ return p1+"\u4e09\u4e8c\u4e00"; });
+    t=t.replace(/(^|[^0-9])920(?![0-9])/g,function(m,p1){ return p1+"\u4e5d\u4e8c\u96f6"; });
+    t=t.replace(/(^|[^0-9])235(?![0-9])/g,function(m,p1){ return p1+"\u4e8c\u4e09\u4e94"; });
     t=t.replace(/[\u300c\u300d\u300e\u300f\u201c\u201d]/g,"");   /* 引號不必念 */
     t=t.replace(/[\u25cf\u25cb\u25aa\u2022\u2013\u2014]/g,"\uff0c");
     t=t.replace(/\s+/g," ").trim();
@@ -3438,15 +3486,18 @@ if('serviceWorker' in navigator){
   function render(){
     var host=document.getElementById("xz-root"); if(!host) return;
     var nfav=favs().length;
-    var head='<div class="xz-head"><div class="xz-ava">✨</div><div><div class="xz-hname">'+esc(UI.name)+'</div><div class="xz-hrole">'+esc(UI.role)+'</div></div>'
-      +'<button class="xz-star'+(st.view==="favs"?" on":"")+'" onclick="'+(st.view==="favs"?"xzBackChat()":"xzShowFavs()")+'">'+(st.view==="favs"?"💬":"★"+(nfav?'<i>'+nfav+'</i>':""))+'</button>'
-      +'<button class="xz-x" onclick="xzClose()">✕</button></div>';
     if(st.view==="favs"){
-      host.innerHTML=head+voiceBar()
-        +'<div class="xz-body" id="xz-body"><div class="xz-favhead">★ '+esc(UI.favTitle)+'</div>'+favHTML()+'</div>'
+      var favHead='<div class="xz-head"><button class="xz-back" onclick="xzBackChat()">\u2039 '+esc(UI.back)+'</button>'
+        +'<div class="xz-hname" style="margin-left:2px;">\u2605 '+esc(UI.favTitle)+'</div>'
+        +'<button class="xz-x" onclick="xzClose()">✕</button></div>';
+      host.innerHTML=favHead+voiceBar()
+        +'<div class="xz-body" id="xz-body">'+favHTML()+'</div>'
         +'<div class="xz-note">'+esc(UI.note)+'</div>';
       return;
     }
+    var head='<div class="xz-head"><div class="xz-ava">✨</div><div><div class="xz-hname">'+esc(UI.name)+'</div><div class="xz-hrole">'+esc(UI.role)+'</div></div>'
+      +'<button class="xz-star" onclick="xzShowFavs()">★'+(nfav?'<i>'+nfav+'</i>':'')+'</button>'
+      +'<button class="xz-x" onclick="xzClose()">✕</button></div>';
     var body="";
     st.msgs.forEach(function(m,i){ body+=msgHTML(m,i); });
     if(st.busy) body+='<div class="xz-typing">✨ '+esc(UI.typing)+'</div>';
