@@ -3779,12 +3779,21 @@ if('serviceWorker' in navigator){
       +'<div class="an-lbl">'+escA(UI.noteLbl)+'</div>'
       +'<textarea class="an-ta" id="an-ta" placeholder="'+escA(UI.notePh)+'" oninput="annoNoteInput()">'+escH(r.note||"")+'</textarea>'
       +'<div class="an-recbar">'+audioRow+'</div>'
-      +'<div class="an-actions"><button class="an-btn an-share grow" onclick="annoShare()">🖼 '+escA(UI.makeCard)+'</button></div>'
+      +'<div class="an-actions"><button class="an-btn an-share grow" onclick="annoShare()">🖼 '+escA(UI.makeCard)+'</button>'
+      +'<button class="an-btn an-ask grow" onclick="annoAskXz()">✨ '+escA("問小智")+'</button></div>'
       +'<div class="an-hint">'+escA(UI.hint)+'</div>'
       +'</div></div>';
   }
   window.annoColor=function(c){ var r=currentRec(); r.c=c||null; r.topic=A.curTopic; r.ref=A.curRef; r.text=A.curText; r.ts=Date.now(); put(A.cur,r); applyMarks(); renderSheet(); };
   window.annoNoteInput=function(){ var ta=document.getElementById("an-ta"); if(!ta) return; var r=currentRec(); r.note=ta.value; r.topic=A.curTopic; r.ref=A.curRef; r.text=A.curText; r.ts=Date.now(); put(A.cur,r); applyMarks(); };
+  window.annoAskXz=function(){
+    var r=currentRec();
+    var ta=document.getElementById("an-ta"); var note=ta?ta.value:(r.note||"");
+    r.note=note; r.topic=A.curTopic; r.ref=A.curRef; r.text=A.curText; r.ts=Date.now(); put(A.cur,r);
+    var q="我正在讀《321夫妻成長營》的內容，畫了這一句："+"「"+A.curText+"」。"+(note?("我的領受是："+"「"+note+"」。"):"")+"請幫我更深地明白這句話對我的意思，也帶我把焦點對準耶穌。";
+    closeSheet();
+    try{ if(typeof window.xzOpen==="function") window.xzOpen(); if(typeof window.xzAsk==="function") window.xzAsk(q); }catch(e){}
+  };
   window.annoCloseSheet=function(){ closeSheet(); };
   function closeSheet(){ stopRecIfAny(); var m=document.getElementById("an-mask"); if(m) m.classList.remove("on"); }
 
