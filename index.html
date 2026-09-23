@@ -678,6 +678,44 @@
   .sen.hl-b{background:rgba(110,170,230,.32);box-shadow:inset 0 -2px 0 rgba(40,110,190,.5);}
   .sen.hasnote{position:relative;}
   .sen.hasnote::after{content:"📝";font-size:11px;margin-left:2px;vertical-align:super;}
+
+  /* ---------- 講章逐字稿：畫線寫領受（7色） ---------- */
+  #msg-body .sen[data-hl]{background:linear-gradient(transparent 58%, rgba(217,167,61,.55) 58%); border-radius:2px;}
+  #msg-body .sen[data-hl][data-color="green"]{background:linear-gradient(transparent 58%, rgba(111,174,113,.5) 58%);}
+  #msg-body .sen[data-hl][data-color="blue"]{background:linear-gradient(transparent 58%, rgba(108,147,209,.5) 58%);}
+  #msg-body .sen[data-hl][data-color="pink"]{background:linear-gradient(transparent 58%, rgba(229,143,160,.55) 58%);}
+  #msg-body .sen[data-hl][data-color="purple"]{background:linear-gradient(transparent 58%, rgba(164,138,201,.5) 58%);}
+  #msg-body .sen[data-hl][data-color="maroon"]{background:linear-gradient(transparent 58%, rgba(140,74,78,.45) 58%);}
+  #msg-body .sen[data-hl][data-color="brown"]{background:linear-gradient(transparent 58%, rgba(138,103,64,.45) 58%);}
+  #msg-body .sen[data-hl][data-color="charcoal"]{background:linear-gradient(transparent 58%, rgba(84,83,78,.4) 58%);}
+  .hl-note{margin:-6px 0 14px;padding:8px 12px;background:#FBF6F1;border-left:3px solid var(--rose);
+    border-radius:6px;font-size:13px;color:var(--ink);white-space:pre-wrap;cursor:pointer;line-height:1.7;}
+  .hl-note[data-color="green"]{border-left-color:#6FAE71;} .hl-note[data-color="blue"]{border-left-color:#6C93D1;}
+  .hl-note[data-color="pink"]{border-left-color:#E58FA0;} .hl-note[data-color="purple"]{border-left-color:#A48AC9;}
+  .hl-note[data-color="maroon"]{border-left-color:#8C4A4E;} .hl-note[data-color="brown"]{border-left-color:#8A6740;}
+  .hl-note[data-color="charcoal"]{border-left-color:#54534E;}
+  .hlsheet-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;display:flex;align-items:flex-end;justify-content:center;}
+  .hlsheet-card{background:#fff;width:100%;max-width:560px;max-height:86vh;overflow-y:auto;border-radius:18px 18px 0 0;
+    padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.25);}
+  .hlsheet-title{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:10px;}
+  .hlsheet-quote{display:block;background:var(--rose-tint);color:var(--ink);border-radius:8px;padding:10px 12px;
+    font-size:14px;line-height:1.8;margin-bottom:12px;}
+  .hlsheet-colorrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .hlsheet-colorlabel{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;}
+  .hlsheet-colors{display:flex;gap:10px;flex-wrap:wrap;}
+  .hlswatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:0;cursor:pointer;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+  .hlswatch.active{border-color:var(--ink);}
+  .hlsheet-ta{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;
+    font-family:inherit;resize:vertical;background:#FBF6F1;color:var(--ink);min-height:84px;margin-bottom:12px;}
+  .hlsheet-acts{display:flex;gap:10px;margin-bottom:8px;}
+  .hlsheet-acts .btn,.hlsheet-acts2 .btn{flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:13.5px;font-weight:700;cursor:pointer;}
+  .hlsheet-acts .btn.gold{background:var(--rose);color:#fff;border-color:var(--rose);}
+  .hlsheet-acts .btn.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .hlsheet-acts2{display:flex;gap:8px;flex-wrap:wrap;}
+  .hlsheet-acts2 .btn{flex:1 1 auto;font-size:12.5px;padding:8px 10px;}
+  .hlsheet-acts2 .btn.danger{color:#B0345A;border-color:#B0345A;}
   /* ---------- read-along ---------- */
   .sen.tts-reading{
     border-radius:5px;
@@ -4048,6 +4086,7 @@ if('serviceWorker' in navigator){
     w.classList.add("on");
     if(b) b.innerHTML="📖 "+esc(MUI.hide);
     if(window.annoWrapMsg) window.annoWrapMsg(ti);
+    if(window.applyMsgMarks) window.applyMsgMarks(ti);
     setTimeout(function(){ try{ w.scrollIntoView({behavior:"smooth",block:"start"}); }catch(e){} },80);
   };
   function plain(ti){ var d=(MSG&&MSG[String(ti)])||[]; return d.map(function(x){ return x[1]; }).join("\n"); }
@@ -4073,6 +4112,110 @@ if('serviceWorker' in navigator){
     try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
     document.querySelectorAll('[id^="msg-spk-"]').forEach(function(b){ b.classList.remove("on"); b.innerHTML="🔊 "+esc(MUI.read); }); }
   window.msgStopAll=msgStop;
+
+  /* ---------- 講章逐字稿：畫線寫領受 ---------- */
+  var MHL_COLORS=[{"id": "gold", "dot": "#D9A73D", "name": "金"}, {"id": "green", "dot": "#6FAE71", "name": "綠"}, {"id": "blue", "dot": "#6C93D1", "name": "藍"}, {"id": "pink", "dot": "#E58FA0", "name": "粉"}, {"id": "purple", "dot": "#A48AC9", "name": "紫"}, {"id": "maroon", "dot": "#8C4A4E", "name": "酒紅"}, {"id": "brown", "dot": "#8A6740", "name": "咖啡"}, {"id": "charcoal", "dot": "#54534E", "name": "墨黑"}];
+  function mhlAll(){ return jget("mhl",{}); }
+  function mhlGet(sid){ return mhlAll()[sid]||null; }
+  function mhlPut(sid,r){ var a=mhlAll(); if(!r||(!r.color&&!(r.note&&r.note.trim()))){ delete a[sid]; } else { a[sid]=r; } jset("mhl",a); }
+  function mhlCloseSheet(){ var m=document.getElementById("hlsheet-mask"); if(m) m.remove(); }
+  function mhlRenderNote(sp){
+    var p=sp.parentNode, sid=sp.dataset.sid, r=mhlGet(sid);
+    var existing=p.parentNode&&p.parentNode.querySelector('.hl-note[data-note-key="'+sid+'"]');
+    if(existing) existing.remove();
+    if(!r||!r.note||!r.note.trim()) return;
+    var noteEl=document.createElement("div");
+    noteEl.className="hl-note"; noteEl.setAttribute("data-note-key",sid); noteEl.setAttribute("data-color",r.color||"gold");
+    noteEl.textContent="📝 "+r.note;
+    var anchor=p.__mhlAnchor||p;
+    anchor.parentNode.insertBefore(noteEl, anchor.nextSibling);
+    p.__mhlAnchor=noteEl;
+    noteEl.addEventListener("click",function(){ mhlOpenSheet(sp); });
+  }
+  window.applyMsgMarks=function(topic){
+    var body=document.getElementById("msg-body-"+topic); if(!body) return;
+    body.querySelectorAll(".sen").forEach(function(sp){ sp.__mhlAnchor=null; if(sp.parentNode) sp.parentNode.__mhlAnchor=null; });
+    body.querySelectorAll(".sen").forEach(function(sp){
+      var r=mhlGet(sp.dataset.sid);
+      sp.removeAttribute("data-hl"); sp.removeAttribute("data-color");
+      if(r&&r.color){ sp.setAttribute("data-hl","1"); sp.setAttribute("data-color",r.color); }
+    });
+    body.querySelectorAll(".sen").forEach(function(sp){ mhlRenderNote(sp); });
+  };
+  function mhlOpenSheet(span){
+    var sid=span.dataset.sid, r=mhlGet(sid)||{color:"gold",note:""};
+    mhlCloseSheet();
+    var sentence=span.textContent.slice(0,200);
+    var curColor=r.color||"gold";
+    var colorsHtml='<div class="hlsheet-colorrow"><span class="hlsheet-colorlabel">'+esc("畫線顏色")+'</span>'
+      +'<div class="hlsheet-colors">'+MHL_COLORS.map(function(c){
+        return '<button type="button" class="hlswatch'+(c.id===curColor?" active":"")+'" data-color="'+c.id+'" style="background:'+c.dot+'" aria-label="'+esc(c.name)+'"></button>';
+      }).join("")+'</div></div>';
+    var mask=document.createElement("div"); mask.id="hlsheet-mask"; mask.className="hlsheet-mask";
+    mask.innerHTML='<div class="hlsheet-card">'
+      +'<div class="hlsheet-title">'+esc("✍️ 寫下你的領受")+'</div>'
+      +'<div class="hlsheet-quote">'+esc(sentence)+'</div>'
+      +colorsHtml
+      +'<textarea class="hlsheet-ta" placeholder="'+esc("這句話帶給你什麼領受、感動，或聖靈的提醒？寫下來，把焦點對準耶穌……")+'">'+esc(r.note||"")+'</textarea>'
+      +'<div class="hlsheet-acts">'
+      +'<button type="button" data-act="save" class="btn gold">'+esc("儲存領受")+'</button>'
+      +'<button type="button" data-act="ask" class="btn primary">✨ '+esc("問小智")+'</button>'
+      +'</div>'
+      +'<div class="hlsheet-acts2">'
+      +'<button type="button" data-act="clearnote" class="btn">'+esc("刪除領受")+'</button>'
+      +'<button type="button" data-act="remove" class="btn danger">'+esc("移除畫線")+'</button>'
+      +'<button type="button" data-act="cancel" class="btn">'+esc("取消")+'</button>'
+      +'</div></div>';
+    document.body.appendChild(mask);
+    mask.addEventListener("click",function(e){ if(e.target===mask) mhlCloseSheet(); });
+    var ta=mask.querySelector(".hlsheet-ta");
+    setTimeout(function(){ try{ ta.focus(); }catch(e){} },60);
+    Array.prototype.forEach.call(mask.querySelectorAll(".hlswatch"),function(btn){
+      btn.addEventListener("click",function(){
+        var color=btn.getAttribute("data-color");
+        var rr=mhlGet(sid)||{color:"gold",note:""}; rr.color=color; rr.text=sentence; rr.topic=span.dataset.topic; rr.ts=Date.now();
+        mhlPut(sid,rr);
+        span.setAttribute("data-hl","1"); span.setAttribute("data-color",color);
+        var noteEl=span.parentNode&&span.parentNode.parentNode&&span.parentNode.parentNode.querySelector('.hl-note[data-note-key="'+sid+'"]');
+        if(noteEl) noteEl.setAttribute("data-color",color);
+        Array.prototype.forEach.call(mask.querySelectorAll(".hlswatch"),function(b){ b.classList.toggle("active", b===btn); });
+      });
+    });
+    mask.querySelector('[data-act="save"]').addEventListener("click",function(){
+      var rr=mhlGet(sid)||{color:curColor,note:""}; rr.note=(ta.value||"").trim(); rr.text=sentence; rr.topic=span.dataset.topic; rr.ts=Date.now();
+      mhlPut(sid,rr); mhlCloseSheet(); mhlRenderNote(span);
+    });
+    mask.querySelector('[data-act="ask"]').addEventListener("click",function(){
+      var note=(ta.value||"").trim();
+      var rr=mhlGet(sid)||{color:curColor,note:""}; rr.note=note; rr.text=sentence; rr.topic=span.dataset.topic; rr.ts=Date.now();
+      mhlPut(sid,rr);
+      mhlCloseSheet(); mhlRenderNote(span);
+      var q="我正在讀講章逐字稿，畫了這一句："+"「"+sentence+"」。"+(note?("我的領受是："+"「"+note+"」。"):"")+"請幫我更深地明白這句話對我的意思，也帶我把焦點對準耶穌。";
+      try{ if(typeof window.xzOpen==="function") window.xzOpen(); if(typeof window.xzAsk==="function") window.xzAsk(q); }catch(e){}
+    });
+    mask.querySelector('[data-act="clearnote"]').addEventListener("click",function(){
+      var rr=mhlGet(sid); if(rr){ rr.note=""; mhlPut(sid,rr); } mhlCloseSheet(); mhlRenderNote(span);
+    });
+    mask.querySelector('[data-act="remove"]').addEventListener("click",function(){
+      mhlPut(sid,null); span.removeAttribute("data-hl"); span.removeAttribute("data-color");
+      var noteEl=span.parentNode&&span.parentNode.parentNode&&span.parentNode.parentNode.querySelector('.hl-note[data-note-key="'+sid+'"]');
+      if(noteEl) noteEl.remove();
+      mhlCloseSheet();
+    });
+    mask.querySelector('[data-act="cancel"]').addEventListener("click", mhlCloseSheet);
+  }
+  document.addEventListener("click",function(e){
+    var s=e.target.closest && e.target.closest('[id^="msg-body-"] .sen');
+    if(!s) return;
+    e.stopPropagation();
+    var sid=s.dataset.sid;
+    var r=mhlGet(sid);
+    if(r&&r.color){ mhlOpenSheet(s); }
+    else{
+      mhlPut(sid,{color:"gold",note:"",text:s.textContent.slice(0,200),topic:s.dataset.topic,ts:Date.now()});
+      s.setAttribute("data-hl","1"); s.setAttribute("data-color","gold");
+    }
+  },true);
 })();
 
 </script>
