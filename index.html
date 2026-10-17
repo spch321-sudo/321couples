@@ -8088,7 +8088,7 @@ function mx_strBytes(s){const a=new Uint8Array(s.length);for(let i=0;i<s.length;
       ${bgmBlob ? `<p class="gxlab">${esc(T('音量', 'Volume'))}</p>${chips([[0.12, T('小聲', 'Soft')], [0.22, T('適中', 'Medium')], [0.38, T('明顯', 'Strong')]], g.vol, 'vol')}` : ''}
       <p class="gxlab">🎙 ${esc(T('錄製', 'Record'))}</p>
       ${chips([['a', T('🎙 只有聲音', '🎙 Voice only')], ['c', T('🖼 卡片畫面', '🖼 Card video')], ['s', T('📷 自拍畫面', '📷 Selfie video')]], recMode, 'rmode')}
-      <div id="gxsSelfWrap" style="${recMode === 's' ? '' : 'display:none'}"><video id="gxsSelf" muted playsinline autoplay style="width:150px;height:150px;border-radius:50%;object-fit:cover;transform:scaleX(-1);display:block;margin:8px auto;background:#000;border:3px solid var(--brass)"></video></div>
+      <div id="gxsSelfWrap" style="${recMode === 's' ? '' : 'display:none'}"><div style="width:156px;height:156px;margin:8px auto;border-radius:50%;overflow:hidden;border:3px solid var(--brass);background:#000;-webkit-mask-image:-webkit-radial-gradient(white,black);isolation:isolate;position:relative"><video id="gxsSelf" muted playsinline autoplay style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;-webkit-transform:scaleX(-1);transform:scaleX(-1)"></video></div></div>
       <div class="gxrec"><span id="gxsRecSt">${on ? '<span class="recdot"></span>' + esc(recLabel) : esc(T('準備好了就按開始', 'Ready when you are'))}</span><b id="gxsRecTm">${mmss(recSec)}</b></div>
       <button class="btn ${on ? 'danger' : 'pri'}" style="width:100%" data-k="rec">${on ? esc(T('■ 停止並完成', '■ Stop and finish')) : esc(T('● 開始錄製', '● Start recording'))}</button>
       ${bgmBlob ? `<p class="gxlab">${esc(T('不錄音，只配音樂', 'Music only, no voice'))}</p>
@@ -8846,7 +8846,7 @@ html.gxa-lock,html.gxa-lock body{overflow:hidden}
 .gxroot .gxz{z-index:300}
 .gxroot .xzm,.gxroot .xzhi,.gxroot .xzsv{font-size:calc(var(--fs,17px)*.94)}
 .gxroot .xzin,.gxroot #gxxzin{font-size:max(16px,calc(var(--fs,17px)*.94))}
-body:has(#gxaroot .gxz.on) .xz-fab,body:has(#gxaroot .gxz.on) #fab,body:has(#gxaov.on) .xz-fab,body:has(#gxaov.on) #fab,body:has(#gxaroot #gxs.on) .xz-fab,body:has(#gxaroot #gxs.on) #fab{display:none!important}.gxroot #gxs,.gxroot .gxsmask{z-index:310}
+body:has(#gxaroot .gxz.on) .xz-fab,body:has(#gxaroot .gxz.on) #fab,body:has(#gxaov.on) .xz-fab,body:has(#gxaov.on) #fab,body:has(#gxaroot #gxs.on) .xz-fab,body:has(#gxaroot #gxs.on) #fab{display:none!important}.gxroot #gxs,.gxroot .gxsmask{z-index:310}#gxaroot #gxsSub,#gxaroot #gxsRv{z-index:330!important}
 .gxroot .chn{flex:0 0 auto;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--paper);font-size:17px}
 .gxroot .chrow .s{display:block;font-size:calc(var(--fs)*.76);color:var(--dusk);margin-top:2px}
 `;
