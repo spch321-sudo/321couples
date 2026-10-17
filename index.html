@@ -4433,6 +4433,93 @@ if('serviceWorker' in navigator){
     document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); else if (pending && !busy()) location.reload(); });
     setTimeout(check, 4000); setInterval(check, 30 * 60 * 1000);
   })();
+
+  /* ── 講章逐字稿：畫線顏色看得見（原本的樣式寫成 #msg-body，實際是 msg-body-0、msg-body-1…，所以畫了線卻沒顏色） ── */
+  (function () {
+    var C = { gold: 'rgba(217,167,61,.55)', green: 'rgba(111,174,113,.5)', blue: 'rgba(108,147,209,.5)', pink: 'rgba(229,143,160,.55)', purple: 'rgba(164,138,201,.5)', maroon: 'rgba(140,74,78,.45)', brown: 'rgba(138,103,64,.45)', charcoal: 'rgba(84,83,78,.4)' };
+    var css = '[id^="msg-body-"] .sen{cursor:pointer}[id^="msg-body-"] .sen[data-hl]{background:linear-gradient(transparent 58%,' + C.gold + ' 58%);border-radius:2px}';
+    for (var k in C) css += '[id^="msg-body-"] .sen[data-hl][data-color="' + k + '"]{background-image:linear-gradient(transparent 58%,' + C[k] + ' 58%)}';
+    css += '[id^="msg-body-"] .sen.tts-reading{background:rgba(232,196,90,.45)!important;border-radius:4px}';
+    css += '.msg-bar .msg-btn.gx-stop{margin-left:4px}';
+    var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+    /* 講章裡點一句：只用講章自己的畫線卡（八色、寫領受、做成美圖、問小智），不再同時跳出另一張「這一句」卡 */
+    var ao0 = window.annoOpenSheet;
+    if (typeof ao0 === 'function') window.annoOpenSheet = function (sid) {
+      try { var el = document.querySelector('[id^="msg-body-"] .sen[data-sid="' + sid + '"]'); if (el) return; } catch (e) {}
+      return ao0.apply(this, arguments);
+    };
+  })();
+  /* ── 講章朗讀：開始／暫停／繼續／結束；暫停停在那一句（保留標示），繼續從那一句接著念 ── */
+  (function () {
+    if (typeof window.msgSpeak !== 'function' || typeof window.xzSpeakAlong !== 'function') return;
+    var P = { ti: null, items: [], idx: 0, mode: 'idle', pausing: false };
+    var L = { read: T2('🔊 朗讀', '🔊 朗读', '🔊 Read'), pause: T2('⏸ 暫停', '⏸ 暂停', '⏸ Pause'), go: T2('▶ 繼續', '▶ 继续', '▶ Resume'), stop: T2('⏹ 結束', '⏹ 结束', '⏹ Stop') };
+    function btns(ti) {
+      var b = document.getElementById('msg-spk-' + ti); if (!b) return;
+      var x = document.getElementById('msg-stop-' + ti);
+      if (!x) { x = document.createElement('button'); x.id = 'msg-stop-' + ti; x.className = 'msg-btn gx-stop'; x.textContent = L.stop; x.onclick = function () { stopAll(); }; b.parentNode.insertBefore(x, b.nextSibling); }
+      b.innerHTML = P.mode === 'play' && P.ti === ti ? L.pause : (P.mode === 'pause' && P.ti === ti ? L.go : L.read);
+      b.classList.toggle('on', P.mode !== 'idle' && P.ti === ti);
+      x.style.display = (P.mode !== 'idle' && P.ti === ti) ? '' : 'none';
+    }
+    function cur() {
+      for (var i = 0; i < P.items.length; i++) if (P.items[i].el && P.items[i].el.classList.contains('tts-reading')) return i;
+      return -1;
+    }
+    function mark(i) { document.querySelectorAll('.sen.tts-reading').forEach(function (e) { e.classList.remove('tts-reading'); }); var it = P.items[i]; if (it && it.el) it.el.classList.add('tts-reading'); }
+    function playFrom(i) {
+      P.mode = 'play'; P.idx = i; btns(P.ti);
+      var ti = P.ti, base = i;
+      window.xzSpeakAlong(P.items.slice(i), null, function () {
+        if (P.pausing) { P.pausing = false; return; }
+        if (P.ti === ti && P.mode === 'play') { P.mode = 'idle'; P.idx = 0; btns(ti); }
+      });
+    }
+    function pause() {
+      var c = cur(); if (c >= 0) P.idx = c;
+      P.pausing = true; P.mode = 'pause';
+      try { window.xzSpeakStop(); } catch (e) {}
+      P.pausing = false; mark(P.idx); btns(P.ti);
+    }
+    function stopAll() {
+      var ti = P.ti; P.mode = 'idle'; P.idx = 0; P.pausing = true;
+      try { window.xzSpeakStop(); } catch (e) {}
+      try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+      P.pausing = false;
+      document.querySelectorAll('.sen.tts-reading').forEach(function (e) { e.classList.remove('tts-reading'); });
+      if (ti != null) btns(ti);
+    }
+    window.gxMsgStop = stopAll;
+    window.msgSpeak = function (ti, tries) {
+      if (P.ti === ti && P.mode === 'play') return pause();
+      if (P.ti === ti && P.mode === 'pause') return playFrom(P.idx);
+      var body = document.getElementById('msg-body-' + ti);
+      if (!body) {
+        tries = (tries || 0) + 1; if (tries > 60) return;
+        if (tries === 1 && typeof window.msgToggle === 'function') window.msgToggle(ti);
+        return setTimeout(function () { window.msgSpeak(ti, tries); }, 120);
+      }
+      if (P.mode !== 'idle') stopAll();
+      Array.prototype.forEach.call(body.querySelectorAll('details.deeper'), function (d) { d.open = true; });
+      P.items = []; Array.prototype.forEach.call(body.querySelectorAll('.sen'), function (s) { var t = s.textContent; if (t && t.trim()) P.items.push({ text: t, el: s }); });
+      if (!P.items.length) return;
+      P.ti = ti; playFrom(0);
+    };
+    /* 收合講章、回前一頁、換分頁、開別的專題：朗讀一律停止 */
+    var mt0 = window.msgToggle;
+    if (typeof mt0 === 'function') window.msgToggle = function (ti) {
+      var w = document.getElementById('msg-wrap-' + ti), closing = w && w.classList.contains('on');
+      if (closing) stopAll();
+      var r = mt0.apply(this, arguments);
+      setTimeout(function () { btns(ti); }, 0);
+      return r;
+    };
+    function stopNav() { if (P.mode !== 'idle') stopAll(); else { try { window.xzSpeakStop(); } catch (e) {} } }
+    if (typeof goTab === 'function') { var gt0 = goTab; goTab = function () { stopNav(); return gt0.apply(this, arguments); }; }
+    if (typeof openTopic === 'function') { var ot0 = openTopic; openTopic = function () { stopNav(); return ot0.apply(this, arguments); }; }
+    document.addEventListener('click', function (e) { var t = e.target; if (t && t.closest && t.closest('.back, #backbtn, .tabbar .tab')) stopNav(); }, true);
+    window.addEventListener('popstate', stopNav);
+  })();
 })();
 
 </script>
@@ -5511,7 +5598,7 @@ var SAGE321 = (function () {
       el.id = C.el; el.className = 'gxz';
       GXA_root().appendChild(el);
     }
-    el.className = ('xz ' + (XZ.open ? 'on' : '')).replace(/\s+$/, '');
+    el.className = ('gxz ' + (XZ.open ? 'on' : '')).replace(/\s+$/, '');
     if (!XZ.open) return;
     var oldB = document.getElementById('gxxzb'), oldTop = oldB ? oldB.scrollTop : 0;
     var inp = document.getElementById('gxxzin'), typed = inp ? inp.value : '';
