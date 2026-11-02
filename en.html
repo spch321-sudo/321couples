@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){try{var q=location.search,m=q.match(/[?&]join=([A-Za-z0-9]{6})/);if(m){sessionStorage.setItem('cr_j',JSON.stringify({j:m[1],s:/[?&]screen=1/.test(q)?1:0,t:Date.now()}));}else{var o=JSON.parse(sessionStorage.getItem('cr_j')||'null');if(o&&Date.now()-o.t<20000){history.replaceState(null,'',location.pathname+'?join='+o.j+(o.s?'&screen=1':'')+location.hash);}}if(/[?&]screen=1/.test(location.search))window.CR_SCREEN=true;}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#B0345A">
@@ -3467,7 +3468,7 @@ if('serviceWorker' in navigator){
   function raReset(){ raState.userScrollUntil=0; }
   function raOnItemStart(el){ if(el===raState.curEl) return; raClearHighlight();
     if(!el) return; try{ el.classList.add("tts-reading"); }catch(e){ return; }
-    raState.curEl=el; raScrollTo(el); }
+    raState.curEl=el; raScrollTo(el); if(window.CR&&CR.tts) CR.tts(el); }
 
   function ttsStop(){ tts.token++;
     try{ if(tts.audio){ tts.audio.pause(); tts.audio.onended=null; tts.audio.onerror=null; } }catch(_){}
@@ -4425,7 +4426,7 @@ if('serviceWorker' in navigator){
        防無限重整：同一新版先一般更新一次，仍是舊檔就硬更新一次，再不行只顯示更新條。
        硬更新只清這個 App 自己的快取與 SW（同網域還有其他 321 App）。 ── */
   (function () {
-    var APPVER = 'v2026.1024.1136-meet', PFX = 'couples321-en-', S = {"newVer": "A new version is ready — tap to update", "updating": "Updating to the new version…", "upToDate": "You have the latest version", "netErr": "No connection — please try again later", "ver": "Version", "check": "Check for updates", "hard": "Force update", "hint": "When a new version is published, the app updates itself the next time you open or return to it."};
+    var APPVER = 'v2026.1103.0010-cr1', PFX = 'couples321-en-', S = {"newVer": "A new version is ready — tap to update", "updating": "Updating to the new version…", "upToDate": "You have the latest version", "netErr": "No connection — please try again later", "ver": "Version", "check": "Check for updates", "hard": "Force update", "hint": "When a new version is published, the app updates itself the next time you open or return to it."};
     window.APPVER = APPVER;
     var UPD = { reg: null, target: '', pending: false };
     function now() { return Date.now(); }
@@ -4438,6 +4439,7 @@ if('serviceWorker' in navigator){
     }
     function busy() {
       try { if (document.querySelector('.gxs-ov.on, .gxroot .gxs, #gxaroot .on, #gxbs, .rw-mask')) return true; } catch (e) {}
+      try { if (window.CR && CR.on && CR.on()) return true; } catch (e) {}
       try { if (window.speechSynthesis && speechSynthesis.speaking) return true; } catch (e) {}
       try { var au = document.querySelectorAll('audio,video'); for (var i = 0; i < au.length; i++) if (!au[i].paused) return true; } catch (e) {}
       try { var a = document.activeElement; if (a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && /text|search|^$/.test(a.type || ''))) && a.value) return true; } catch (e) {}
@@ -9773,5 +9775,6 @@ window.GXA_FACTORY();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
+<script src="coread.js?v=v2026.1103.0010-cr1"></script>
 </body>
 </html>
