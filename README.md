@@ -17,3 +17,6 @@
 - 沒有 AI 影片（已決定不做）。
 - 上傳：index.html、sw.js、version.json（若有）、README.md 一起覆蓋。
 
+
+## v2026.1103.0010-cr1-fs1103（2026-11-03）
+- 畫線面板新增「複製」「分享」；小智全螢幕面板與字級（A）鈕（GXFS v2）；背景/鎖屏播放 Media Session + Wake Lock（GXMS）
