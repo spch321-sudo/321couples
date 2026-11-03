@@ -4434,7 +4434,7 @@ if('serviceWorker' in navigator){
        防無限重整：同一新版先一般更新一次，仍是舊檔就硬更新一次，再不行只顯示更新條。
        硬更新只清這個 App 自己的快取與 SW（同網域還有其他 321 App）。 ── */
   (function () {
-    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103', PFX = 'couples321-sc-', S = {"newVer": "已有新版本，点这里立即更新", "updating": "正在更新到新版…", "upToDate": "已经是最新版本", "netErr": "连不上网路，请稍后再试", "ver": "版本", "check": "检查更新", "hard": "强制更新", "hint": "发布新版后，App 打开或切回来时会自动换成新版。"};
+    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103', PFX = 'couples321-sc-', S = {"newVer": "已有新版本，点这里立即更新", "updating": "正在更新到新版…", "upToDate": "已经是最新版本", "netErr": "连不上网路，请稍后再试", "ver": "版本", "check": "检查更新", "hard": "强制更新", "hint": "发布新版后，App 打开或切回来时会自动换成新版。"};
     window.APPVER = APPVER;
     var UPD = { reg: null, target: '', pending: false };
     function now() { return Date.now(); }
@@ -4532,7 +4532,12 @@ if('serviceWorker' in navigator){
         track(reg.installing); track(reg.waiting);
         reg.addEventListener('updatefound', function () { track(reg.installing); });
       })['catch'](function () {});
-      sw.addEventListener('message', function (e) { var d = e.data || {}; if (d.t === 'sw-updated' && d.v && d.v !== APPVER) onNew(d.v); });
+      /* 同網域的各 321 App 共用 origin，別支 App 的 SW 也會廣播 sw-updated：只理會自己這支 sw.js 的通知，並回頭讀 version.json 確認（不直接相信通知裡的版本字串） */
+      sw.addEventListener('message', function (e) {
+        var d = e.data || {}; if (d.t !== 'sw-updated') return;
+        try { var src = e.source && e.source.scriptURL; if (src && src !== new URL('sw.js', location.href).href) return; } catch (x) { }
+        check(0);
+      });
       sw.addEventListener('controllerchange', function () { if (UPD.target && !busy()) fresh(); });
     }
     setTimeout(function () { check(0); }, 2500);
@@ -9802,7 +9807,7 @@ window.GXA_FACTORY();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
-<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103"></script>
+<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103-au1103"></script>
 <script id="GXFS">
 /* ═══ 小智全螢幕＋字級（2026-11-03，給 GXA 系 App）═══
    ① 小智面板佔滿整個畫面（原本是下方抽屜，上面還露出一截頁首）
