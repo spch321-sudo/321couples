@@ -8,10 +8,10 @@
    ‧ fetch：網頁、JS、JSON 網路優先（no-cache），離線才用快取；圖示快取優先；
      version.json 永不快取；影音與 Range 請求不攔截
    ※ 每次改版：index.html 的 APPVER、這裡的 VER、version.json 三處要一致。 */
-var VER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103';
+var VER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103';
 var PFX = 'couples321-tw-';
 var CACHE = PFX + VER;
-var SHELL = ['./', './index.html','./xz2.js', './sc.html', './en.html', './manifest.webmanifest', './manifest-sc.webmanifest', './manifest-en.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './coread.js', './peerjs.min.js'];
+var SHELL = ['./', './index.html','./xz2.js', './xzm.js', './sc.html', './en.html', './manifest.webmanifest', './manifest-sc.webmanifest', './manifest-en.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './coread.js', './peerjs.min.js'];
 
 self.addEventListener('install', function (e) {
   self.skipWaiting();

@@ -4435,7 +4435,7 @@ if('serviceWorker' in navigator){
        防無限重整：同一新版先一般更新一次，仍是舊檔就硬更新一次，再不行只顯示更新條。
        硬更新只清這個 App 自己的快取與 SW（同網域還有其他 321 App）。 ── */
   (function () {
-    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103', PFX = 'couples321-tw-', S = {"newVer": "已有新版本，點這裡立即更新", "updating": "正在更新到新版…", "upToDate": "已經是最新版本", "netErr": "連不上網路，請稍後再試", "ver": "版本", "check": "檢查更新", "hard": "強制更新", "hint": "發佈新版後，App 打開或切回來時會自動換成新版。"};
+    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103', PFX = 'couples321-tw-', S = {"newVer": "已有新版本，點這裡立即更新", "updating": "正在更新到新版…", "upToDate": "已經是最新版本", "netErr": "連不上網路，請稍後再試", "ver": "版本", "check": "檢查更新", "hard": "強制更新", "hint": "發佈新版後，App 打開或切回來時會自動換成新版。"};
     window.APPVER = APPVER;
     var UPD = { reg: null, target: '', pending: false };
     function now() { return Date.now(); }
@@ -9808,7 +9808,7 @@ window.GXA_FACTORY();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
-<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103-au1103"></script>
+<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103"></script>
 <script id="GXFS">
 /* ═══ 小智全螢幕＋字級（2026-11-03，給 GXA 系 App）═══
    ① 小智面板佔滿整個畫面（原本是下方抽屜，上面還露出一截頁首）
@@ -9916,5 +9916,7 @@ window.GXA_FACTORY();
   } catch (e) {}
 })();
 </script>
+<script src="xzm.js?v=xzm1103"></script>
+<script>try{XZM.install(XZM.preset.mix2());}catch(e){}</script>
 </body>
 </html>
