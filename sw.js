@@ -8,7 +8,7 @@
    ‧ fetch：網頁、JS、JSON 網路優先（no-cache），離線才用快取；圖示快取優先；
      version.json 永不快取；影音與 Range 請求不攔截
    ※ 每次改版：index.html 的 APPVER、這裡的 VER、version.json 三處要一致。 */
-var VER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103';
+var VER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103-rf1105';
 var PFX = 'couples321-tw-';
 var CACHE = PFX + VER;
 var SHELL = ['./', './index.html','./xz2.js', './xzm.js', './sc.html', './en.html', './manifest.webmanifest', './manifest-sc.webmanifest', './manifest-en.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './coread.js', './peerjs.min.js'];
@@ -37,6 +37,29 @@ self.addEventListener('activate', function (e) {
 
 self.addEventListener('message', function (e) { if (e.data === 'skip' || e.data === 'SKIP_WAITING') self.skipWaiting(); });
 
+/* rf1105（互動聖經 v2.58.3）：網路優先，但慢網路（超過 SHELL_WAIT 毫秒沒回）先用完全相同的快取開；網路那份繼續下載並更新快取。
+   只有導覽請求才可以退回 index.html（程式檔退回 HTML 會造成 Unexpected token '<'）。 */
+var SHELL_WAIT = 1000;
+function shellFetch(e, req, key, url, nav) {
+  var net = fetch(url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (resp) {
+    if (resp && resp.ok) { var cp = resp.clone(); caches.open(CACHE).then(function (c) { c.put(key, cp); }); }
+    return resp;
+  });
+  e.waitUntil(net.then(function () { }, function () { }));
+  function fallback() {
+    return caches.match(key).then(function (h) { return h || caches.match(req, { ignoreSearch: true }); })
+      .then(function (h) { return h || (nav ? caches.match('./index.html') : undefined); });
+  }
+  return new Promise(function (resolve) {
+    var done = false;
+    var t = setTimeout(function () { fallback().then(function (h) { if (h && !done) { done = true; resolve(h); } }); }, SHELL_WAIT);
+    net.then(function (resp) { if (!done) { done = true; clearTimeout(t); resolve(resp); } }, function () {
+      clearTimeout(t);
+      if (done) return;
+      fallback().then(function (h) { if (!done) { done = true; resolve(h || Response.error()); } });
+    });
+  });
+}
 self.addEventListener('fetch', function (e) {
   var r = e.request; if (r.method !== 'GET') return;
   var u; try { u = new URL(r.url); } catch (x) { return; }
@@ -50,12 +73,7 @@ self.addEventListener('fetch', function (e) {
   var nav = r.mode === 'navigate' || /\.html$/.test(p) || /\/$/.test(p);
   var key = nav ? './index.html' : (/\.(json|js|webmanifest|css)$/.test(p) ? u.origin + p : r);
   if (nav || /\.(json|js|css|webmanifest)$/.test(p)) {
-    e.respondWith(fetch(nav ? u.origin + p + u.search : r.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (resp) {
-      if (resp && resp.ok) { var cp = resp.clone(); caches.open(CACHE).then(function (c) { c.put(key, cp); }); }
-      return resp;
-    })['catch'](function () {
-      return caches.match(key).then(function (h) { return h || caches.match(r, { ignoreSearch: true }).then(function (h2) { return h2 || caches.match('./index.html'); }); });
-    }));
+    e.respondWith(shellFetch(e, r, key, nav ? u.origin + p + u.search : r.url, nav));
     return;
   }
   e.respondWith(caches.match(r, { ignoreSearch: true }).then(function (h) {
