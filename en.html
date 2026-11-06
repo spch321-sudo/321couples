@@ -4507,7 +4507,7 @@ if('serviceWorker' in navigator){
        防無限重整：同一新版先一般更新一次，仍是舊檔就硬更新一次，再不行只顯示更新條。
        硬更新只清這個 App 自己的快取與 SW（同網域還有其他 321 App）。 ── */
   (function () {
-    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103-rf1105', PFX = 'couples321-en-', S = {"newVer": "A new version is ready — tap to update", "updating": "Updating to the new version…", "upToDate": "You have the latest version", "netErr": "No connection — please try again later", "ver": "Version", "check": "Check for updates", "hard": "Force update", "hint": "When a new version is published, the app updates itself the next time you open or return to it."};
+    var APPVER = 'v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103-rf1105h', PFX = 'couples321-en-', S = {"newVer": "A new version is ready — tap to update", "updating": "Updating to the new version…", "upToDate": "You have the latest version", "netErr": "No connection — please try again later", "ver": "Version", "check": "Check for updates", "hard": "Force update", "hint": "When a new version is published, the app updates itself the next time you open or return to it."};
     window.APPVER = APPVER;
     var UPD = { reg: null, target: '', pending: false };
     function now() { return Date.now(); }
@@ -9630,6 +9630,9 @@ const GXHL = (function () {
 .gxhl-on.gxhl-pink{background:linear-gradient(transparent 58%,#F6CCD6 58%)!important}.gxhl-on.gxhl-purple{background:linear-gradient(transparent 58%,#DCCDEE 58%)!important}
 .gxhl-on.gxhl-maroon{background:linear-gradient(transparent 58%,#E6C7C7 58%)!important}.gxhl-on.gxhl-brown{background:linear-gradient(transparent 58%,#E4D3B8 58%)!important}
 .gxhl-on.gxhl-charcoal{background:linear-gradient(transparent 58%,#D6D5D0 58%)!important}
+/* 深色模式畫線：半透明，不蓋住淺色字 */
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .gxhl-on{background:linear-gradient(transparent 58%,rgba(240,200,90,.30) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-green{background:linear-gradient(transparent 58%,rgba(111,174,113,.32) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-blue{background:linear-gradient(transparent 58%,rgba(108,147,209,.34) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-pink{background:linear-gradient(transparent 58%,rgba(229,143,160,.32) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-purple{background:linear-gradient(transparent 58%,rgba(164,138,201,.34) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-maroon{background:linear-gradient(transparent 58%,rgba(190,110,115,.34) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-brown{background:linear-gradient(transparent 58%,rgba(190,150,90,.32) 58%)!important}:root:not([data-theme=light]) .gxhl-on.gxhl-charcoal{background:linear-gradient(transparent 58%,rgba(190,190,185,.28) 58%)!important}}
+:root[data-theme=dark] .gxhl-on{background:linear-gradient(transparent 58%,rgba(240,200,90,.30) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-green{background:linear-gradient(transparent 58%,rgba(111,174,113,.32) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-blue{background:linear-gradient(transparent 58%,rgba(108,147,209,.34) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-pink{background:linear-gradient(transparent 58%,rgba(229,143,160,.32) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-purple{background:linear-gradient(transparent 58%,rgba(164,138,201,.34) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-maroon{background:linear-gradient(transparent 58%,rgba(190,110,115,.34) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-brown{background:linear-gradient(transparent 58%,rgba(190,150,90,.32) 58%)!important}:root[data-theme=dark] .gxhl-on.gxhl-charcoal{background:linear-gradient(transparent 58%,rgba(190,190,185,.28) 58%)!important}
 .gxhl-note{margin:6px 0 14px;padding:8px 12px;background:#F2EEE3;border-left:3px solid #A9762F;border-radius:6px;font-size:.86em;color:#23211C;white-space:pre-wrap;cursor:pointer;line-height:1.6;text-align:left;text-indent:0}
 .gxhl-note[data-color=green]{border-left-color:#6FAE71}.gxhl-note[data-color=blue]{border-left-color:#6C93D1}.gxhl-note[data-color=pink]{border-left-color:#E58FA0}.gxhl-note[data-color=purple]{border-left-color:#A48AC9}.gxhl-note[data-color=maroon]{border-left-color:#8C4A4E}.gxhl-note[data-color=brown]{border-left-color:#8A6740}.gxhl-note[data-color=charcoal]{border-left-color:#54534E}
 .gxbs-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2147482000;display:flex;align-items:flex-end;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif}
@@ -9999,7 +10002,7 @@ window.GXA_FACTORY();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
-<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103-rf1105"></script>
+<script src="coread.js?v=v2026.1103.0010-cr1-fs1103-xz1103-au1103-xzm1103-rf1105h"></script>
 <script id="GXFS">
 /* ═══ 小智全螢幕＋字級（2026-11-03，給 GXA 系 App）═══
    ① 小智面板佔滿整個畫面（原本是下方抽屜，上面還露出一截頁首）
